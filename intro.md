@@ -23,7 +23,7 @@ Rep_vote_share_2020 <- (Rep_vote_share_2016 *.70) + (Rep_vote_share_2012 *.2) +
 
 I chose to weight the 2016 election by .7, as it is most similar to the 2020 election due to how recent it is as well as the consistency in republican candidates (Trump). I originally planned to weight the 2012 election by .3, but I decided it would be best to also consider the 2008 election, as it is the last election with a republican incumbent. Thus, I split the remaining weight between the 2012 and 2008 results by .2 and .1, respectively. 
 
-*Note:* this data reflects the 2 party popular vote share as opposed to the overall vote share. This decision was made to counteract potential third party influences in the election, as significant third party influences are rare, even in  elections where both republican and democratic candidates are unpopular, such as in 2016 (Neville-Shepard 2017). 
+*Note:* this data reflects the 2 party popular vote share as opposed to the overall vote share. This decision was made to counteract potential third party influences in the election, as significant third party influences are rare, even in  elections where both republican and democratic candidates are unpopular, such as in 2016 [(Neville-Shepard 2017)](https://www.researchgate.net/publication/317830780_Constrained_by_Duality_Third-Party_Master_Narratives_in_the_2016_Presidential_Election_. 
 
 ### Results
 
