@@ -7,16 +7,29 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 ```
 
-## R Markdown
+## Introduction
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+American presidential elections have always been a fascinating and contentious topic, perhaps nevermore so than in 2020. In this blog, I will build weekly models to predict the 2020  election. This introductory post will first present a basic predictive model derived from past election voting data and then discuss key trends in the data as they relate to the election process.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## Basic Predictive Model
+
+Perhaps the most basic strategy to predict the 2020 election is to look at the results from previous elections. My model draws from the past three elections (2008, 2012, 2016). The graphic below displays the state-by-state victories for either the republican or democratic party from these three elections. A state appears red if the republican party candidate won the majority of votes or blue if the democratic party candidate did. 
+
+![election grid]("posts/PV_states_grid.png")
+
+My model calculates the predicted result of each state by taking a weighted average of the democratic and republican vote shares for each state for the past three elections. This equation is shown below.
+
+[equation]
+
+I chose to weight the 2016 election by .7, as it is most similar to the 2020 election due to how recent it is as well as the consistency in republican candidates (Trump). I originally planned to weight the 2012 election by .3, but I decided it would be best to also consider the 2008 election, as it is the last election with a republican incumbent. Thus, I split the remaining weight between the 2012 and 2008 results by .2 and .1, respectively. 
+
+* 
 
 ```{r cars}
-summary(cars)
+
 ```
 
 ## Including Plots
