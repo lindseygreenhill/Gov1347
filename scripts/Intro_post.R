@@ -201,7 +201,8 @@ for(state in unique(pvstate_df$state)){
    filter(year >= 2008) %>%
    arrange(win_margin)
  
- # how to classify a swing state. Taken from Purple America. State is blue  is average vote share for  democratic candidate was .51 or greater. Red if democratic Voteshare was .47 or less. They used past four presidential elections
+ # how to classify a swing state. Taken from Purple America. 
+ # State is blue  is average vote share for  democratic candidate was .51 or greater. Red if democratic Voteshare was .47 or less. They used past four presidential elections
  
  pvstate_df_swing <- data.frame()
  
