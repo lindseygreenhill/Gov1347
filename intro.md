@@ -1,9 +1,10 @@
 
 ## Introduction
+### Sep 10, 2020
 
 American presidential elections have always been a fascinating and contentious topic, perhaps nevermore so than in 2020. In this blog, I will build weekly models to predict the 2020  election. This introductory post will first present a basic predictive model derived from past election voting data and then discuss the concepts of "Purple America" and swing states. 
 
-## Basic Predictive Model
+### Basic Predictive Model
 
 Perhaps the most basic strategy to predict the 2020 election is to look at the results from previous elections. My model draws from the past three elections (2008, 2012, 2016). The graphic below displays the state-by-state victories for either the republican or democratic party from these three elections. A state appears red if the republican party candidate won the majority of votes or blue if the democratic party candidate did. 
 
@@ -13,11 +14,9 @@ Perhaps the most basic strategy to predict the 2020 election is to look at the r
 My model calculates the predicted result of each state by taking a weighted average of the democratic and republican vote shares for each state for the past three elections. This equation is shown below.
 
 ```
-Dem_vote_share_2020 <- (Dem_vote_share_2016 *.70) +
-  (Dem_vote_share_2012 *.2) +
+Dem_vote_share_2020 <- (Dem_vote_share_2016 *.70) + (Dem_vote_share_2012 *.2) +
   (Dem_vote_share_2008 *.1)
-Rep_vote_share_2020 <- (Rep_vote_share_2016 *.70) +
-  (Rep_vote_share_2012 *.2) +
+Rep_vote_share_2020 <- (Rep_vote_share_2016 *.70) + (Rep_vote_share_2012 *.2) +
   (Rep_vote_share_2008 *.1)
 ```
 
@@ -32,11 +31,11 @@ The map below shows my state-by-state prediction.
 
 ![picture](Gov1347-master/figures/2020_blue_red.png)
 
-My results show that Biden will win the election with 279 electoral votes (EV) and Trump with lose with  259 EV. My prediction differs from the 2016 election in a few key areas.
+My results show that **Biden will win** the election with 279 electoral votes (EV) and Trump with lose with  259 EV. My prediction differs from the 2016 election in a few key areas.
 
-|              1. Wisconsin [10 EV] goes blue
-|              2. Michigan [16 EV] goes blue
-|              3. Pennsylvania [20 EV] goes blue
+> - Wisconsin [10 EV] goes blue
+> - Michigan [16 EV] goes blue
+> - Pennsylvania [20 EV] goes blue
 
 
 
@@ -47,9 +46,9 @@ However, these maps might be slightly misleading, as, in reality, states do not 
 
 These tight vote margins have important implications as they bring in the concept of swing states, or states that have the potential to go either red or blue and generally have very tight win margins. Going back to my prediction, the three states that changed from red to blue from 2016 to 2020, Pennsylvania, Wisconsin, and Michigan, showed the 2nd, 3rd, and 5th tightest vote margins in my forecast. Specifically:
 
-|              Pennsyvania goes blue by 1.6%
-|              Wisconsin goes blue by 2.2%
-|              Michigan goes blue by 3.4%
+> - Pennsyvania goes blue by 1.6%
+> - Wisconsin goes blue by 2.2%
+> - Michigan goes blue by 3.4%
 
 All else constant, if even one of those states flipped red, Biden will not win the electoral college.
 
