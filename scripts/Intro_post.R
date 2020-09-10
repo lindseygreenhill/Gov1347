@@ -197,9 +197,9 @@ for(state in unique(pvstate_df$state)){
  top10 <- EC %>% arrange(desc(votes)) %>%
    slice(1:10)
  
- top5swing  <- pv_margins_grid %>% 
-   filter(year >= 2008) %>%
-   arrange(win_margin)
+ # top5swing  <- pv_margins_grid %>% 
+ #   filter(year >= 2008) %>%
+ #   arrange(win_margin)
  
  # how to classify a swing state. Taken from Purple America. 
  # State is blue  is average vote share for  democratic candidate was .51 or greater. Red if democratic Voteshare was .47 or less. They used past four presidential elections

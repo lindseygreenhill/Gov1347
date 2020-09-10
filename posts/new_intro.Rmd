@@ -1,5 +1,5 @@
 ---
-title: "Intro_post"
+title: "new_intro"
 author: "Lindsey Greenhill"
 date: "9/10/2020"
 output: html_document
@@ -7,7 +7,6 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 ```
 
 ## Introduction
