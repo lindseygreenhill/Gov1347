@@ -15,9 +15,18 @@ setwd("/Users/lindseygreenhill/Desktop/Elections/Gov1347")
 # reading in voting data
 
 popvote_df <- read_csv("data/popvote_1948-2016.csv")
+
 ## reading in state data
+
 pvstate_df <- read_csv("data/popvote_bystate_1948-2016.csv")
 pvstate_df$full <- pvstate_df$state
+
+# reading in electoral college data
+vector <- data.frame(state = "District of Columbia", votes = 3)
+EC <- read_csv("data/electoral_college.csv") %>%
+  select(state = State, votes = electoralVotesNumber) %>%
+  bind_rows(vector)
+
 
 # creating  maps of last three elections with labels
 
@@ -90,16 +99,16 @@ for(state in unique(pvstate_df$state)){
   # creating a vector to use in bind rows  
   
   vector <-
-    data.frame(state = state,
-               D_pv2p = D_pred_2020,
-               R_pv2p = R_pred_2020)
+    data.frame(state = state, year = 2020,
+               R_pv2p = R_pred_2020,
+               D_pv2p = D_pred_2020)
   
   # binding vector with forcasts
   
   forcasts <- forcasts %>% bind_rows(vector)
 }
 
- forcasts <- forcasts %>% mutate(year = 2020, margins = R_pv2p - D_pv2p)
+ forcasts <- forcasts %>% mutate(margins = R_pv2p - D_pv2p)
  
  # mutating to create a win column in forcasts 
  
@@ -124,6 +133,63 @@ for(state in unique(pvstate_df$state)){
    )
  
  ggsave("figures/2020_blue_red.png", height = 4, width = 5)
+ 
+ # getting electoral data and using to count electoral votes for 2020
+ 
+ forcasts_EC <- forcasts %>% 
+   left_join(EC, by = "state") %>%
+   mutate(winner = if_else(D_pv2p > R_pv2p, "D", "R"))
+ 
+ forcasts_EC$votes[state == "District of Columbia"] <- 3
+ 
+ Trump_EC <- 0.0
+ 
+ Biden_EC <- 0.0
+ 
+ for(i in 1:dim(forcasts_EC)[1]){
+   row <- forcasts_EC[i,]
+   count <- row %>% pull(votes)
+   if(row$winner == "R"){
+     Trump_EC <- Trump_EC + count
+   }
+   else{
+     Biden_EC <- Biden_EC + count
+   }
+ }
+ 
+ # combining forcasts data set with pvp data set so I can plot them all in a grid
+ 
+ forcasts_com <-  forcasts %>% select(-margins)
+ pvstate_df_com <- pvstate_df  %>% select(state, year, R_pv2p, D_pv2p) %>%
+   bind_rows(forcasts_com) %>%
+   filter(year >= 2008) %>%
+   mutate(win_margin = R_pv2p - D_pv2p)
+ 
+ plot_usmap(data = pvstate_df_com, regions = "states", values = "win_margin", color = "white") +
+   facet_wrap(facets = year ~.) + ## specify a grid by year
+   scale_fill_gradient2(
+     high = "red", 
+     # mid = scales::muted("purple"), ##TODO: purple or white better?
+     mid = "white",
+     low = "blue", 
+     breaks = c(-50,-25,0,25,50), 
+     limits = c(-50,50),
+     name = "win margin"
+   ) +
+   theme_void() +
+ labs(title = "Win Margins 2008-2020",
+      fill = "Win Margin") +
+   theme_void() +
+   theme(
+     strip.text = element_text(size = 12),
+     plot.title = element_text(hjust = .5),
+     aspect.ratio = 1
+   )
+ 
+ ggsave("figures/purple_grid.png", height = 4, width = 5)
+ 
+ 
+ 
  
 
 
