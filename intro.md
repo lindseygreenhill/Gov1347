@@ -59,6 +59,6 @@ Some states have interesting histories as "perennial swing states" (Ansolabehere
 ![picture](Gov1347-master/figures/swing_states.png)
 
 There a few interesting trends in this graph.
-|              Florida and North Carolina have remained the "swingiest" of these five states
-|              Virginia has become more democratic
-|              Iowa and Ohio have become more republican
+> - Florida and North Carolina have remained the "swingiest" of these five states
+> - Virginia has become more democratic
+> - Iowa and Ohio have become more republican
