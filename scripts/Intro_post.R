@@ -121,7 +121,8 @@ for(state in unique(pvstate_df$state)){
    data = forcasts_wins,
    regions = "states",
    values = "winner",
-   color = "white"
+   color = "white",
+   labels = TRUE
  ) +
    scale_fill_manual(values = c("blue", "red"), name = "PV winner") +
    labs(title = "Predicted Election Results 2020") +
@@ -165,6 +166,8 @@ for(state in unique(pvstate_df$state)){
    filter(year >= 2008) %>%
    mutate(win_margin = R_pv2p - D_pv2p)
  
+ # creating faceted map of "purple america"
+ 
  plot_usmap(data = pvstate_df_com, regions = "states", values = "win_margin", color = "white") +
    facet_wrap(facets = year ~.) + ## specify a grid by year
    scale_fill_gradient2(
@@ -174,19 +177,91 @@ for(state in unique(pvstate_df$state)){
      low = "blue", 
      breaks = c(-50,-25,0,25,50), 
      limits = c(-50,50),
-     name = "win margin"
-   ) +
-   theme_void() +
- labs(title = "Win Margins 2008-2020",
-      fill = "Win Margin") +
-   theme_void() +
-   theme(
+     name = "win margin") +
+     theme_void() +
+     labs(title = "Win Margins 2008-2020",
+     fill = "Win Margin") +
+     theme_void() +
+     theme(
      strip.text = element_text(size = 12),
      plot.title = element_text(hjust = .5),
      aspect.ratio = 1
    )
  
  ggsave("figures/purple_grid.png", height = 4, width = 5)
+ 
+ 
+# finding what I consider swing states. Method taken from purple America. 
+# Also finding the top ten biggest electoral college states.
+ 
+ top10 <- EC %>% arrange(desc(votes)) %>%
+   slice(1:10)
+ 
+ top5swing  <- pv_margins_grid %>% 
+   filter(year >= 2008) %>%
+   arrange(win_margin)
+ 
+ # how to classify a swing state. Taken from Purple America. State is blue  is average vote share for  democratic candidate was .51 or greater. Red if democratic Voteshare was .47 or less. They used past four presidential elections
+ 
+ pvstate_df_swing <- data.frame()
+ 
+ for(state in unique(pvstate_df$state)){
+   state <- state
+   
+   # calculating the democratic  vote percentage  average  over four years
+   
+   D_vote_share <- (pvstate_df$D_pv2p[pvstate_df$state == state & pvstate_df$year == 2016] +
+                      pvstate_df$D_pv2p[pvstate_df$state == state & pvstate_df$year == 2012] +
+                      pvstate_df$D_pv2p[pvstate_df$state == state & pvstate_df$year == 2008] +
+                      pvstate_df$D_pv2p[pvstate_df$state == state & pvstate_df$year == 2004]) / 4
+   
+   # creating a vector to use in bind rows
+   
+   vector <- data.frame(state = state, D_pv2p_avg = D_vote_share)
+   
+   # binding vector with forcasts
+   
+   pvstate_df_swing <- pvstate_df_swing %>% bind_rows(vector)
+ }
+ 
+ top5swing <- pvstate_df_swing %>%
+   filter(D_pv2p_avg < 51 & D_pv2p_avg > 47)
+ 
+# creating a graph to  display the movement of the swing states.
+# Idea came from professor enos/538
+ 
+ pvstate_df$vote_margin <- pvstate_df$D_pv2p - pvstate_df$R_pv2p
+ 
+ pvstate_df %>% 
+   ## subset data
+   filter(state %in% c("Florida","Iowa","North Carolina","Ohio","Virginia")) %>%
+   filter(year >= 2004) %>%
+   ## pipe into ggplot()
+   ggplot(aes(x=year, y=vote_margin, color=vote_margin)) + 
+   ## specify a grid by state
+   facet_wrap(. ~ state,  nrow = 3) + 
+   ## add plot elements
+   geom_hline(yintercept=0,color="gray") +
+   geom_line() + 
+   geom_point() +
+   ## specify scale colors
+   scale_colour_gradient(low = "red", high = "blue") +
+   scale_fill_gradient(low = "red", high = "blue") +
+   labs(x = "Year",
+        y = "Democrat vote-share margin",
+        title = "Movement of Swing States since 2004") +
+   theme_classic() +
+   theme(panel.border = element_blank(),
+         plot.title = element_text(size = 18, hjust = .5, face = "bold"),
+         legend.position = "none",
+         axis.title = element_text(size=12),
+         strip.text = element_text(size = 12, face = "bold"))
+ 
+ ggsave("figures/swing_states.png", height = 4, width = 5)
+ 
+ 
+ 
+ 
  
  
  
