@@ -1,10 +1,4 @@
 
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
-```
-
 ## Introduction
 
 American presidential elections have always been a fascinating and contentious topic, perhaps nevermore so than in 2020. In this blog, I will build weekly models to predict the 2020  election. This introductory post will first present a basic predictive model derived from past election voting data and then discuss the concepts of "Purple America" and swing states. 
