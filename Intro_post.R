@@ -10,7 +10,7 @@ library(usmap)
 
 # setting workind directory
 
-setwd("/Users/lindseygreenhill/Desktop/Elections/Gov1347")
+# setwd("/Users/lindseygreenhill/Desktop/Elections/Gov1347")
 
 # reading in voting data
 
