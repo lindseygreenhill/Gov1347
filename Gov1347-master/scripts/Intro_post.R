@@ -14,16 +14,16 @@ library(usmap)
 
 # reading in voting data
 
-popvote_df <- read_csv("data/popvote_1948-2016.csv")
+popvote_df <- read_csv("Gov1347-master/data/popvote_1948-2016.csv")
 
 ## reading in state data
 
-pvstate_df <- read_csv("data/popvote_bystate_1948-2016.csv")
+pvstate_df <- read_csv("Gov1347-master/data/popvote_bystate_1948-2016.csv")
 pvstate_df$full <- pvstate_df$state
 
 # reading in electoral college data
 vector <- data.frame(state = "District of Columbia", votes = 3)
-EC <- read_csv("data/electoral_college.csv") %>%
+EC <- read_csv("Gov1347-master/data/electoral_college.csv") %>%
   select(state = State, votes = electoralVotesNumber) %>%
   bind_rows(vector)
 
@@ -52,7 +52,7 @@ plot_usmap(
 ) +
   facet_wrap(facets = year ~ .) + ## specify a grid by year
   scale_fill_manual(values = c("blue", "red"), name = "PV winner") +
-  labs(title = "Election Results 2008-2018") +
+  labs(title = "Election Results 2008-2016") +
   theme_void() +
   theme(
     strip.text = element_text(size = 12),
@@ -62,7 +62,7 @@ plot_usmap(
 
 # saving grid as an image
 
-ggsave("figures/PV_states_grid.png", height = 3, width = 8)
+ggsave("Gov1347-master/figures/PV_states_grid.png", height = 3, width = 8)
 
 # creating model to predict election. Including last three election cycles 
 # because that was the last time a republican was incumbent
@@ -133,7 +133,7 @@ for(state in unique(pvstate_df$state)){
      aspect.ratio = 1
    )
  
- ggsave("figures/2020_blue_red.png", height = 4, width = 5)
+ ggsave("Gov1347-master/figures/2020_blue_red.png", height = 4, width = 5)
  
  # getting electoral data and using to count electoral votes for 2020
  
@@ -188,7 +188,7 @@ for(state in unique(pvstate_df$state)){
      aspect.ratio = 1
    )
  
- ggsave("figures/purple_grid.png", height = 4, width = 5)
+ ggsave("Gov1347-master/figures/purple_grid.png", height = 4, width = 5)
  
  
 # finding what I consider swing states. Method taken from purple America. 
@@ -258,7 +258,7 @@ for(state in unique(pvstate_df$state)){
          axis.title = element_text(size=12),
          strip.text = element_text(size = 12, face = "bold"))
  
- ggsave("figures/swing_states.png", height = 4, width = 5)
+ ggsave("Gov1347-master/figures/swing_states.png", height = 4, width = 5)
  
  
  
