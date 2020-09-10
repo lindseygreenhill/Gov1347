@@ -1,3 +1,4 @@
+# Gov1347 Presidential Election Blog
+## Lindsey Greenhill
 
-
-### [Intro](intro.md)
+### [Introduction](intro.md)
