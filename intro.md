@@ -7,7 +7,7 @@ American presidential elections have always been a fascinating and contentious t
 
 Perhaps the most basic strategy to predict the 2020 election is to look at the results from previous elections. My model draws from the past three elections (2008, 2012, 2016). The graphic below displays the state-by-state victories for either the republican or democratic party from these three elections. A state appears red if the republican party candidate won the majority of votes or blue if the democratic party candidate did. 
 
-![picture]("PV_states_grid_copy.png")
+![picture]("Gov1347-master/figures/2020_blue_red.png")
 
 
 My model calculates the predicted result of each state by taking a weighted average of the democratic and republican vote shares for each state for the past three elections. This equation is shown below.
