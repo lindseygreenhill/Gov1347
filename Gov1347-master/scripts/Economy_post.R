@@ -90,7 +90,6 @@ for(i in vars){
 
 # cross 
 
-for(i in )
 
 
 
