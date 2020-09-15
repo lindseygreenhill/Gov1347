@@ -19,7 +19,7 @@ data <- popvote_df %>%
   left_join(economy_df, by = "year") %>%
   filter(year >= 1948, quarter == 2, incumbent_party == TRUE) %>%
   select(year, party, winner, pv2p, incumbent, incumbent_party, prev_admin,
-         GDP_growth_qt, GDP_growth_yr, unemployment, stock_open)
+         GDP_growth_qt, GDP_growth_yr, unemployment, stock_close)
 
 vars <- c("GDP_growth_qt")
 
@@ -31,9 +31,9 @@ lm_GDP_growth_qt <- lm(pv2p ~ GDP_growth_qt, data = data)
 
 # checking in sample model error and MSE
 
-r_squared <- summary(lm_GDP_growth_qt)$r.squared
+r_squared_GDP_growth_qt<- summary(lm_GDP_growth_qt)$r.squared
 
-mse <- sqrt(mean((lm_GDP_growth_qt$model$pv2p - lm_GDP_growth_qt$fitted.values)^2))
+mse_GDP_growth_qt <- sqrt(mean((lm_GDP_growth_qt$model$pv2p - lm_GDP_growth_qt$fitted.values)^2))
 
 ## model testing: cross-validation (1000 runs)
 
@@ -47,12 +47,112 @@ outsamp_errors <- sapply(1:1000, function(i){
   mean(outsamp_pred - outsamp_true)
 })
 
-mean_outsamp <- mean(abs(outsamp_errors))
+mean_outsamp_GDP_growth_qt <- mean(abs(outsamp_errors))
 
-row1 <- table(var = "GDP_growth_qt",
-              r_sq = r_squared,
-              mse = mse,
-              mean_out = mean_outsamp)
+Model_Statistics <- tibble(var = "GDP_growth_qt",
+              r_sq = r_squared_GDP_growth_qt,
+              mse = mse_GDP_growth_qt,
+              mean_out = mean_outsamp_GDP_growth_qt)
+
+######## GDP growth yr ###############
+######################################
+
+lm_GDP_growth_yr <- lm(pv2p ~ GDP_growth_yr, data = data)
+
+# checking in sample model error and MSE
+
+r_squared_GDP_growth_yr<- summary(lm_GDP_growth_yr)$r.squared
+
+mse_GDP_growth_yr <- sqrt(mean((lm_GDP_growth_yr$model$pv2p - lm_GDP_growth_yr$fitted.values)^2))
+
+## model testing: cross-validation (1000 runs)
+
+outsamp_errors <- sapply(1:1000, function(i){
+  years_outsamp <- sample(data$year, 8)
+  outsamp_mod <- lm(pv2p ~ GDP_growth_yr,
+                    data[!(data$year %in% years_outsamp),])
+  outsamp_pred <- predict(outsamp_mod,
+                          newdata = data[data$year %in% years_outsamp,])
+  outsamp_true <- data$pv2p[data$year %in% years_outsamp]
+  mean(outsamp_pred - outsamp_true)
+})
+
+mean_outsamp_GDP_growth_yr <- mean(abs(outsamp_errors))
+
+row3 <- c(var = "GDP_growth_yr",
+              r_sq = r_squared_GDP_growth_yr,
+              mse = mse_GDP_growth_yr,
+              mean_out = mean_outsamp_GDP_growth_yr)
+
+
+
+
+######## unemployment ###############
+######################################
+
+lm_unemployment <- lm(pv2p ~ unemployment, data = data)
+
+# checking in sample model error and MSE
+
+r_squared_unemployment <- summary(lm_unemployment)$r.squared
+
+mse_unemployment <- sqrt(mean((lm_unemployment$model$pv2p - lm_unemployment$fitted.values)^2))
+
+## model testing: cross-validation (1000 runs)
+
+outsamp_errors <- sapply(1:1000, function(i){
+  years_outsamp <- sample(data$year, 8)
+  outsamp_mod <- lm(pv2p ~ unemployment,
+                    data[!(data$year %in% years_outsamp),])
+  outsamp_pred <- predict(outsamp_mod,
+                          newdata = data[data$year %in% years_outsamp,])
+  outsamp_true <- data$pv2p[data$year %in% years_outsamp]
+  mean(outsamp_pred - outsamp_true)
+})
+
+mean_outsamp_unemployment <- mean(abs(outsamp_errors))
+
+row2 <- c(var = "unemployment",
+              r_sq = r_squared_unemployment,
+              mse = mse_unemployment,
+              mean_out = mean_outsamp_unemployment)
+
+
+######## stock close ###############
+######################################
+
+lm_stock_close <- lm(pv2p ~ stock_close, data = data)
+
+# checking in sample model error and MSE
+
+r_squared_stock_close <- summary(lm_stock_close)$r.squared
+
+mse_stock_close <- sqrt(mean((lm_stock_close$model$pv2p - lm_stock_close$fitted.values)^2))
+
+## model testing: cross-validation (1000 runs)
+
+outsamp_errors <- sapply(1:1000, function(i){
+  years_outsamp <- sample(data$year, 8)
+  outsamp_mod <- lm(pv2p ~ stock_close,
+                    data[!(data$year %in% years_outsamp),])
+  outsamp_pred <- predict(outsamp_mod,
+                          newdata = data[data$year %in% years_outsamp,])
+  outsamp_true <- data$pv2p[data$year %in% years_outsamp]
+  mean(outsamp_pred - outsamp_true)
+})
+
+mean_outsamp_stock_close <- mean(abs(outsamp_errors))
+
+row4 <- c(var = "stock_close",
+              r_sq = r_squared_stock_close,
+              mse = mse_stock_close,
+              mean_out = mean_outsamp_stock_close)
+
+
+########## creating stats table #########
+
+Model_Statistics <- Model_Statistics %>%
+  rbind(row2, row3, row4)
 
 
 # loop attemp
