@@ -23,7 +23,7 @@ Rep_vote_share_2020 <- (Rep_vote_share_2016 *.70) + (Rep_vote_share_2012 *.2) +
 
 I chose to weight the 2016 election by .7, as it is most similar to the 2020 election due to how recent it is as well as the consistency in republican candidates (Trump). I originally planned to weight the 2012 election by .3, but I decided it would be best to also consider the 2008 election, as it is the last election with a republican incumbent. Thus, I split the remaining weight between the 2012 and 2008 results by .2 and .1, respectively. 
 
-*Note:* this data reflects the 2 party popular vote share as opposed to the overall vote share. This decision was made to counteract potential third party influences in the election, as significant third party influences are rare, even in  elections where both republican and democratic candidates are unpopular, such as in 2016 (Neville-Shepard 2017). 
+*Note:* this data reflects the 2 party popular vote share as opposed to the overall vote share. This decision was made to counteract potential third party influences in the election, as significant third party influences are rare, even in  elections where both republican and democratic candidates are unpopular, such as in 2016 [(Neville-Shepard 2017)](https://www.researchgate.net/publication/317830780_Constrained_by_Duality_Third-Party_Master_Narratives_in_the_2016_Presidential_Election_.) 
 
 ### Results
 
@@ -40,7 +40,7 @@ My results show that **Biden will win** the election with 279 electoral votes (E
 
 
 ## Purple America and Swing States
-However, these maps might be slightly misleading, as, in reality, states do not vote 100% red or 100% blue. In fact, win margins in states have shrunk dramatically over the past decades to the point where America can be seen as more purple than red and blue (Ansolabehere 2006). Thus, a perhaps more accurate representation of the three past elections as well as the model’s results are shown in the map below. 
+However, these maps might be slightly misleading, as, in reality, states do not vote 100% red or 100% blue. In fact, win margins in states have shrunk dramatically over the past decades to the point where America can be seen as more purple than red and blue [(Ansolabehere 2006)](https://www.aeaweb.org/articles?id=10.1257/jep.20.2.97). Thus, a perhaps more accurate representation of the three past elections as well as the model’s results are shown in the map below. 
 
 ![picture](Gov1347-master/figures/purple_grid.png)
 
@@ -54,7 +54,7 @@ All else constant, if even one of those states flipped red, Biden will not win t
 
 ## Swing States
 
-Some states have interesting histories as "perennial swing states" (Ansolabehere 2006). The graphic below shoes the movement in vote margins of five states I consider to be perennial swing states. I selected these states based on a method used by Ansolabehere, Rodden, and Snyder in "Purple America" (Ansolabehere 2006). This method classifies a swing state by taking the average of the democratic vote share for each state for the past four elections. A state is classified as a swing state if the average democratic vote share fell in between 48% and 51%. My analysis of vote shares from the 2004, 2008, 2012, and 2016 classified Florida, Iowa, North Carolina, Virginia, and Ohio as swing states. The graphic below shows the movement of the win margin within those states from 2004 to 2016. 
+Some states have interesting histories as "perennial swing states" (Ansolabehere 2006). The graphic below shoes the movement in vote margins of five states I consider to be perennial swing states. I selected these states based on a [method](https://www.aeaweb.org/articles?id=10.1257/jep.20.2.97) used by Ansolabehere, Rodden, and Snyder in "Purple America" (Ansolabehere 2006). This method classifies a swing state by taking the average of the democratic vote share for each state for the past four elections. A state is classified as a swing state if the average democratic vote share fell in between 48% and 51%. My analysis of vote shares from the 2004, 2008, 2012, and 2016 classified Florida, Iowa, North Carolina, Virginia, and Ohio as swing states. The graphic below shows the movement of the win margin within those states from 2004 to 2016. 
 
 ![picture](Gov1347-master/figures/swing_states.png)
 
