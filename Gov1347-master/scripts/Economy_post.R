@@ -10,8 +10,13 @@
 
 library(tidyverse)
 library(ggplot2)
+library(janitor)
 popvote_df <- read_csv("Gov1347-master/data/popvote_1948-2016.csv")
 economy_df <- read_csv("Gov1347-master/data/econ.csv") 
+local_df <- read_csv("Gov1347-master/data/local.csv") %>%
+  clean_names() %>%
+  filter(!(state_and_area %in% c("New York city", "Los Angeles County"))) %>%
+  mutate(month = parse_double(month))
 
 # creating a data set that joins economy and popular vote. Getting rid of candidate column. Filtering for elections after WWII. 
 
@@ -153,6 +158,16 @@ row4 <- c(var = "stock_close",
 
 Model_Statistics <- Model_Statistics %>%
   rbind(row2, row3, row4)
+
+
+########## states extension ###############3
+
+local_2 <- local_df %>%
+  filter(month %in% c(7, 8, 9)) %>%
+  select(state_and_area, year, month, unemployed_prce) %>%
+  pivot_wider(names_from = month, values_from = unemployed_prce, names_prefix = "rate_") %>%
+  mutate(avg_7_9 = (rate_7 + rate_8 + rate_9)/3)
+  
 
 
 # loop attemp
