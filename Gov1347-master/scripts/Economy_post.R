@@ -182,22 +182,29 @@ states <- c("Arizona", "Colorado", "Florida", "Georgia", "Iowa", "Maine", "Michi
             "North Carolina", "Ohio", "Pennsyvania")
 
 local_vote %>%
-  filter(state_and_ared %in%
   ggplot(aes(avg_7_9, incumbent_vs)) +
   geom_point() +
   geom_smooth(method = "lm")
   
 
-correlations <- date_frame()
+correlations <- data_frame()
 for(i in unique(local_vote$state_and_area)){
   df <- local_vote  %>%
     filter(state_and_area == i)
   
-  cor <- cor(local_vote$avg_7_9, local_vote$incumbent_vs)
+  cor <- cor(df$avg_7_9, df$incumbent_vs)
   
+  vector <- data.frame(state = i, correlation = cor)
   
-  print(df)
+  # binding vector with forcasts
+  
+  correlations <- correlations %>% bind_rows(vector)
+
 }
+
+# means that this model could be a powerful way to predict some states but not
+# others. probably better off sticking with normal economy but this could be
+# interesting to look at for some  states such as Texas, Mississippi
   
 
 
