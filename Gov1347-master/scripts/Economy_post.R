@@ -178,9 +178,26 @@ local_vote <- local_2 %>%
   left_join(data_state, by = "year") %>%
   mutate(incumbent_vs = if_else(party == "republican", R_pv2p,  D_pv2p))
 
+states <- c("Arizona", "Colorado", "Florida", "Georgia", "Iowa", "Maine", "Michigan",
+            "North Carolina", "Ohio", "Pennsyvania")
+
 local_vote %>%
+  filter(state_and_ared %in%
   ggplot(aes(avg_7_9, incumbent_vs)) +
-  geom_point()
+  geom_point() +
+  geom_smooth(method = "lm")
+  
+
+correlations <- date_frame()
+for(i in unique(local_vote$state_and_area)){
+  df <- local_vote  %>%
+    filter(state_and_area == i)
+  
+  cor <- cor(local_vote$avg_7_9, local_vote$incumbent_vs)
+  
+  
+  print(df)
+}
   
 
 
