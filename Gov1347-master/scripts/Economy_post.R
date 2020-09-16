@@ -18,6 +18,8 @@ local_df <- read_csv("Gov1347-master/data/local.csv") %>%
   filter(!(state_and_area %in% c("New York city", "Los Angeles County"))) %>%
   mutate(month = parse_double(month))
 
+popvote_state <- read_csv("Gov1347-master/data/popvote_bystate_1948-2016.csv")
+
 # creating a data set that joins economy and popular vote. Getting rid of candidate column. Filtering for elections after WWII. 
 
 data <- popvote_df %>%
@@ -162,11 +164,23 @@ Model_Statistics <- Model_Statistics %>%
 
 ########## states extension ###############3
 
+data_state <- data %>%
+  select(year, party)
+
 local_2 <- local_df %>%
-  filter(month %in% c(7, 8, 9)) %>%
+  filter(month %in% c(7, 8, 9), (year%%4) == 0) %>%
   select(state_and_area, year, month, unemployed_prce) %>%
   pivot_wider(names_from = month, values_from = unemployed_prce, names_prefix = "rate_") %>%
   mutate(avg_7_9 = (rate_7 + rate_8 + rate_9)/3)
+
+local_vote <- local_2 %>%
+  left_join(popvote_state, by = c("state_and_area" = "state", "year")) %>%
+  left_join(data_state, by = "year") %>%
+  mutate(incumbent_vs = if_else(party == "republican", R_pv2p,  D_pv2p))
+
+local_vote %>%
+  ggplot(aes(avg_7_9, incumbent_vs)) +
+  geom_point()
   
 
 
