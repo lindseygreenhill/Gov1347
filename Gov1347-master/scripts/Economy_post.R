@@ -231,10 +231,10 @@ row5 <- c(var = "RDI_growth",
 
 ########## creating stats table #########
 
-Model_Statistics <- Model_Statistics %>%
+Model_Statistics_2 <- Model_Statistics %>%
   rbind(row2, row3, row4, row5)
 
-Model_Stats <- Model_Statistics %>%
+Model_Stats <- Model_Statistics_2 %>%
   mutate(Correlation = parse_number(cor),
          Estimate =  parse_number(estimate),
          R_Sq = parse_number(r_sq),
@@ -259,7 +259,7 @@ library(webshot)
 
 # saving the table as an image
 
-gtsave(stats_gt, "Gov1347-master/data/regression_table.png")
+gtsave(stats_gt, "Gov1347-master/figures/regression_table.png")
 
 ########## Predictions ##########
 
@@ -291,7 +291,7 @@ data_prediction <- data %>%
   select(year, pv2p, GDP_growth_qt) %>%
   bind_rows(GDP_qt_2_pred)
 
-ggplot(data_prediction, aes(x = GDP_growth_qt, y = pv2p)) +
+Q2_GDP_Graph <- ggplot(data_prediction, aes(x = GDP_growth_qt, y = pv2p)) +
   geom_point() +
   geom_smooth(method = "lm") +
   annotate("text", x = -8.7, y = 21.5, label = "<-  2020", color = "red") +
@@ -301,12 +301,22 @@ ggplot(data_prediction, aes(x = GDP_growth_qt, y = pv2p)) +
        x = "Q2 GDP Growth",
        y = "Incumbent Popular Vote Share")
 
+ggsave("Gov1347-master/figures/Q2_GDP_graph.png")
+
 
 ########## NYT Graph ##########
 
-Extrap_GDP <- economy_df %>%
-  filter(year >= 1948,  quarter %in%  c(1,2)) %>%
-  mutate(quarter = if_else(quarter== 1, "Q1","Q2")) %>%
+row_q3 <- tibble(year = 2020, quarter = 3, GDP_growth_qt = 22)
+
+
+economy_df_q3 <- economy_df %>%
+  select(year, quarter, GDP_growth_qt) %>%
+  na.omit() %>%
+  bind_rows(row_q3)
+
+Extrap_GDP <- economy_df_q3 %>%
+  filter(year >= 1948,  quarter %in% c(1,2,3)) %>%
+  mutate(quarter = if_else(quarter == 1, "Q1",if_else(quarter == 2, "Q2", "Q3"))) %>%
   ggplot(aes(x = year, y = GDP_growth_qt, fill = (GDP_growth_qt > 0))) +
   facet_wrap(~quarter) +
   geom_col(show.legend = FALSE) + 
@@ -319,18 +329,18 @@ Extrap_GDP <- economy_df %>%
 ######### Q1 GDP ##########
 data_q1 <- popvote_df %>%
   left_join(economy_df, by = "year") %>%
-  filter(year >= 1948, quarter == 1, incumbent_party == TRUE) %>%
+  filter(year >= 1948, quarter == 3, incumbent_party == TRUE) %>%
   select(year, party, winner, pv2p, incumbent, incumbent_party, prev_admin,
          GDP_growth_qt, GDP_growth_yr, unemployment, stock_close, RDI_growth)
 
 
 
-######## GDP growth qt ###############
+######## GDP growth q1 ###############
 ######################################
 
 cor_GDP_growth_qt_1 <- cor(data_q1$GDP_growth_qt, data_q1$pv2p)
 
-lm_GDP_growth_qt_1 <- lm(pv2p ~ GDP_growth_qt, data = data)
+lm_GDP_growth_qt_1 <- lm(pv2p ~ GDP_growth_qt, data = data_q1)
 
 estimate_GDP_growth_qt_1 <- lm_GDP_growth_qt_1 %>% tidy() %>%
   filter(term == "GDP_growth_qt") %>% pull(estimate)
@@ -360,8 +370,13 @@ Model_Statistics_1 <- tibble(var = "GDP_growth_qt_1",
                            estimate = estimate_GDP_growth_qt_1,
                            r_sq = r_squared_GDP_growth_qt_1,
                            mse = mse_GDP_growth_qt_1,
-                           mean_out = mean_outsamp_GDP_growth_qt_1)
+                           mean_out = mean_outsamp_GDP_growth_qt_1) %>%
+  bind_rows(Model_Statistics)
 
+
+q1_vs_q2 <- Model_Statistics_1 %>%
+  mutate_if(is.numeric, round, digits = 3) %>%
+  
 ## prediction q1 ######
 
 GDP_new_1 <- economy_df %>%
