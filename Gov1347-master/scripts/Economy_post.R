@@ -245,11 +245,21 @@ Model_Stats <- Model_Statistics %>%
   select(-(2:6)) %>%
   arrange(desc(R_Sq))
 
+# creating gt table of regression statistics
+
 stats_gt <- Model_Stats %>%
   gt() %>%
   tab_header(title = "Linear Regression Results") %>%
   cols_label(var = "IV",  R_Sq = "R Sq",
              Outsampling_Error = "Outsampling Error")
+
+# need lbrary to save table as an image
+
+library(webshot)
+
+# saving the table as an image
+
+gtsave(stats_gt, "Gov1347-master/data/regression_table.png")
 
 ########## Predictions ##########
 
@@ -271,6 +281,25 @@ GDP_yr_new <- economy_df %>%
   select(GDP_growth_yr)
 
 GDP_yr_prediction  <- predict(lm_GDP_growth_yr, GDP_yr_new, interval="prediction")
+
+
+##### ggplot of regression ##########
+
+GDP_qt_2_pred <- tibble(year = 2020, pv2p = GDP_prediction[1], GDP_growth_qt = GDP_new[[1]])
+
+data_prediction <- data %>%
+  select(year, pv2p, GDP_growth_qt) %>%
+  bind_rows(GDP_qt_2_pred)
+
+ggplot(data_prediction, aes(x = GDP_growth_qt, y = pv2p)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  annotate("text", x = -8.7, y = 21.5, label = "<-  2020", color = "red") +
+  theme_classic() +
+  labs(title = "Q2 GDP Growth vs Incumbent Popular Vote Share 1948-2020",
+       subtitle = "Model predicts Trump will win 21.4% of the popular vote",
+       x = "Q2 GDP Growth",
+       y = "Incumbent Popular Vote Share")
 
 
 ########## NYT Graph ##########
