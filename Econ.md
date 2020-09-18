@@ -15,9 +15,8 @@
   
 #### Analysis
 
-> Quarterly GDP growth shows the strongest correlation (.57) and R2 (.326) values, meaning that the model accounts for the most amount of variance compared to models with other economic indicators 
-
-Quarterly GDP growth also shows the lowest Mean Squared Error(4.2) and lowest mean out-of-sample cross validation testing error (1.74)
-Yearly GDP growth also appears to be a decent predictor of the popular vote, however, all of its metrics are slightly weaker than Quarterly GDP growth
-RDI growth appears to be the third best predictor of the popular vote, with all metrics weaker than both Quarterly and Yearly GDP growth
-Both stock close and unemployment do not display predictive power, with R2 values close to 0 and MSE values about .8 to .9 higher than GDP predictors 
+> - Quarterly GDP growth shows the strongest correlation (.57) and R2 (.326) values, meaning that the model accounts for the most amount of variance compared to models with other economic indicators 
+> - Quarterly GDP growth also shows the lowest Mean Squared Error(4.2) and lowest mean out-of-sample cross validation testing error (1.74)
+> - Yearly GDP growth also appears to be a decent predictor of the popular vote, however, all of its metrics are slightly weaker than Quarterly GDP growth
+> - RDI growth appears to be the third best predictor of the popular vote, with all metrics weaker than both Quarterly and Yearly GDP growth
+> - Both stock close and unemployment do not display predictive power, with R2 values close to 0 and MSE values about .8 to .9 higher than GDP predictors 
