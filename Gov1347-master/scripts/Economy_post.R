@@ -306,17 +306,17 @@ ggsave("Gov1347-master/figures/Q2_GDP_graph.png")
 
 ########## NYT Graph ##########
 
-row_q3 <- tibble(year = 2020, quarter = 3, GDP_growth_qt = 22)
+# row_q3 <- tibble(year = 2020, quarter = 3, GDP_growth_qt = 22)
 
 
-economy_df_q3 <- economy_df %>%
-  select(year, quarter, GDP_growth_qt) %>%
-  na.omit() %>%
-  bind_rows(row_q3)
+# economy_df_q3 <- economy_df %>%
+#   select(year, quarter, GDP_growth_qt) %>%
+#   na.omit() %>%
+#   bind_rows(row_q3)
 
-Extrap_GDP <- economy_df_q3 %>%
-  filter(year >= 1948,  quarter %in% c(1,2,3)) %>%
-  mutate(quarter = if_else(quarter == 1, "Q1",if_else(quarter == 2, "Q2", "Q3"))) %>%
+Extrap_GDP <- economy_df %>%
+  filter(year >= 1948,  quarter %in% c(1,2)) %>%
+  mutate(quarter = if_else(quarter == 1, "Q1", "Q2")) %>%
   ggplot(aes(x = year, y = GDP_growth_qt, fill = (GDP_growth_qt > 0))) +
   facet_wrap(~quarter) +
   geom_col(show.legend = FALSE) + 
@@ -325,6 +325,17 @@ Extrap_GDP <- economy_df_q3 %>%
        subtitle = "2020 Q2 GDP decline is unprecedented",
        x = "Year",
        y = "Quarterly GDP Growth")
+
+
+Extrap_GDP_yr <- economy_df %>%
+  filter(year >= 1948,  quarter == 2) %>%
+  ggplot(aes(x = year, y = GDP_growth_yr, fill = (GDP_growth_yr > 0))) +
+  geom_col(show.legend = FALSE) + 
+  theme_classic() +
+  labs(title = "Yearly GDP Growth (Q2) 1948-2020",
+       subtitle = "2020 Q2 GDP decline is unprecedented",
+       x = "Year",
+       y = "Yearly GDP Growth (Q2)")
 
 ######### Q1 GDP ##########
 data_q1 <- popvote_df %>%
