@@ -2,3 +2,5 @@
 ## Lindsey Greenhill
 
 ### [Introduction](intro.md)
+
+### [Economy](econ.md)
