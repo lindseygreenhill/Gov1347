@@ -245,11 +245,12 @@ Model_Stats <- Model_Statistics_2 %>%
   select(-(2:6)) %>%
   arrange(desc(R_Sq))
 
+
 # creating gt table of regression statistics
 
 stats_gt <- Model_Stats %>%
   gt() %>%
-  tab_header(title = "Linear Regression Results") %>%
+  tab_header(title = "Linear Regression Results (Popular Vote ~ IV") %>%
   cols_label(var = "IV",  R_Sq = "R Sq",
              Outsampling_Error = "Outsampling Error")
 
@@ -270,14 +271,14 @@ GDP_new <- economy_df %>%
 GDP_prediction  <- predict(lm_GDP_growth_qt, GDP_new, interval="prediction")
 
 RDI_new <- economy_df %>%
-  filter(year == 2020, quarter == 1)  %>%
+  filter(year == 2020, quarter == 2)  %>%
   select(RDI_growth)
 
 RDI_prediction  <- predict(lm_RDI_growth, RDI_new, interval="prediction")
 
 
 GDP_yr_new <- economy_df %>%
-  filter(year == 2020, quarter == 1)  %>%
+  filter(year == 2020, quarter == 2)  %>%
   select(GDP_growth_yr)
 
 GDP_yr_prediction  <- predict(lm_GDP_growth_yr, GDP_yr_new, interval="prediction")
@@ -294,14 +295,62 @@ data_prediction <- data %>%
 Q2_GDP_Graph <- ggplot(data_prediction, aes(x = GDP_growth_qt, y = pv2p)) +
   geom_point() +
   geom_smooth(method = "lm") +
-  annotate("text", x = -8.7, y = 21.5, label = "<-  2020", color = "red") +
+  annotate("text", x = -8.6, y = 21.5, label = "<-  2020", color = "red", size =7) +
   theme_classic() +
-  labs(title = "Q2 GDP Growth vs Incumbent Popular Vote Share 1948-2020",
+  labs(title = "Incumbent Popular Vote Share 1948-2020 vs  Q2 GDP Quarterly Growth",
        subtitle = "Model predicts Trump will win 21.4% of the popular vote",
-       x = "Q2 GDP Growth",
+       x = "Q2 GDP Quarterly Growth",
        y = "Incumbent Popular Vote Share")
 
 ggsave("Gov1347-master/figures/Q2_GDP_graph.png")
+
+#### ggplot of prediction for yearly GDP #########
+
+GDP_qt_2_yr_pred <- tibble(year = 2020, pv2p = GDP_yr_prediction[1], GDP_growth_yr = GDP_yr_new[[1]])
+
+data_yr_prediction <- data %>%
+  select(year, pv2p, GDP_growth_yr) %>%
+  bind_rows(GDP_qt_2_yr_pred)
+
+Q2_GDP_yr_Graph <- ggplot(data_yr_prediction, aes(x = GDP_growth_yr, y = pv2p)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  annotate("text", x = -7.7, y = 34.2, label = "<- 2020", color = "red", size =7) +
+  theme_classic() +
+  labs(title = "Incumbent Popular Vote Share 1948-2020 vs Q2 GDP Yearly Growth",
+       subtitle = "Model predicts Trump will win 34.2% of the popular vote",
+       x = "Q2 GDP Yearly Growth",
+       y = "Incumbent Popular Vote Share")
+
+ggsave("Gov1347-master/figures/Q2_GDP_yr_graph.png")
+
+
+
+
+#### ggplot of prediction for RDI #########
+
+RDI_pred <- tibble(year = 2020, pv2p = RDI_prediction[1], RDI_growth = RDI_new[[1]])
+
+data_prediction_RDI <- data_RDI %>%
+  select(year, pv2p, RDI_growth) %>%
+  bind_rows(RDI_pred)
+
+RDI_Graph <- ggplot(data_prediction_RDI, aes(x = RDI_growth, y = pv2p)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  annotate("text", x = .087, y = 80, label = "2020 ->", color = "red", size = 7) +
+  theme_classic() +
+  labs(title = "Incumbent Popular Vote Share 1948-2020 vs Q2 RDI Growth",
+       subtitle = "Model predicts Trump will win 80.3% of the popular vote",
+       x = "Q2 RDI Growth",
+       y = "Incumbent Popular Vote Share")
+
+ggsave("Gov1347-master/figures/RDI_graph.png")
+
+library(ggpubr)
+
+ggarrange(Q2_GDP_Graph, Q2_GDP_yr_Graph, RDI_Graph,
+          ncol = 3, nrow = 1)
 
 
 ########## NYT Graph ##########
@@ -315,13 +364,11 @@ ggsave("Gov1347-master/figures/Q2_GDP_graph.png")
 #   bind_rows(row_q3)
 
 Extrap_GDP <- economy_df %>%
-  filter(year >= 1948,  quarter %in% c(1,2)) %>%
-  mutate(quarter = if_else(quarter == 1, "Q1", "Q2")) %>%
+  filter(year >= 1948,quarter ==2) %>%
   ggplot(aes(x = year, y = GDP_growth_qt, fill = (GDP_growth_qt > 0))) +
-  facet_wrap(~quarter) +
   geom_col(show.legend = FALSE) + 
   theme_classic() +
-  labs(title = "Quarterly GDP Growth 1948-2020",
+  labs(title = "Q2 Quarterly GDP Growth 1948-2020",
        subtitle = "2020 Q2 GDP decline is unprecedented",
        x = "Year",
        y = "Quarterly GDP Growth")
@@ -336,6 +383,20 @@ Extrap_GDP_yr <- economy_df %>%
        subtitle = "2020 Q2 GDP decline is unprecedented",
        x = "Year",
        y = "Yearly GDP Growth (Q2)")
+
+Extrap_RDI <- economy_df %>%
+  filter(year >= 1960,quarter == 2) %>%
+  ggplot(aes(x = year, y = RDI_growth, fill = (RDI_growth > 0))) +
+  geom_col(show.legend = FALSE) + 
+  theme_classic() +
+  labs(title = "Quarterly RDI Growth (Q2) 1960-2020",
+       subtitle = "2020 Q2 RDI Growth is unprecedented",
+       x = "Year",
+       y = "Quarterly RDI Growth (Q2)")
+
+
+ggarrange(Extrap_GDP, Extrap_GDP_yr, Extrap_RDI,
+          ncol = 3, nrow = 1)
 
 ######### Q1 GDP ##########
 data_q1 <- popvote_df %>%
@@ -446,157 +507,157 @@ for(i in unique(local_vote$state_and_area)){
 # interesting to look at for some  states such as Texas, Mississippi
   
 
-
-# loop attemp
-
-
-for(i in vars){
-  
- lm_x <- lm(pv2p ~ data[[i]], data = data)
- 
-# checking in sample model error and MSE
- 
- r_squared <- summary(lm_x)$r.squared
- 
- mse <- sqrt(mean((lm_x$model$pv2p - lm_x$fitted.values)^2))
- 
- ## model testing: cross-validation (1000 runs)
- 
- outsamp_errors <- sapply(1:1000, function(j){
-   years_outsamp <- sample(data$year, 8)
-   outsamp_mod <- lm(pv2p ~ data[[i]],
-                     data[!(data$year %in% years_outsamp),])
-   outsamp_pred <- predict(outsamp_mod,
-                           newdata = data[data$year %in% years_outsamp,])
-   outsamp_true <- data$pv2p[data$year %in% years_outsamp]
-   mean(outsamp_pred - outsamp_true)
- })
- 
- mean_outsamp <- mean(abs(outsamp_errors))
 # 
-# row1 <- table(var = i,
-#               r_sq = r_squared,
-#               mse = mse,
-#               mean_out = mean_outsamp)
-}
-
-# cross 
-
-
-
-
-# # creating a loop to test different models
+# # loop attemp
 # 
-# for(i in IV){
-#   
-#   var <- i
-#   print(var)
-#   
-#   # fitting a model
-#   
-#    lm_x <- lm(pv2p ~ i, data = data, drop.unused.levels = FALSE)
-#   # 
-#   # # getting in sample error and MSE
-#   # 
-#    r_squared <- summary(lm_x)$r.squared
-#   # 
-#    mse <- sqrt(mean((lm_x$model$pv2p - lm_x$fitted.values)^2))
 # 
+# for(i in vars){
+#   
+#  lm_x <- lm(pv2p ~ data[[i]], data = data)
+#  
+# # checking in sample model error and MSE
+#  
+#  r_squared <- summary(lm_x)$r.squared
+#  
+#  mse <- sqrt(mean((lm_x$model$pv2p - lm_x$fitted.values)^2))
+#  
+#  ## model testing: cross-validation (1000 runs)
+#  
+#  outsamp_errors <- sapply(1:1000, function(j){
+#    years_outsamp <- sample(data$year, 8)
+#    outsamp_mod <- lm(pv2p ~ data[[i]],
+#                      data[!(data$year %in% years_outsamp),])
+#    outsamp_pred <- predict(outsamp_mod,
+#                            newdata = data[data$year %in% years_outsamp,])
+#    outsamp_true <- data$pv2p[data$year %in% years_outsamp]
+#    mean(outsamp_pred - outsamp_true)
+#  })
+#  
+#  mean_outsamp <- mean(abs(outsamp_errors))
+# # 
+# # row1 <- table(var = i,
+# #               r_sq = r_squared,
+# #               mse = mse,
+# #               mean_out = mean_outsamp)
 # }
-
-# fitting a model
-
-
-
-## scatterplot + line
-dat %>%
-  ggplot(aes(x=GDP_growth1, y=voteshare,
-             label=year)) + 
-  geom_text() +
-  geom_smooth(method="lm", formula = y ~ x) +
-  geom_hline(yintercept=50, lty=2) +
-  geom_vline(xintercept=0.01, lty=2) + # median
-  xlab("Second quarter GDP growth") +
-  ylab("Incumbent party's national popular voteshare") +
-  theme_bw()
-
-## fit a model
-
-lm_econ <- lm(pv2p ~ GDP_growth_qt, data = dat)
-
-# getting in sample error and MSE
-
-summary(lm_econ)
-
-dat %>%
-  ggplot(aes(x=GDP_growth_qt, y=pv2p,
-             label=year)) + 
-    geom_text(size = 8) +
-    geom_smooth(method="lm", formula = y ~ x) +
-    geom_hline(yintercept=50, lty=2) +
-    geom_vline(xintercept=0.01, lty=2) + # median
-    xlab("Q2 GDP growth (X)") +
-    ylab("Incumbent party PV (Y)") +
-    theme_bw() +
-    ggtitle("Y = 49.44 + 2.969 * X") + 
-    theme(axis.text = element_text(size = 20),
-          axis.title = element_text(size = 24),
-          plot.title = element_text(size = 32))
-
-## model fit 
-
-#TODO
-
-## model testing: leave-one-out
-outsamp_mod  <- lm(pv2p ~ GDP_growth_qt, dat[dat$year != 2016,])
-outsamp_pred <- predict(outsamp_mod, dat[dat$year == 2016,])
-outsamp_true <- dat$pv2p[dat$year == 2016] 
-
-## model testing: cross-validation (one run)
-years_outsamp <- sample(dat$year, 8)
-mod <- lm(pv2p ~ GDP_growth_qt,
-          dat[!(dat$year %in% years_outsamp),])
-
-outsamp_pred <- #TODO
-  
-## model testing: cross-validation (1000 runs)
-outsamp_errors <- sapply(1:1000, function(i){
-  years_outsamp <- sample(data$year, 8)
-  outsamp_mod <- lm(pv2p ~ GDP_growth_qt,
-                    data[!(data$year %in% years_outsamp),])
-  outsamp_pred <- predict(outsamp_mod,
-                          newdata = data[data$year %in% years_outsamp,])
-  outsamp_true <- data$pv2p[data$year %in% years_outsamp]
-  mean(outsamp_pred - outsamp_true)
-})
-
-hist(outsamp_errors,
-     xlab = "",
-     main = "mean out-of-sample residual\n(1000 runs of cross-validation)")
-
-## prediction for 2020
-GDP_new <- economy_df %>%
-    subset(year == 2020 & quarter == 2) %>%
-    select(GDP_growth_qt)
-
-predict(lm_econ, GDP_new)
-
-#TODO: predict uncertainty
-  
-## extrapolation?
-##   replication of: https://nyti.ms/3jWdfjp
-
-economy_df %>%
-  subset(quarter == 2 & !is.na(GDP_growth1)) %>%
-  ggplot(aes(x=year, y=GDP_growth1,
-             fill = (GDP_growth1 > 0))) +
-  geom_col() +
-  xlab("Year") +
-  ylab("GDP Growth (Second Quarter)") +
-  ggtitle("The percentage decrease in G.D.P. is by far the biggest on record.") +
-  theme_bw() +
-  theme(legend.position="none",
-        plot.title = element_text(size = 12,
-                                  hjust = 0.5,
-                                  face="bold"))
+# 
+# # cross 
+# 
+# 
+# 
+# 
+# # # creating a loop to test different models
+# # 
+# # for(i in IV){
+# #   
+# #   var <- i
+# #   print(var)
+# #   
+# #   # fitting a model
+# #   
+# #    lm_x <- lm(pv2p ~ i, data = data, drop.unused.levels = FALSE)
+# #   # 
+# #   # # getting in sample error and MSE
+# #   # 
+# #    r_squared <- summary(lm_x)$r.squared
+# #   # 
+# #    mse <- sqrt(mean((lm_x$model$pv2p - lm_x$fitted.values)^2))
+# # 
+# # }
+# 
+# # fitting a model
+# 
+# 
+# 
+# ## scatterplot + line
+# dat %>%
+#   ggplot(aes(x=GDP_growth1, y=voteshare,
+#              label=year)) + 
+#   geom_text() +
+#   geom_smooth(method="lm", formula = y ~ x) +
+#   geom_hline(yintercept=50, lty=2) +
+#   geom_vline(xintercept=0.01, lty=2) + # median
+#   xlab("Second quarter GDP growth") +
+#   ylab("Incumbent party's national popular voteshare") +
+#   theme_bw()
+# 
+# ## fit a model
+# 
+# lm_econ <- lm(pv2p ~ GDP_growth_qt, data = dat)
+# 
+# # getting in sample error and MSE
+# 
+# summary(lm_econ)
+# 
+# dat %>%
+#   ggplot(aes(x=GDP_growth_qt, y=pv2p,
+#              label=year)) + 
+#     geom_text(size = 8) +
+#     geom_smooth(method="lm", formula = y ~ x) +
+#     geom_hline(yintercept=50, lty=2) +
+#     geom_vline(xintercept=0.01, lty=2) + # median
+#     xlab("Q2 GDP growth (X)") +
+#     ylab("Incumbent party PV (Y)") +
+#     theme_bw() +
+#     ggtitle("Y = 49.44 + 2.969 * X") + 
+#     theme(axis.text = element_text(size = 20),
+#           axis.title = element_text(size = 24),
+#           plot.title = element_text(size = 32))
+# 
+# ## model fit 
+# 
+# #TODO
+# 
+# ## model testing: leave-one-out
+# outsamp_mod  <- lm(pv2p ~ GDP_growth_qt, dat[dat$year != 2016,])
+# outsamp_pred <- predict(outsamp_mod, dat[dat$year == 2016,])
+# outsamp_true <- dat$pv2p[dat$year == 2016] 
+# 
+# ## model testing: cross-validation (one run)
+# years_outsamp <- sample(dat$year, 8)
+# mod <- lm(pv2p ~ GDP_growth_qt,
+#           dat[!(dat$year %in% years_outsamp),])
+# 
+# outsamp_pred <- #TODO
+#   
+# ## model testing: cross-validation (1000 runs)
+# outsamp_errors <- sapply(1:1000, function(i){
+#   years_outsamp <- sample(data$year, 8)
+#   outsamp_mod <- lm(pv2p ~ GDP_growth_qt,
+#                     data[!(data$year %in% years_outsamp),])
+#   outsamp_pred <- predict(outsamp_mod,
+#                           newdata = data[data$year %in% years_outsamp,])
+#   outsamp_true <- data$pv2p[data$year %in% years_outsamp]
+#   mean(outsamp_pred - outsamp_true)
+# })
+# 
+# hist(outsamp_errors,
+#      xlab = "",
+#      main = "mean out-of-sample residual\n(1000 runs of cross-validation)")
+# 
+# ## prediction for 2020
+# GDP_new <- economy_df %>%
+#     subset(year == 2020 & quarter == 2) %>%
+#     select(GDP_growth_qt)
+# 
+# predict(lm_econ, GDP_new)
+# 
+# #TODO: predict uncertainty
+#   
+# ## extrapolation?
+# ##   replication of: https://nyti.ms/3jWdfjp
+# 
+# economy_df %>%
+#   subset(quarter == 2 & !is.na(GDP_growth1)) %>%
+#   ggplot(aes(x=year, y=GDP_growth1,
+#              fill = (GDP_growth1 > 0))) +
+#   geom_col() +
+#   xlab("Year") +
+#   ylab("GDP Growth (Second Quarter)") +
+#   ggtitle("The percentage decrease in G.D.P. is by far the biggest on record.") +
+#   theme_bw() +
+#   theme(legend.position="none",
+#         plot.title = element_text(size = 12,
+#                                   hjust = 0.5,
+#                                   face="bold"))
 
