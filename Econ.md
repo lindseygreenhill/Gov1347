@@ -13,10 +13,35 @@
   
   ![picture](Gov1347-master/figures/regression_table.png)
   
-#### Analysis
+##### Analysis
 
 > - Quarterly GDP growth shows the strongest correlation (.57) and R2 (.326) values, meaning that the model accounts for the most amount of variance compared to models with other economic indicators 
 > - Quarterly GDP growth also shows the lowest Mean Squared Error(4.2) and lowest mean out-of-sample cross validation testing error (1.74)
 > - Yearly GDP growth also appears to be a decent predictor of the popular vote, however, all of its metrics are slightly weaker than Quarterly GDP growth
 > - RDI growth appears to be the third best predictor of the popular vote, with all metrics weaker than both Quarterly and Yearly GDP growth
 > - Both stock close and unemployment do not display predictive power, with R2 values close to 0 and MSE values about .8 to .9 higher than GDP predictors 
+
+
+These regression results suggest that Quarterly GDP growth is the best predictor of the popular vote compared to economic indicators and that Yearly GDP Growth and RDI growth also have predictive power. 
+
+### Prediction
+
+The graphics below compare the predictions of the quarterly GDP, yearly GDP, and RDI models. 
+
+![picture](Gov1347-master/figures/predictions_plot_3.png)
+
+
+##### Analysis
+
+> - All three models predict the 2020 popular vote at vastly different places, with the quarterly GDP model predicting Trump winning 21% of the popular vote, the yearly GDP model predicting Trump winning 34% of the popular vote, and the RDI model predicting Trump winning 80% of the popular vote 
+> - The prediction intervals of from all the models are quite large, with the quarterly GDP model ranging from -4% to 46%,  
+the yearly GDP model ranging from 16% to 51%, and the RDI model ranging from 49% to 104%
+> - These predictions are probelmatic, as they are extreme in both their predictions and prediction intervals (a popular vote obviously cannot be negative or positive) 
+
+### The Problem: Extrapolation
+The problem with these models likely comes from extrapolation – the case when the prediction data is outside of the data used to build the model.
+In the case of 2020, the corona virus pandemic led to a world wide shock economic shock, leading to incredibe volatily and unprecedented economic extremes. Extrapolation leads to unreliable predictions and large prediction intervals, as we saw was the case above. 
+The graphic below visualises this extremity. 
+![picture](Gov1347-master/figures/extrapolation_plots.png)
+
+
