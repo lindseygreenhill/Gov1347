@@ -3,4 +3,4 @@
 
 ### [Introduction](intro.md)
 
-### [Economy](econ.md)
+### [Economy](Econ.md)
