@@ -42,7 +42,7 @@ the yearly GDP model ranging from 16% to 51%, and the RDI model ranging from 49%
 The problem with these models likely comes from extrapolation – the case when the prediction data is outside of the range of the data used to build the model. One of the consequences of extrapolation is extreme, and often unreliable, prediction values and verge large prediction intervals, which we saw in the predictions above. 
 In the case of 2020, the corona virus pandemic triggered a world wide economic shock, leading to incredible volatily and unprecedented economic movement. This volatility manifested itself in all of the economic metrics used in building our predictive models. 
 The graphic below visualises this extremity. 
-![picture](Gov1347-master/figures/extrapolation_plots.png)
+![picture](Gov1347-master/figures/extrapolation_plot.png)
 
 ##### Analysis
 
