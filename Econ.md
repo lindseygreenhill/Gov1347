@@ -22,7 +22,7 @@ Following the logic that people vote based on their perception of an incumbentâ€
 > - Quarterly RDI growth appears to be the third best predictor of the popular vote, with all metrics weaker than both Quarterly and Yearly GDP growth
 > - Both Stock close and Unemployment do not display predictive power, with R Squared values near 0 and MSE values about .8 to .9 higher than GDP predictors 
 
-* Note that all models except for RDI growth use election data from 1948 onwards. RDI model uses data from 1960 onwards, as no data is available before then.
+** Note that all models except for RDI growth use election data from 1948 onwards. RDI model uses data from 1960 onwards, as no data is available before then.
 
 These regression results suggest that Quarterly GDP growth is the best predictor of the popular vote compared to other economic indicators and that Yearly GDP growth and RDI growth also have predictive power. 
 
