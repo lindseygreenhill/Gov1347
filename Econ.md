@@ -52,6 +52,6 @@ The graphic below visualises this extremity.
 
 
 ### Conclusion
-
+In conclusion, the volatility and unprecedented nature of the 2020 economy brought on by the Covid-19 pandemic makes economic metrics not ideal in predicting the 2020 election. I believe it would be better to focus on different metrics to more accurately predict this year's presidential race. 
 
 
