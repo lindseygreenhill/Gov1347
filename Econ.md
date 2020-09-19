@@ -39,9 +39,19 @@ the yearly GDP model ranging from 16% to 51%, and the RDI model ranging from 49%
 > - These predictions are probelmatic, as they are extreme in both their predictions and prediction intervals (a popular vote obviously cannot be negative or positive) 
 
 ### The Problem: Extrapolation
-The problem with these models likely comes from extrapolation – the case when the prediction data is outside of the data used to build the model.
-In the case of 2020, the corona virus pandemic led to a world wide shock economic shock, leading to incredibe volatily and unprecedented economic extremes. Extrapolation leads to unreliable predictions and large prediction intervals, as we saw was the case above. 
+The problem with these models likely comes from extrapolation – the case when the prediction data is outside of the range of the data used to build the model. One of the consequences of extrapolation is extreme, and often unreliable, prediction values and verge large prediction intervals. 
+In the case of 2020, the corona virus pandemic triggered a world wide economic shock, leading to incredible volatily and unprecedented economic movement. This volatility manifested itself in all of the economic metrics used in building our predictive model. 
 The graphic below visualises this extremity. 
 ![picture](Gov1347-master/figures/extrapolation_plots.png)
+
+##### Analysis
+
+> - 2020 Q2 Quarterly GDP Growth was -9.49%, a value much lower than any other Q2 quarterly growth in the data set. The next lowest growth was in 1980 (-2.06%)
+> - Similar to 2020 Q2 Quarterly GDP Growth, 2020 Q2 Yearly GDP Growth sat at -9.54%. The next lowest Q2 GDP yearly growth was in 1980 (-.775%)
+> - Quarterly RDI Growth is extreme in the opposite direction compared to GDP growth. 2020 Q2 Quarterly RDI Growth (.0972%) is much higher than any of the RDI growths in the data set. The next highest growth is from 1964 (.027%)
+
+
+### Conclusion
+
 
 
