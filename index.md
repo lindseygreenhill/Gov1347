@@ -1,6 +1,6 @@
 # Gov1347 Presidential Election Blog
 ## Lindsey Greenhill
 
-### [Introduction - September 19, 2020](intro.md)
+### [Introduction - September 12, 2020](intro.md)
 
-### [Economy - September 12, 2020](Econ.md)
+### [Economy - September 19, 2020](Econ.md)
