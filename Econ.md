@@ -28,7 +28,7 @@ These regression results suggest that Quarterly GDP growth is the best predictor
 
 The graphics below compare the predictions of the quarterly GDP, yearly GDP, and RDI models. 
 
-![picture](Gov1347-master/figures/predictions_plot_3.png)
+![picture](Gov1347-master/figures/prediction_plot.png)
 
 
 ##### Analysis
