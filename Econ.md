@@ -1,6 +1,6 @@
 ## Introduction
 
-  Perhaps one of the most essential questions to predicting elections is "how does a voter make their decision?" Decades of research has tried to answer this question and come up with many theories. One of the most prominent of these theories, introduced by V.O. Key in 1966, is retrospective voting, or voting in response to an incumbent’s job performance [(Achen and Bartels 2017)](https://press.princeton.edu/books/hardcover/9780691169446/democracy-for-realists). In other words, rewarding incumbents who do well and punishing those who do not. 
+ 	Perhaps one of the most essential questions to predicting elections is "how does a voter make their decision?" Decades of research has tried to answer this question and come up with many theories. One of the most prominent of these theories, introduced by V.O. Key in 1966, is retrospective voting, or voting in response to an incumbent’s job performance [(Achen and Bartels 2017)](https://press.princeton.edu/books/hardcover/9780691169446/democracy-for-realists). In other words, rewarding incumbents who do well and punishing those who do not. 
 	Following the logic that people vote based on their perception of an incumbent’s performance, we can predict the election by focusing on metrics of performance. This blog will focus on the economy as a metric of incumbent success and present a prediction model using economic data.
   
 ## Building the Model
