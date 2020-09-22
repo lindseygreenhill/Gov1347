@@ -250,7 +250,7 @@ Model_Stats <- Model_Statistics_2 %>%
 
 stats_gt <- Model_Stats %>%
   gt() %>%
-  tab_header(title = "Linear Regression Results (Popular Vote ~ IV") %>%
+  tab_header(title = "Linear Regression Results (Popular Vote ~ IV)") %>%
   cols_label(var = "IV",  R_Sq = "R Sq",
              Outsampling_Error = "Outsampling Error")
 
@@ -295,12 +295,16 @@ data_prediction <- data %>%
 Q2_GDP_Graph <- ggplot(data_prediction, aes(x = GDP_growth_qt, y = pv2p)) +
   geom_point() +
   geom_smooth(method = "lm") +
-  annotate("text", x = -8.6, y = 21.5, label = "<-  2020", color = "red", size =7) +
+  annotate("text", x = -8, y = 21.5, label = "<-  2020", color = "red", size =7) +
   theme_classic() +
-  labs(title = "Incumbent Popular Vote Share 1948-2020 vs  Q2 GDP Quarterly Growth",
-       subtitle = "Model predicts Trump will win 21.4% of the popular vote",
+  labs(title = "Incumbent Popular Vote Share 1948-2020\n vs  Q2 GDP Quarterly Growth",
+       subtitle = "Model predicts Trump will win 21.4% of the PV",
        x = "Q2 GDP Quarterly Growth",
-       y = "Incumbent Popular Vote Share")
+       y = "Incumbent Popular Vote Share") +
+  theme(plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size=18),
+        axis.title = element_text(size=16),
+        axis.text = element_text(size=13))
 
 ggsave("Gov1347-master/figures/Q2_GDP_graph.png")
 
@@ -315,12 +319,16 @@ data_yr_prediction <- data %>%
 Q2_GDP_yr_Graph <- ggplot(data_yr_prediction, aes(x = GDP_growth_yr, y = pv2p)) +
   geom_point() +
   geom_smooth(method = "lm") +
-  annotate("text", x = -7.7, y = 34.2, label = "<- 2020", color = "red", size =7) +
+  annotate("text", x = -7.2, y = 34.2, label = "<- 2020", color = "red", size =7) +
   theme_classic() +
-  labs(title = "Incumbent Popular Vote Share 1948-2020 vs Q2 GDP Yearly Growth",
-       subtitle = "Model predicts Trump will win 34.2% of the popular vote",
+  labs(title = "Incumbent Popular Vote Share 1948-2020\n vs Q2 GDP Yearly Growth",
+       subtitle = "Model predicts Trump will win 34.2% of the PV",
        x = "Q2 GDP Yearly Growth",
-       y = "Incumbent Popular Vote Share")
+       y = "Incumbent Popular Vote Share") +
+  theme(plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size=18),
+        axis.title = element_text(size=16),
+        axis.text = element_text(size=13))
 
 ggsave("Gov1347-master/figures/Q2_GDP_yr_graph.png")
 
@@ -338,12 +346,16 @@ data_prediction_RDI <- data_RDI %>%
 RDI_Graph <- ggplot(data_prediction_RDI, aes(x = RDI_growth, y = pv2p)) +
   geom_point() +
   geom_smooth(method = "lm") +
-  annotate("text", x = .087, y = 80, label = "2020 ->", color = "red", size = 7) +
+  annotate("text", x = .085, y = 80, label = "2020 ->", color = "red", size = 7) +
   theme_classic() +
-  labs(title = "Incumbent Popular Vote Share 1948-2020 vs Q2 RDI Growth",
-       subtitle = "Model predicts Trump will win 80.3% of the popular vote",
+  labs(title = "Incumbent Popular Vote Share 1948-2020\n vs Q2 RDI Growth",
+       subtitle = "Model predicts Trump will win 80.3% of the PV",
        x = "Q2 RDI Growth",
-       y = "Incumbent Popular Vote Share")
+       y = "Incumbent Popular Vote Share") +
+  theme(plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size=18),
+        axis.title = element_text(size=16),
+        axis.text = element_text(size=13))
 
 ggsave("Gov1347-master/figures/RDI_graph.png")
 
@@ -363,36 +375,48 @@ ggarrange(Q2_GDP_Graph, Q2_GDP_yr_Graph, RDI_Graph,
 #   na.omit() %>%
 #   bind_rows(row_q3)
 
-Extrap_GDP <- economy_df %>%
-  filter(year >= 1948,quarter ==2) %>%
+Extrap_GDP <- data_prediction%>%
+  filter(year >= 1948) %>%
   ggplot(aes(x = year, y = GDP_growth_qt, fill = (GDP_growth_qt > 0))) +
   geom_col(show.legend = FALSE) + 
   theme_classic() +
-  labs(title = "Q2 Quarterly GDP Growth 1948-2020",
+  labs(title = "Quarterly GDP Growth (Q2) 1948-2020",
        subtitle = "2020 Q2 GDP decline is unprecedented",
        x = "Year",
-       y = "Quarterly GDP Growth")
+       y = "Quarterly GDP Growth (Q2)") +
+  theme(plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size=18),
+        axis.title = element_text(size=16),
+        axis.text = element_text(size=13))
 
 
-Extrap_GDP_yr <- economy_df %>%
-  filter(year >= 1948,  quarter == 2) %>%
+Extrap_GDP_yr <- data_yr_prediction %>%
+  filter(year >= 1948) %>%
   ggplot(aes(x = year, y = GDP_growth_yr, fill = (GDP_growth_yr > 0))) +
   geom_col(show.legend = FALSE) + 
   theme_classic() +
   labs(title = "Yearly GDP Growth (Q2) 1948-2020",
        subtitle = "2020 Q2 GDP decline is unprecedented",
        x = "Year",
-       y = "Yearly GDP Growth (Q2)")
+       y = "Yearly GDP Growth (Q2)") +
+  theme(plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size=18),
+        axis.title = element_text(size=16),
+        axis.text = element_text(size=13))
 
-Extrap_RDI <- economy_df %>%
-  filter(year >= 1960,quarter == 2) %>%
+Extrap_RDI <- data_prediction_RDI %>%
+  filter(year >= 1960) %>%
   ggplot(aes(x = year, y = RDI_growth, fill = (RDI_growth > 0))) +
   geom_col(show.legend = FALSE) + 
   theme_classic() +
   labs(title = "Quarterly RDI Growth (Q2) 1960-2020",
        subtitle = "2020 Q2 RDI Growth is unprecedented",
        x = "Year",
-       y = "Quarterly RDI Growth (Q2)")
+       y = "Quarterly RDI Growth (Q2)") +
+  theme(plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size=18),
+        axis.title = element_text(size=16),
+        axis.text = element_text(size=13))
 
 
 ggarrange(Extrap_GDP, Extrap_GDP_yr, Extrap_RDI,
