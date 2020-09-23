@@ -201,12 +201,17 @@ data_state_six <- state_pv %>%
 data_state_sev <- state_pv %>%
   full_join(state_avg) %>%
   filter(state %in% c("Idaho", 
+                      "Delaware",
+                      "Alaska",
                       "Utah",
                       "District of Columbia", 
                       "Georgia",
                       "Mississippi",
                       "South Dakota",
-                      "Wyoming"), weeks_left == 7) %>%
+                      "Wyoming",
+                      "Hawaii",
+                      "Kentucky",
+                      "North Dakota"), weeks_left == 7) %>%
   group_by(state,year,party, pv, incumbent_party) %>% 
   summarise(avg_support=mean(avg_poll))
 
@@ -214,7 +219,7 @@ data_state_sev <- state_pv %>%
 
 data_state_eight <- state_pv%>%
   full_join(state_avg) %>%
-  filter(state == "Idaho", weeks_left == 8) %>%
+  filter(state %in% c("Idaho", "Wyoming", "District of Columbia"), weeks_left == 8) %>%
   group_by(state,year,party, pv, incumbent_party) %>% 
   summarise(avg_support=mean(avg_poll))
 
@@ -324,8 +329,32 @@ results_2020_ec <- results_2020 %>%
   left_join(EC, by ="state") %>%
   mutate(winner = if_else(republican > democrat, "republican", "democrat"))
 
-sums <- results_2020_ec %>%
-  group_by(winner)%>%
+# missing data from 2020
+
+missing <- EC %>% filter(state %in% c("Illinois",
+                                      "Nebraska",
+                                      "Rhode Island",
+                                      "South Dakota",
+                                      "Vermont",
+                                      "Wyoming",
+                                      "District of Columbia")) %>%
+  mutate(republican = 0, democrat = 0, winner = case_when(state == "Illinois" ~ "democrat",
+                                                          state == "Nebraska" ~ "republican",
+                                                          state == "Rhode Island" ~ "democrat",
+                                                          state == "South Dakota" ~ "republican",
+                                                          state == "Vermont" ~ "democrat",
+                                                          state == "Wyoming" ~ "republican",
+                                                          state == "District of Columbia" ~ "democrat")) %>%
+  select(state, republican, democrat, votes, winner)
+
+
+# combining missing and 2020 data
+
+results_2020_plus <- results_2020_ec %>%
+  bind_rows(missing)
+
+sums <- results_2020_plus %>%
+  group_by(winner) %>%
   summarise(c =  sum(votes))
 
 
