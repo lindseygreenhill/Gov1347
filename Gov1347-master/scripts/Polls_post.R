@@ -253,6 +253,14 @@ for(s in unique(pre_2020_data$state)){
 }
 
 
+accuracy_org <- accuracy %>%
+  select(year, state, state_margin_error, state_winner_correct) %>%
+  group_by(state) %>%
+  summarise(mean_ME = mean(state_margin_error),
+            mean_correct =  mean(state_winner_correct),
+            .groups = "drop") %>%
+  arrange(desc(mean_correct))
+
 
 
 
