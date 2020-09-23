@@ -338,25 +338,60 @@ missing <- EC %>% filter(state %in% c("Illinois",
                                       "Vermont",
                                       "Wyoming",
                                       "District of Columbia")) %>%
-  mutate(republican = 0, democrat = 0, winner = case_when(state == "Illinois" ~ "democrat",
-                                                          state == "Nebraska" ~ "republican",
-                                                          state == "Rhode Island" ~ "democrat",
-                                                          state == "South Dakota" ~ "republican",
-                                                          state == "Vermont" ~ "democrat",
-                                                          state == "Wyoming" ~ "republican",
-                                                          state == "District of Columbia" ~ "democrat")) %>%
+  mutate(winner = case_when(state == "Illinois" ~ "democrat",
+                           state == "Nebraska" ~ "republican",
+                           state == "Rhode Island" ~ "democrat",
+                           state == "South Dakota" ~ "republican",
+                           state == "Vermont" ~ "democrat",
+                           state == "Wyoming" ~ "republican",
+                           state == "District of Columbia" ~ "democrat"),
+         republican = if_else(winner == "republican", 100, 0),
+         democrat = if_else(winner == "democrat", 100, 0)) %>%
   select(state, republican, democrat, votes, winner)
 
 
 # combining missing and 2020 data
 
 results_2020_plus <- results_2020_ec %>%
-  bind_rows(missing)
+  bind_rows(missing) %>%
+  mutate(win_margin = case_when(state == "Illinois" ~ -16.9,
+                                state == "Nebraska" ~ 25.1,
+                                state == "Rhode Island" ~ -15.5,
+                                state == "South Dakota" ~ 29.8,
+                                state == "Vermont" ~ -26.4,
+                                state == "Wyoming" ~ 46.3,
+                                state == "District of Columbia" ~ -86.9,
+                               TRUE ~ republican - democrat))
 
 sums <- results_2020_plus %>%
   group_by(winner) %>%
   summarise(c =  sum(votes))
 
+
+###### creating map of 2020 results  #######
+
+library(usmap)
+states_map <- usmap::us_map()
+unique(states_map$abbr)
+
+plot_usmap(data = results_2020_plus, regions = "states", values = "win_margin") +
+  scale_fill_gradient2(
+    high = "red", 
+    # mid = scales::muted("purple"), ##TODO: purple or white better?
+    mid = "white",
+    low = "blue", 
+    breaks = c(-50,-25,0,25,50), 
+    limits = c(-50,50),
+    name = "win margin") +
+  theme_void() +
+  labs(title = "Win Margins 2008-2020",
+       fill = "Win Margin") +
+  theme_void() +
+  theme(
+    strip.text = element_text(size = 12),
+    plot.title = element_text(hjust = .5),
+    aspect.ratio = 1
+  )
 
 ### Model Selection: Classification Accuracy ########
 
