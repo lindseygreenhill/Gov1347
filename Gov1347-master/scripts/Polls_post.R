@@ -19,6 +19,156 @@ EC <- read_csv("Gov1347-master/data/electoral_college.csv") %>%
   bind_rows(vector)
 
 
+###### code from section of finding cross sample validation ########
+
+dat <- popvote_df %>% 
+  full_join(poll_df %>% 
+              filter(weeks_left == 6) %>% 
+              group_by(year,party) %>% 
+              summarise(avg_support=mean(avg_support))) %>% 
+  left_join(economy_df %>% 
+              filter(quarter == 2))
+
+#####------------------------------------------------------#
+#####  Proposed models ####
+#####------------------------------------------------------#
+
+## option 1: fundamentals-only model
+dat_econ <- unique(dat[!is.na(dat$GDP_growth_qt),])
+dat_econ_inc <- dat_econ[dat_econ$incumbent_party,]
+dat_econ_chl <- dat_econ[!dat_econ$incumbent_party,]
+mod_econ_inc <- lm(pv ~ GDP_growth_qt, data = dat_econ_inc)
+mod_econ_chl <- lm(pv ~ GDP_growth_qt, data = dat_econ_chl)
+
+## option 2: adjusted polls-only model
+dat_poll <- dat[!is.na(dat$avg_support),]
+dat_poll_inc <- dat_poll[dat_poll$incumbent_party,]
+dat_poll_chl <- dat_poll[!dat_poll$incumbent_party,]
+mod_poll_inc <- lm(pv ~ avg_support, data = dat_poll_inc)
+mod_poll_chl <- lm(pv ~ avg_support, data = dat_poll_chl)
+
+## option 3: adjusted polls + fundamentals model
+dat_plus <- dat[!is.na(dat$avg_support) & !is.na(dat$GDP_growth_qt),]
+dat_plus_inc <- dat_plus[dat_plus$incumbent_party,]
+dat_plus_chl <- dat_plus[!dat_plus$incumbent_party,]
+mod_plus_inc <- lm(pv ~ avg_support + GDP_growth_qt, data = dat_plus_inc)
+mod_plus_chl <- lm(pv ~ avg_support + GDP_growth_qt, data = dat_plus_chl)
+
+#####------------------------------------------------------#
+#####  Model selection: In-sample evaluation ####
+#####------------------------------------------------------#
+
+## interpret models
+summary(mod_econ_inc)
+summary(mod_econ_chl)
+
+summary(mod_poll_inc)
+summary(mod_poll_chl)
+
+summary(mod_plus_inc)
+summary(mod_plus_chl)
+
+## in-sample fit
+mean(abs(mod_econ_inc$residuals))
+mean(abs(mod_econ_chl$residuals))
+
+mean(abs(mod_poll_inc$residuals))
+mean(abs(mod_poll_chl$residuals))
+
+mean(abs(mod_plus_inc$residuals))
+mean(abs(mod_plus_chl$residuals))
+
+par(mfrow=c(3,2))
+{
+  plot(mod_econ_inc$fitted.values, dat_econ_inc$pv,
+       main="fundamentals (incumbent)", xlab="predicted", ylab="true", 
+       cex.lab=2, cex.main=2, type='n',xlim=c(40,65),ylim=c(40,65))
+  text(mod_econ_inc$fitted.values, dat_econ_inc$pv, dat_econ_inc$year)
+  abline(a=0, b=1, lty=2)
+  
+  plot(mod_econ_chl$fitted.values, dat_econ_chl$pv,
+       main="fundamentals (challenger)", xlab="predicted", ylab="true", 
+       cex.lab=2, cex.main=2, type='n',xlim=c(40,55),ylim=c(40,55))
+  text(mod_econ_chl$fitted.values, dat_econ_chl$pv, dat_econ_chl$year)
+  abline(a=0, b=1, lty=2)
+  
+  plot(mod_poll_inc$fitted.values, dat_poll_inc$pv,
+       main="polls (incumbent)", xlab="predicted", ylab="true", 
+       cex.lab=2, cex.main=2, type='n',xlim=c(40,55),ylim=c(40,55))
+  text(mod_poll_inc$fitted.values, dat_poll_inc$pv, dat_poll_inc$year)
+  abline(a=0, b=1, lty=2)
+  
+  plot(mod_poll_chl$fitted.values, dat_poll_chl$pv,
+       main="polls (challenger)", xlab="predicted", ylab="true", 
+       cex.lab=2, cex.main=2, type='n',xlim=c(40,55),ylim=c(40,55))
+  text(mod_poll_chl$fitted.values, dat_poll_chl$pv, dat_poll_chl$year)
+  abline(a=0, b=1, lty=2)
+  
+  plot(mod_plus_inc$fitted.values, dat_plus_inc$pv,
+       main="plus (incumbent)", xlab="predicted", ylab="true", 
+       cex.lab=2, cex.main=2, type='n',xlim=c(40,55),ylim=c(40,55))
+  text(mod_plus_inc$fitted.values, dat_plus_inc$pv, dat_plus_inc$year)
+  abline(a=0, b=1, lty=2)
+  
+  plot(mod_plus_chl$fitted.values, dat_plus_chl$pv,
+       main="plus (challenger)", xlab="predicted", ylab="true", 
+       cex.lab=2, cex.main=2, type='n',xlim=c(40,55),ylim=c(40,55))
+  text(mod_plus_chl$fitted.values, dat_plus_chl$pv, dat_plus_chl$year)
+  abline(a=0, b=1, lty=2)
+}
+
+#####------------------------------------------------------#
+#####  Model selection: Out-of-sample evaluation ####
+#####------------------------------------------------------#
+
+all_years <- seq(from=1948, to=2016, by=4)
+outsamp_dflist <- lapply(all_years, function(year){
+  
+  true_inc <- unique(dat$pv[dat$year == year & dat$incumbent_party])
+  true_chl <- unique(dat$pv[dat$year == year & !dat$incumbent_party])
+  
+  ##fundamental model out-of-sample prediction
+  mod_econ_inc_ <- lm(pv ~ GDP_growth_qt, data = dat_econ_inc[dat_econ_inc$year != year,])
+  mod_econ_chl_ <- lm(pv ~ GDP_growth_qt, data = dat_econ_chl[dat_econ_chl$year != year,])
+  pred_econ_inc <- predict(mod_econ_inc_, dat_econ_inc[dat_econ_inc$year == year,])
+  pred_econ_chl <- predict(mod_econ_chl_, dat_econ_chl[dat_econ_chl$year == year,])
+  
+  if (year >= 1980) {
+    ##poll model out-of-sample prediction
+    mod_poll_inc_ <- lm(pv ~ avg_support, data = dat_poll_inc[dat_poll_inc$year != year,])
+    mod_poll_chl_ <- lm(pv ~ avg_support, data = dat_poll_chl[dat_poll_chl$year != year,])
+    pred_poll_inc <- predict(mod_poll_inc_, dat_poll_inc[dat_poll_inc$year == year,])
+    pred_poll_chl <- predict(mod_poll_chl_, dat_poll_chl[dat_poll_chl$year == year,])
+    
+    
+    ##plus model out-of-sample prediction
+    mod_plus_inc_ <- lm(pv ~ GDP_growth_qt + avg_support, data = dat_plus_inc[dat_poll_inc$year != year,])
+    mod_plus_chl_ <- lm(pv ~ GDP_growth_qt + avg_support, data = dat_plus_chl[dat_poll_chl$year != year,])
+    pred_plus_inc <- predict(mod_plus_inc_, dat_plus_inc[dat_plus_inc$year == year,])
+    pred_plus_chl <- predict(mod_plus_chl_, dat_plus_chl[dat_plus_chl$year == year,])
+  } else {
+    pred_poll_inc <- pred_poll_chl <- pred_plus_inc <- pred_plus_chl <- NA
+  }
+  
+  cbind.data.frame(year,
+                   econ_margin_error = (pred_econ_inc-pred_econ_chl) - (true_inc-true_chl),
+                   poll_margin_error = (pred_poll_inc-pred_poll_chl) - (true_inc-true_chl),
+                   plus_margin_error = (pred_plus_inc-pred_plus_chl) - (true_inc-true_chl),
+                   econ_winner_correct = (pred_econ_inc > pred_econ_chl) == (true_inc > true_chl),
+                   poll_winner_correct = (pred_poll_inc > pred_poll_chl) == (true_inc > true_chl),
+                   plus_winner_correct = (pred_plus_inc > pred_plus_chl) == (true_inc > true_chl)
+  )
+})
+outsamp_df <- do.call(rbind, outsamp_dflist)
+colMeans(abs(outsamp_df[2:4]), na.rm=T)
+colMeans(outsamp_df[5:7], na.rm=T) ### classification accuracy
+
+outsamp_df[,c("year","econ_winner_correct","poll_winner_correct","plus_winner_correct")]
+
+
+
+
+
 #####------------------------------------------------------#
 #####  State extension####
 #####------------------------------------------------------#
@@ -181,13 +331,6 @@ sums <- results_2020_ec %>%
 
 ### Model Selection: Classification Accuracy ########
 
-all_years <- seq(from=1972, to=2016, by=4)
-outsamp_dflist <- lapply(all_years, function(year){
-  true_inc <- unique(datadata_state$year == year & data_state$incumbent_party)
-  
-  
-})
-
 accuracy <- tibble()
 
 
@@ -243,7 +386,7 @@ for(s in unique(pre_2020_data$state)){
     
     outsamp_df <-  do.call(rbind, outsamp_dflist) %>%
       mutate(state = s)
-    colMeans()
+    # colMeans()
     
     # adding error to main accuracy df
     
@@ -260,6 +403,9 @@ accuracy_org <- accuracy %>%
             mean_correct =  mean(state_winner_correct),
             .groups = "drop") %>%
   arrange(desc(mean_correct))
+
+
+### next steps: see the cross sample validation for the national polls
 
 
 
