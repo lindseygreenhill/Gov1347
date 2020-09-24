@@ -38,7 +38,7 @@ The cross validation process includes taking one election year out of the data,
 building a model without that year's data, and then using the model to predict
 the left out election. The prediction is considered "correct" if the model
 correctly predicts the winning party in the election (the winning party
-is whichever party (incumbent or challenger) has higher popular vote). The
+is whichever party (incumbent or challenger) has the higher popular vote). The
 data below shows this model's average classification accuracy. 
 
 
