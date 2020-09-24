@@ -18,7 +18,9 @@ taken about six weeks out from the election in the data set). I only include pol
 out from the election because, as of today (9/23/2020), we are about six weeks away from the 2020
 election. Moreover, polls become [increasingly better predictors](https://www.semanticscholar.org/paper/Election-forecasting%3A-Too-far-out-Jennings-Lewis-Beck/7d0621cd3f984483652caf09e7764c88233948d7) of the election as they get
 closer to the election, so it makes sense to focus on the most recent data we have available (as of today, that is polls
-about six weeks away from the election). 
+about six weeks away from the election). The results of the two regressions (incumbent and challenger) are 
+shown below. 
+![plots](Gov1247-master/figures/national_poll_plots.png)
 
 
 
