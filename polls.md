@@ -20,7 +20,7 @@ election. Moreover, polls become [increasingly better predictors](https://www.se
 closer to the election, so it makes sense to focus on the most recent data we have available (as of today, that is polls
 about six weeks away from the election). The results of the two regressions (incumbent and challenger) are 
 shown below. 
-![plots](Gov1247-master/figures/national_polls_plots.png)
+![plots](Gov1347-master/figures/national_polls_plots.png)
 
 ```
 Call:
