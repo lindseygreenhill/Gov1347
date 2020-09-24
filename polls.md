@@ -10,7 +10,9 @@ on a state-by-state basis. Finally, I will use these models to predict the 2020 
 ### Model 1: National Level Polls
 
 Although I call this section model 1, it really discusses two models: one for incumbent vote share
-and one for challenger vote share. For each model, I ran a linear regression of
+and one for challenger vote share. Ultimately, I will combine the results of the two models in my prediction.
+In the case of 2020, the incumbent model will be used to predict Trump's popular vote share and the 
+challenger model will be used to predict Biden's popular vote share. For each model, I ran a linear regression of
 popular vote share vs. average poll support. The independent variable, average poll support,
 was calculated by taking the average result from each poll six weeks out from the election
 in every year (i.e. the average support in 2008 would be equal to the average result of every poll from 2008
@@ -33,14 +35,22 @@ The regression results for both the incumbent and challenger models are shown be
 
 #### Model Analysis: out sample fit
 In order to avoid overfitting the model to historical data, I ran
-leave-one-out cross validation to evaluate each model's out-of-sample performance.
+leave-one-out cross validation to evaluate the model's out-of-sample performance.
 The cross validation process includes taking one election year out of the data,
 building a model without that year's data, and then using the model to predict
 the left out election. The prediction is considered "correct" if the model
 correctly predicts the winning party in the election (the winning party
-is whichever party (incumbent or challenger) has the higher popular vote). The
-data below shows this model's average classification accuracy. 
+is whichever party (incumbent or challenger) has the higher popular vote). 
 
+The national polls model has a classification accurracy of **0.900**, meaning
+that the model correctly predicted 90% of elections in the cross validation
+process. 
+
+### Model 2: State Level Polls
+
+The national poll model appears to be a good predictive model based off of it's in-sample
+and out-sample statistics. However, the American presidentiial election is not decided 
+by the national popular vote. 
 
 
 Whether or not you still trust polls after
