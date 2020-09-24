@@ -22,10 +22,25 @@ about six weeks away from the election). The results of the two regressions (inc
 shown below. 
 ![plots](Gov1347-master/figures/national_polls_plots.png)
 
-#### Model Summary and in sample fit
+#### Model Analysis: summary and in sample fit
 
 The regression results for both the incumbent and challenger models are shown below.
 ![plot](Gov1347-master/figures/national_reg_table.png)
+###### Analysis
+<- The Adjusted R Squared is better for the incumbent model but still decent for the challenger model
+<- Both models have fairly low Mean Squared Errors
+<- Overall, the in sample fit for both of these models is promising
+
+#### Model Analysis: out sample fit
+In order to avoid overfitting the model to historical data, I ran
+leave-one-out cross validation to evaluate each model's out-of-sample performance.
+The cross validation process includes taking one election year out of the data,
+building a model without that year's data, and then using the model to predict
+the left out election. The prediction is considered "correct" if the model
+correctly predicts the winning party in the election (the winning party
+is whichever party (incumbent or challenger) has higher popular vote). The
+data below shows this model's average classification accuracy. 
+
 
 
 Whether or not you still trust polls after
