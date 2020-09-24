@@ -32,6 +32,25 @@ dat <- popvote_df %>%
 #####------------------------------------------------------#
 #####  Proposed models ####
 #####------------------------------------------------------#
+library(ggplot2)
+library(ggrepel)
+
+### polls incumbent graph ###
+inc_dat <- dat %>% filter(incumbent_party)
+inc_plot <- ggplot(inc_dat, aes(x = avg_support, y = pv)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_classic() +
+  labs(title = "Popular Vote Share vs Avg Poll Support (Incumbent)",
+       x = "Avg Poll Support",
+       y = "Popular Vote Share") +
+  theme(plot.title = element_text(size = 20),
+        axis.title = element_text(size=16),
+        axis.text = element_text(size=13)) +
+  geom_label_repel(aes(label = year),
+                   box.padding = .35,
+                   point.padding = .5,
+                   segment.color = "grey50")
 
 ## option 1: fundamentals-only model
 dat_econ <- unique(dat[!is.na(dat$GDP_growth_qt),])
@@ -264,6 +283,48 @@ pre_2020_data <- bind_rows(data_state_six, data_state_sev, data_state_eight)
 # predictions for for 2020. I guess I will predict other states somehow else.
 
 
+####### state models in sample fits ##########
+
+library(rsample)
+
+insamp <- tibble()
+
+for(s in unique(pre_2020_data$state)){
+  
+  # temp data
+  
+  temp_data_inc <- pre_2020_data %>%
+    filter(state == s, incumbent_party == TRUE)
+  
+  temp_data_chl <- pre_2020_data %>%
+    filter(state == s, incumbent_party == FALSE)
+  
+  # state models
+  
+  mod_inc <- lm(pv ~ avg_support, data = temp_data_inc)
+  mod_chl <- lm(pv ~ avg_support, data = temp_data_chl)
+  
+  # summarising
+  
+  sum_inc <- summary(mod_inc)
+  print(sum_inc)
+  summary(mod_chl)
+  
+  # errors
+  
+  mean(abs(mod_inc$residuals))
+  mean(abs(mod_chl$residuals))
+  
+ 
+}
+
+
+
+
+
+######### 2020 predictions #########
+
+
 new_unique <- unique(poll_2020_six$state)
 
 results_2020 <- tibble()
@@ -284,7 +345,6 @@ for(s in new_unique){
   
   # incumbent 2020 data
   
-  
   temp_2020_inc <- poll_2020_six %>%
     filter(state  == s, incumbent_party == TRUE) %>%
     slice(1) %>%
@@ -303,19 +363,25 @@ for(s in new_unique){
   
   #incumbent prediction
   
-  inc <- predict(temp_mod_inc, newdata = inc_df)
+  inc <- predict(temp_mod_inc, newdata = inc_df, 
+                 interval = "prediction", level=.95) %>%
+    round(digits = 2)
   
   # challenger prediction
   
-  chl <- predict(temp_mod_chl, newdata = chl_df)
+  chl <- predict(temp_mod_chl, newdata = chl_df,
+                 interval = "prediction", level=.95) %>%
+    round(digits = 2)
   
   inc_party <- "republican"
   
   chl_party <- "democrat"
   
   temp_df <- tibble(state = s,
-                    republican = if_else(inc_party == "republican", inc, chl),
-                    democrat = if_else(inc_party == "democrat", inc, chl))
+                    republican = if_else(inc_party == "republican", inc[[1]], chl[[1]]),
+                    r_interval = paste(inc[[2]], inc[[3]], sep = "-"),
+                    democrat = if_else(inc_party == "democrat", inc[[1]], chl[[1]]),
+                    d_interval = paste(chl[[2]], chl[[3]], sep = "-"))
   
   
   results_2020 <- results_2020 %>% bind_rows(temp_df)
@@ -384,7 +450,8 @@ plot_usmap(data = results_2020_plus, regions = "states", values = "win_margin") 
     limits = c(-50,50),
     name = "win margin") +
   theme_void() +
-  labs(title = "Win Margins 2008-2020",
+  labs(title = "Win Margins Predictions 2020",
+       subtitle = "Biden wins 377 electoral votes",
        fill = "Win Margin") +
   theme_void() +
   theme(
