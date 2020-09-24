@@ -22,59 +22,11 @@ about six weeks away from the election). The results of the two regressions (inc
 shown below. 
 ![plots](Gov1347-master/figures/national_polls_plots.png)
 
-```
-Call:
-lm(formula = pv ~ avg_support, data = dat_poll_inc)
+#### Model Summary and in sample fit
 
-Residuals:
-    Min      1Q  Median      3Q     Max 
--5.3613 -0.9303  0.1666  2.6013  4.1467 
+The regression results for both the incumbent and challenger models are shown below.
+![plot](Gov1347-master/figures/national_reg_table.png)
 
-Coefficients:
-            Estimate Std. Error t value Pr(>|t|)    
-(Intercept)  15.1876     4.8647   3.122  0.00972 ** 
-avg_support   0.7294     0.1047   6.966 2.37e-05 ***
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-Residual standard error: 2.931 on 11 degrees of freedom
-Multiple R-squared:  0.8152,	Adjusted R-squared:  0.7984 
-F-statistic: 48.53 on 1 and 11 DF,  p-value: 2.372e-05
-```
-
-
-
-for the incumbent or challenger depending o
-
-This first model is built using national-level poll data from 1980 onwards.
-
-
-I ran 
-linear regressions on vote share vs average poll support for both the incumbent vote
-share and the challenger vote share
-
-
-
-
-
-
-
-
-Before diving into building predictive models,
-it is important context to first discuss some of the pros and cons of using polls as a statistical tool to 
-see why they would be useful in predicting an election.
-
-Pros: One major pro of polling 
-An important pro of 
-
-
-
-Of course, there are pros and cons 
-of polling as a statistical tool However, 
-
-
-Although polling is sometimes critisized
-as 
 
 Whether or not you still trust polls after
 the [2016 election](https://www.pewresearch.org/fact-tank/2016/11/09/why-2016-election-polls-missed-their-mark/),
