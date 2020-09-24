@@ -34,6 +34,7 @@ dat <- popvote_df %>%
 #####------------------------------------------------------#
 library(ggplot2)
 library(ggrepel)
+library(ggpubr)
 
 ### polls incumbent graph ###
 inc_dat <- dat %>% filter(incumbent_party)
@@ -51,6 +52,25 @@ inc_plot <- ggplot(inc_dat, aes(x = avg_support, y = pv)) +
                    box.padding = .35,
                    point.padding = .5,
                    segment.color = "grey50")
+
+### polls challenger graph ###
+chl_dat <- dat %>% filter(!incumbent_party)
+chl_plot <- ggplot(chl_dat, aes(x = avg_support, y = pv)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_classic() +
+  labs(title = "Popular Vote Share vs Avg Poll Support (Challenger)",
+       x = "Avg Poll Support",
+       y = "Popular Vote Share") +
+  theme(plot.title = element_text(size = 20),
+        axis.title = element_text(size=16),
+        axis.text = element_text(size=13)) +
+  geom_label_repel(aes(label = year),
+                   box.padding = .35,
+                   point.padding = .5,
+                   segment.color = "grey50")
+
+ggarrange(inc_plot, chl_plot)
 
 ## option 1: fundamentals-only model
 dat_econ <- unique(dat[!is.na(dat$GDP_growth_qt),])
@@ -87,6 +107,7 @@ summary(mod_poll_chl)
 summary(mod_plus_inc)
 summary(mod_plus_chl)
 
+
 ## in-sample fit
 mean(abs(mod_econ_inc$residuals))
 mean(abs(mod_econ_chl$residuals))
@@ -96,6 +117,19 @@ mean(abs(mod_poll_chl$residuals))
 
 mean(abs(mod_plus_inc$residuals))
 mean(abs(mod_plus_chl$residuals))
+
+## data taken from summaries above
+
+chl_mod_sum <- tibble(Model = "Challenger",
+                      Estimate = .49,
+                      Adj_R_squared = .34,
+                      MSE = 2.588)
+inc_mod_sum <- tibble(Model = "Incumbent",
+                      Estimate = .72,
+                      Adj_R_squared = .79,
+                      MSE = 2.16)
+
+poll_mod_summary <- bind_rows(inc_mod_sum, chl_mod_sum)
 
 par(mfrow=c(3,2))
 {
