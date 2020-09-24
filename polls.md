@@ -22,6 +22,26 @@ about six weeks away from the election). The results of the two regressions (inc
 shown below. 
 ![plots](Gov1247-master/figures/national_polls_plots.png)
 
+```
+Call:
+lm(formula = pv ~ avg_support, data = dat_poll_inc)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-5.3613 -0.9303  0.1666  2.6013  4.1467 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  15.1876     4.8647   3.122  0.00972 ** 
+avg_support   0.7294     0.1047   6.966 2.37e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.931 on 11 degrees of freedom
+Multiple R-squared:  0.8152,	Adjusted R-squared:  0.7984 
+F-statistic: 48.53 on 1 and 11 DF,  p-value: 2.372e-05
+```
+
 
 
 for the incumbent or challenger depending o
