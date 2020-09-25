@@ -80,12 +80,12 @@ election.
 
 </details>
 
-<- The MSE is lower for many of the state models compared to the national model
-<- The Adjusted R Squared is also stronger for many of the state models than
+> - The MSE is lower for many of the state models compared to the national model
+> - The Adjusted R Squared is also stronger for many of the state models than
 the national model. 
-<- However, too high of an R-squared could imply that the model is overfit to 
+> - However, too high of an R-squared could imply that the model is overfit to 
 historical data and will break down when used to predict. 
-<- To test the models' predictive power, we will perform leave one out
+> - To test the models' predictive power, we will perform leave one out
 cross validation for each model as we did with the national model
 
 #### Model Analysis: out of sample fit/cross validation results
@@ -97,12 +97,12 @@ cross validation for each model as we did with the national model
 
 </details>
 
-<- The classification accuracy is higher for many of the state models
+> - The classification accuracy is higher for many of the state models
 than for the national model, with 23 states predicting the correct winner
 100% of the time.
-<- On the other hand, 23 state models have classification accuracy below
+> - On the other hand, 23 state models have classification accuracy below
 70%. 
-<- Some state models (notably Florida) have classification accuracy of
+> - Some state models (notably Florida) have classification accuracy of
 25%
 
 
