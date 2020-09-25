@@ -72,6 +72,17 @@ polls taken eight weeks away from the election. This is significant because, as
 discussed above, polls become less predictive the farther away they get from the 
 election. 
 
+# A collapsible section with markdown
+<details>
+  <summary>Click to expand!</summary>
+  
+  ## Heading
+  1. A numbered
+  2. list
+     * With some
+     * Sub bullets
+</details>
+
 
 
 are at least three election years
