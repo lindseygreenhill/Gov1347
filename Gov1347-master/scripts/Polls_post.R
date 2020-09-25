@@ -383,7 +383,7 @@ insamp_gt <- insamp %>%
   mutate_if(is.numeric, ~round(., 3)) %>%
   gt()
 
-gtsave(insamp_gt, "Gov1347-master/figures/tab.html")
+gtsave(insamp_gt, "Gov1347-master/figures/tab.png")
 
 
 
@@ -601,6 +601,15 @@ accuracy_org <- accuracy %>%
             mean_correct =  mean(state_winner_correct),
             .groups = "drop") %>%
   arrange(desc(mean_correct))
+
+accuracy_gt <- accuracy_org %>%
+  mutate_if(is.numeric, ~round(.,3)) %>%
+  rename(State = state, Avg_Margin_Err = mean_ME, 
+         Classification_Accuracy = mean_correct) %>%
+  gt() %>%
+  tab_header("Out of Sample/Cross Validation Results")
+
+gtsave(accuracy_gt, "Gov1347-master/figures/accuracy_table.png")
 
 
 ### next steps: see the cross sample validation for the national polls
