@@ -72,11 +72,18 @@ polls taken eight weeks away from the election. This is significant because, as
 discussed above, polls become less predictive the farther away they get from the 
 election. 
 
-# A collapsible section with markdown
+#### Model Analysis: regression results and in sample fit
 <details>
-  <summary>Click to see regression results!</summary>
+  <summary>Click to see regression results</summary>
   
   ![tab](Gov1347-master/figures/tab.png)
+
+</details>
+#### Model Analysis: out of sample fit/cross validation results
+<details>
+  <summary>Click to see cross validation results</summary>
+  
+  ![tab](Gov1347-master/figures/accuracy_table.png)
 
 </details>
 
