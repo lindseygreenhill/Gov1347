@@ -106,6 +106,16 @@ than for the national model, with 23 states predicting the correct winner
 25%
 
 
+### Predicting the 2020 Election with National and State-by-State Model
+
+> - Based off of the average of national poll results (for polls taken six weeks from
+the election) taken from [538](https://projects.fivethirtyeight.com/polls/president-general/national/), Model 1 predicts that Biden will win the election with 
+
+Biden: 50.312
+
+Trump: 43.396
+
+
 
 
 
