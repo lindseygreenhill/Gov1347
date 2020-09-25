@@ -79,7 +79,9 @@ election.
   ![tab](Gov1347-master/figures/tab.png)
 
 </details>
+
 #### Model Analysis: out of sample fit/cross validation results
+
 <details>
   <summary>Click to see cross validation results</summary>
   
