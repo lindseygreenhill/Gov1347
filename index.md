@@ -3,4 +3,6 @@
 
 ### [Introduction - September 12, 2020](intro.md)
 
-### [Economy - September 19, 2020](Econ.md)
+### [The Economy - September 19, 2020](Econ.md)
+
+### [Polls - September 23, 2020](polls.md)
