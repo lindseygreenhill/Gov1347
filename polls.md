@@ -1,4 +1,5 @@
 # Using Polls to Predict Elections
+September 23, 2020
 
 ### Introduction
 
