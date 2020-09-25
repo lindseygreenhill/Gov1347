@@ -13,7 +13,9 @@ Although I call this section model 1, it really discusses two models: one for in
 and one for challenger vote share. Ultimately, I will combine the results of the two models in my prediction.
 In the case of 2020, the incumbent model will be used to predict Trump's popular vote share and the 
 challenger model will be used to predict Biden's popular vote share. For each model, I ran a linear regression of
-popular vote share vs. average poll support. The independent variable, average poll support,
+popular vote share vs. average poll support. 
+
+The independent variable, average poll support,
 was calculated by taking the average result from each poll six weeks out from the election
 in every year (i.e. the average support in 2008 would be equal to the average result of every poll from 2008
 taken about six weeks out from the election in the data set). I only include polls taken six weeks
@@ -48,9 +50,31 @@ process.
 
 ### Model 2: State Level Polls
 
-The national poll model appears to be a good predictive model based off of it's in-sample
+The national poll model appears to be a good predictive model based off of its in-sample
 and out-sample statistics. However, the American presidentiial election is not decided 
-by the national popular vote. 
+by the national popular vote, but rather the electoral college. Thus, it could be more
+informative to predict the election on a state-by-state basis. In order to build this 
+state model, I ran linear regressions for each individual state using historical polling
+data from that state. As with the national model, I calculated both an incumbent and challenger
+model for every state. 
+
+The independent variable for each regression is calculated by taking 
+the mean of every poll taken six weeks out from the election in each state for a given 
+election year. However, unlike national-level polls, there is not data available for 
+every election year for every state. This lack of data has some important implications.
+First, for almost every state, there are fewer data points to run a regression on compared
+to the national model. Second, in order to ensure there is data on at least three election
+years for every state, I had to include the results of polls taken seven weeks away
+from the election when calculating the average support variable (this was the case for 
+Idaho, Delaware, Alaska, Utah, DC, Georgia, Mississippi, South Dakota, Wyoming,
+Hawaii, Kentucky, and North Dakota). For Idaho, Wyoming, and DC, I had to include
+polls taken eight weeks away from the election. This is significant because, as
+discussed above, polls become less predictive the farther away they get from the 
+election. 
+
+
+are at least three election years
+
 
 
 Whether or not you still trust polls after
