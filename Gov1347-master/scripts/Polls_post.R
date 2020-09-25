@@ -3,6 +3,7 @@
 library(tidyverse)
 library(ggplot2)
 library(webshot)
+library(kableExtra)
 library(gt)
 
 #####------------------------------------------------------#
@@ -132,6 +133,9 @@ inc_mod_sum <- tibble(Model = "Incumbent",
                       MSE = 2.16)
 
 poll_mod_summary <- bind_rows(inc_mod_sum, chl_mod_sum)
+kable_sum <- poll_mod_summary %>%
+  kable() %>%
+  tab_header(title = "Regression Results (PV ~ Avg_Support)")
 
 gt_sum <- poll_mod_summary %>%
   gt() %>%
@@ -604,12 +608,20 @@ accuracy_org <- accuracy %>%
 
 accuracy_gt <- accuracy_org %>%
   mutate_if(is.numeric, ~round(.,3)) %>%
-  rename(State = state, Avg_Margin_Err = mean_ME, 
+  rename(State = state, Avg_Err = mean_ME, 
          Classification_Accuracy = mean_correct) %>%
-  gt() %>%
-  tab_header("Out of Sample/Cross Validation Results")
+  gt()
 
 gtsave(accuracy_gt, "Gov1347-master/figures/accuracy_table.png")
+
+accuracy_kable <- accuracy_org %>%
+  mutate_if(is.numeric, ~round(.,3)) %>%
+  rename(State = state, Avg_Err = mean_ME, 
+         Classification_Accuracy = mean_correct) %>%
+  kable() %>%
+  kable_material()
+
+save_kable(accuracy_kable, "Gov1347-master/figures/accuracy_kable.png")
 
 
 ### next steps: see the cross sample validation for the national polls
