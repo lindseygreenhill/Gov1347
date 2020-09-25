@@ -2,6 +2,7 @@
 
 library(tidyverse)
 library(ggplot2)
+library(gt)
 
 #####------------------------------------------------------#
 ##### Read and merge data ####
@@ -130,6 +131,16 @@ inc_mod_sum <- tibble(Model = "Incumbent",
                       MSE = 2.16)
 
 poll_mod_summary <- bind_rows(inc_mod_sum, chl_mod_sum)
+
+gt_sum <- poll_mod_summary %>%
+  gt() %>%
+  tab_header(title = "Regression Results (PV ~ Avg_Support)")
+
+library(webshot)
+
+# saving the table as an image
+
+gtsave(gt_sum, "Gov1347-master/figures/national_reg_table.png")
 
 par(mfrow=c(3,2))
 {
@@ -341,16 +352,36 @@ for(s in unique(pre_2020_data$state)){
   # summarising
   
   sum_inc <- summary(mod_inc)
-  print(sum_inc)
-  summary(mod_chl)
+  #print(sum_inc)
+  sum_chl <- summary(mod_chl)
   
   # errors
   
   mean(abs(mod_inc$residuals))
   mean(abs(mod_chl$residuals))
   
- 
+  vector_inc <- tibble(State = s,
+                       Model = "Incumbent",
+                       Estimate = sum_inc$coefficients[2,1],
+                       MSE = mean(abs(mod_inc$residuals)),
+                       Adj_R_Squared = sum_inc$adj.r.squared
+                       )
+  vector_chl <- tibble(State = s,
+                       Model = "Challenger",
+                       Estimate = sum_chl$coefficients[2,1],
+                       MSE = mean(abs(mod_chl$residuals)),
+                       Adj_R_Squared = sum_chl$adj.r.squared
+  )
+  
+  insamp <- insamp %>%
+    bind_rows(vector_inc, vector_chl)
+  
 }
+
+insamp_gt <- insamp %>%
+  gt()
+
+gtsave(insamp_gt, "Gov1347-master/figures/tab.html")
 
 
 
