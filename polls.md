@@ -107,6 +107,9 @@ than for the national model, with 23 states predicting the correct winner
 70%. 
 > - Some state models (notably Florida) have a classification accuracy of
 25%, some have a classification accuracy of 0%
+> - The classification accuracy is very high for some [key battleground states]
+such as North Carolina (100%) and Georgia (87.5%) and very low for others
+(Florida)
 
 <details>
   <summary>Click to see full cross validation results</summary>
@@ -123,9 +126,17 @@ Based off of the average of national poll results (for polls taken six weeks fro
 the election) taken from [538](https://projects.fivethirtyeight.com/polls/president-general/national/), Model 1 predicts that **Biden will win the election with 49.46%
 of the popular vote** and **Trump will lose the lection with 46.83% of the popular vote**.
 
-Model 2 predicts the election state-by-state. See the map below for results. 
+Model 2 predicts the election state-by-state -- it says that **Biden will win the election with 377 electoral votes** and **Trump will lose the election with 161 electoral votes**. See the map below for results. 
 
 ![map](Gov1347-master/figures/polls_mod_prediction_map.png)
+
+> - The state-by-state model presents unexpected results in some states that 
+are thought to be reliably republican
+> - For example, the model has Biden winning Alaska by .28% and Arkansas by .07%
+> - The model also predicts some very tight races in [key swing states](https://www.nytimes.com/interactive/2020/us/elections/election-states-biden-trump.html)
+> - For example, the model has Biden winning Florida with a .25% win margin, Georgia
+with a 1.73% win margin, and North Carolina by a 2.08% win margin
+
 
 
 
