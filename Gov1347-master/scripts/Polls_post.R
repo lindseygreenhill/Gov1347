@@ -389,6 +389,26 @@ insamp_gt <- insamp %>%
 
 gtsave(insamp_gt, "Gov1347-master/figures/tab.png")
 
+### R squared histogram
+
+r_df_2 <- tibble(Model = c("Challenger", "Incumbent")) %>%
+  mutate(Adj_R_squared = if_else(Model == "Challenger", .34, .79))
+
+r_hist <- insamp %>%
+  ggplot(aes(Adj_R_Squared)) +
+  geom_vline(data = r_df_2, aes(xintercept = Adj_R_squared, color = "red")) +
+  geom_histogram(bins = 22) +
+  facet_wrap(~Model) +
+  theme_classic() +
+  labs(title = "Distribution of Adjusted R Squared Values for 51 State Models",
+       subtitle = "Distributions for both the incumbent and challenger models included",
+       x = "Adjusted R Squared",
+       y = "Count") +
+  theme(plot.title = element_text(size = 20),
+        axis.title = element_text(size=16),
+        axis.text = element_text(size=13),
+        legend.position = "none")
+
 
 
 
@@ -522,15 +542,17 @@ plot_usmap(data = results_2020_plus, regions = "states", values = "win_margin") 
     name = "win margin") +
   theme_void() +
   labs(title = "Win Margins Predictions 2020",
-       subtitle = "Biden wins 377 electoral votes",
+       subtitle = "Biden wins 377 electoral votes\n Trump wins 161 electoral votes",
        fill = "Win Margin") +
   theme_void() +
   theme(
     strip.text = element_text(size = 12),
     plot.title = element_text(hjust = .5),
+    plot.subtitle = element_text(hjust = .5),
     aspect.ratio = 1
   )
 
+ggsave("Gov1347-master/figures/polls_mod_prediction_map.png")
 ### Model Selection: Classification Accuracy ########
 
 accuracy <- tibble()
@@ -606,6 +628,26 @@ accuracy_org <- accuracy %>%
             .groups = "drop") %>%
   arrange(desc(mean_correct))
 
+# histogram of classification accuracy
+
+accuracy_hist <- accuracy_org %>%
+  ggplot(aes(mean_correct)) +
+  geom_histogram(bins = 45) +
+  geom_vline(xintercept = .9, color = "red") + 
+  annotate("text", x = .78, y = 20, label = "National Model\n Classification Accuracy",
+           color = "red", size = 5) +
+  theme_classic() +
+  labs(title = "Distribution of Classification Accuracy for 51 State Models",
+       subtitle = "Some models outperform national model, some underperform national model",
+       x = "Classification Accuracy",
+       y = "Count") +
+  theme(plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size = 16),
+        axis.title = element_text(size=16),
+        axis.text = element_text(size=13))
+
+ggsave("Gov1347-master/figures/poll_state_classification_hist.png")
+
 accuracy_gt <- accuracy_org %>%
   mutate_if(is.numeric, ~round(.,3)) %>%
   rename(State = state, Avg_Err = mean_ME, 
@@ -625,6 +667,14 @@ save_kable(accuracy_kable, "Gov1347-master/figures/accuracy_kable.png")
 
 
 ### next steps: see the cross sample validation for the national polls
+
+#### predicting 2020 with national model ######
+
+# avg support taken from 538 data
+biden <- tibble(avg_support = 50.312)
+trump <- tibble(avg_support = 43.396)
+biden_prediction <- predict(mod_poll_chl, newdata = biden)
+trump_prediction <- predict(mod_poll_inc, newdata = trump)
 
 
 
