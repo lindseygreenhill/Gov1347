@@ -136,6 +136,17 @@ are thought to be reliably republican
 > - The model also predicts some very tight races in [key swing states](https://www.nytimes.com/interactive/2020/us/elections/election-states-biden-trump.html)
 > - For example, the model has Biden winning Florida with a .25% win margin, Georgia
 with a 1.73% win margin, and North Carolina by a 2.08% win margin
+> - If any of these states go republican, the results of the election could be a lot
+closer than this model predicts
+
+
+### Conclusion
+
+Both models predict that Biden will win the election, with the state model predicting a land slide win for the democrats and the national model predicting a tighter race. There are pros and cons of both the state and the national model. On major con of the state model is that there is less data to build models from. However, I believe it is more telling to predict the election on a state-by-state basis due to the electoral college system.
+
+In normal (non-pandemic) times, it would be interesting to build a model based off of both economic and polling data. However, because of the extremity of today's economic data (see last weeks's [blog post](Gov1347-master/Econ.md)), that would difficult. 
+
+In the coming weeks, I will work to build a model based off of other predictive variables in addition to polling data. 
 
 
 
