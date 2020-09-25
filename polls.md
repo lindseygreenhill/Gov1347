@@ -73,37 +73,48 @@ discussed above, polls become less predictive the farther away they get from the
 election. 
 
 #### Model Analysis: regression results and in sample fit
-<details>
-  <summary>Click to see regression results</summary>
-  
-  ![tab](Gov1347-master/figures/tab.png)
+The histogram below shows the distribution of Adjusted R Squared values for all incumbent and challenger state models. 
 
-</details>
+![hist](Gov1347-master/figures/polls_state_r_hist.png)
 
-> - The MSE is lower for many of the state models compared to the national model
-> - The Adjusted R Squared is also stronger for many of the state models than
-the national model. 
+> - The Adj R Squared value varies across each model but is generally strong
+> - While some models have a lower Adj R Squared than the national model,
+the majority of state models have a stronger Adj R Squared
 > - However, too high of an R-squared could imply that the model is overfit to 
 historical data and will break down when used to predict. 
 > - To test the models' predictive power, we will perform leave one out
 cross validation for each model as we did with the national model
 
-#### Model Analysis: out of sample fit/cross validation results
-
 <details>
-  <summary>Click to see cross validation results</summary>
+  <summary>Click here to see full regression results</summary>
   
-  ![tab](Gov1347-master/figures/accuracy_table.png)
+  ![tab](Gov1347-master/figures/tab.png)
 
 </details>
+
+
+#### Model Analysis: out of sample fit/cross validation results
+
+The Histogram below displays the distribution of mean classifications accurracies 
+for each state model. 
+
+![hist](ov1347-master/figures/poll_state_classification_hist.png)
 
 > - The classification accuracy is higher for many of the state models
 than for the national model, with 23 states predicting the correct winner
 100% of the time.
 > - On the other hand, 23 state models have classification accuracy below
 70%. 
-> - Some state models (notably Florida) have classification accuracy of
-25%
+> - Some state models (notably Florida) have a classification accuracy of
+25%, some have a classification accuracy of 0%
+
+<details>
+  <summary>Click to see full cross validation results</summary>
+  
+  ![tab](Gov1347-master/figures/accuracy_table.png)
+
+</details>
+
 
 
 ### Predicting the 2020 Election with National and State-by-State Model
