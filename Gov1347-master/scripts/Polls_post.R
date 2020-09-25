@@ -2,6 +2,7 @@
 
 library(tidyverse)
 library(ggplot2)
+library(webshot)
 library(gt)
 
 #####------------------------------------------------------#
@@ -379,6 +380,7 @@ for(s in unique(pre_2020_data$state)){
 }
 
 insamp_gt <- insamp %>%
+  mutate_if(is.numeric, ~round(., 3)) %>%
   gt()
 
 gtsave(insamp_gt, "Gov1347-master/figures/tab.html")
