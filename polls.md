@@ -93,7 +93,7 @@ cross validation for each model as we did with the national model
 <details>
   <summary>Click to see cross validation results</summary>
   
-  ![tab](Gov1347-master/figures/accuracy_kable.png)
+  ![tab](Gov1347-master/figures/accuracy_table.png)
 
 </details>
 
