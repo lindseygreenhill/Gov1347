@@ -112,7 +112,9 @@ Based off of the average of national poll results (for polls taken six weeks fro
 the election) taken from [538](https://projects.fivethirtyeight.com/polls/president-general/national/), Model 1 predicts that **Biden will win the election with 49.46%
 of the popular vote** and **Trump will lose the lection with 46.83% of the popular vote**.
 
-Model 2 predicts the election state-by-state. See the map below for results.  
+Model 2 predicts the election state-by-state. See the map below for results. 
+
+![map](Gov1347-master/figures/polls_mod_prediction_map.png)
 
 
 
