@@ -115,7 +115,9 @@ such as North Carolina (100%) and Georgia (87.5%) and very low for others
 <details>
   <summary>Click to see full cross validation results</summary>
   
+  
   ![tab](Gov1347-master/figures/accuracy_table.png)
+  
 
 </details>
 
