@@ -128,6 +128,8 @@ of the popular vote** and **Trump will lose the lection with 46.83% of the popul
 
 Model 2 predicts the election state-by-state -- it says that **Biden will win the election with 377 electoral votes** and **Trump will lose the election with 161 electoral votes**. See the map below for results. 
 
+*Note:* Unfortunately there is not polling data available for all states in 2020. The states without data are Illinois, Nebraska, Rhode Island, South Dakota, Vermont, Wyoming, and DC. Fortunately, none of these states are expected to have tight races or be swing states, so it should be safe to use results from 2016 as a proxy for results for 2020. 
+
 ![map](Gov1347-master/figures/polls_mod_prediction_map.png)
 
 > - The state-by-state model presents unexpected results in some states that 
