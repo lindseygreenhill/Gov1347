@@ -98,7 +98,7 @@ cross validation for each model as we did with the national model
 The Histogram below displays the distribution of mean classifications accurracies 
 for each state model. 
 
-![hist](ov1347-master/figures/poll_state_classification_hist.png)
+![hist](Gov1347-master/figures/poll_state_classification_hist.png)
 
 > - The classification accuracy is higher for many of the state models
 than for the national model, with 23 states predicting the correct winner
