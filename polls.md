@@ -75,6 +75,7 @@ election.
 # A collapsible section with markdown
 <details>
   <summary>Click to see regression results!</summary>
+  
   ![tab](Gov1347-master/figures/tab.png)
 
 </details>
