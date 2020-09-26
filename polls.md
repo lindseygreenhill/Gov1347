@@ -32,12 +32,12 @@ shown below.
 The regression results for both the incumbent and challenger models are shown below.
 ![plot](Gov1347-master/figures/national_reg_table.png)
 ###### Analysis
-<- The Adjusted R Squared is better for the incumbent model but still decent for the challenger model
-<- Both models have fairly low Mean Squared Errors
-<- Overall, the in sample fit for both of these models is promising
+> - The Adjusted R Squared is better for the incumbent model but still decent for the challenger model
+> - Both models have fairly low Mean Squared Errors
+> - Overall, the in sample fit for both of these models is promising
 
-#### Model Analysis: out sample fit
-In order to avoid overfitting the model to historical data, I ran
+#### Model Analysis: out of sample fit
+In order to avoid overfitting the model to historical data, I used
 leave-one-out cross validation to evaluate the model's out-of-sample performance.
 The cross validation process includes taking one election year out of the data,
 building a model without that year's data, and then using the model to predict
@@ -52,11 +52,11 @@ process.
 ### Model 2: State Level Polls
 
 The national poll model appears to be a good predictive model based off of its in-sample
-and out-sample statistics. However, the American presidentiial election is not decided 
+and out-sample summary statistics. However, the American presidential election is not decided 
 by the national popular vote, but rather the electoral college. Thus, it could be more
 informative to predict the election on a state-by-state basis. In order to build this 
 state model, I ran linear regressions for each individual state using historical polling
-data from that state. As with the national model, I calculated both an incumbent and challenger
+data from that state. As with the national model, I built both an incumbent and challenger
 model for every state. 
 
 The independent variable for each regression is calculated by taking 
@@ -78,13 +78,13 @@ The histogram below shows the distribution of Adjusted R Squared values for all 
 
 ![hist](Gov1347-master/figures/polls_state_r_hist.png)
 
-> - The Adj R Squared value varies across each model but is generally strong
+> - The Adjusted R Squared value varies across each model but is generally strong
 > - While some models have a lower Adj R Squared than the national model,
 the majority of state models have a stronger Adj R Squared
 > - However, too high of an R-squared could imply that the model is overfit to 
-historical data and will break down when used to predict. 
-> - To test the models' predictive power, we will perform leave one out
-cross validation for each model as we did with the national model
+historical data and will break down when used to predict 
+> - To test the models' predictive power, I performed leave-one-out
+cross validation for each model as I did with the national model
 
 <details>
   <summary>Click here to see full regression results</summary>
@@ -96,16 +96,16 @@ cross validation for each model as we did with the national model
 
 #### Model Analysis: out of sample fit/cross validation results
 
-The Histogram below displays the distribution of mean classifications accurracies 
+The histogram below displays the distribution of mean classification accurracies 
 for each state model. 
 
 ![hist](Gov1347-master/figures/poll_state_classification_hist.png)
 
 > - The classification accuracy is higher for many of the state models
 than for the national model, with 23 states predicting the correct winner
-100% of the time.
-> - On the other hand, 23 state models have classification accuracy below
-70%. 
+100% of the time
+> - On the other hand, 23 state models have a classification accuracy below
+70% 
 > - Some state models (notably Florida) have a classification accuracy of
 25%, some have a classification accuracy of 0%
 > - The classification accuracy is very high for some [key battleground states]
@@ -126,17 +126,15 @@ such as North Carolina (100%) and Georgia (87.5%) and very low for others
 ### Predicting the 2020 Election with National and State-by-State Model
 
 Based off of the average of national poll results (for polls taken six weeks from
-the election) taken from [538](https://projects.fivethirtyeight.com/polls/president-general/national/), Model 1 predicts that **Biden will win the election with 49.46%
-of the popular vote** and **Trump will lose the lection with 46.83% of the popular vote**.
+the election) taken from [538](https://projects.fivethirtyeight.com/polls/president-general/national/), Model 1 predicts that **Biden will win the election with 49.46% of the popular vote** and **Trump will lose the election with 46.83% of the popular vote**.
 
-Model 2 predicts the election state-by-state -- it says that **Biden will win the election with 377 electoral votes** and **Trump will lose the election with 161 electoral votes**. See the map below for results. 
+Model 2 predicts the election state-by-state -- it predicts that **Biden will win the election with 377 electoral votes** and **Trump will lose the election with 161 electoral votes**. See the map below for results. 
 
-*Note:* Unfortunately there is not polling data available for all states in 2020. The states without data are Illinois, Nebraska, Rhode Island, South Dakota, Vermont, Wyoming, and DC. Fortunately, none of these states are expected to have tight races or be swing states, so it should be safe to use results from 2016 as a proxy for results for 2020. 
+*Note:* Unfortunately, there is not polling data available for all states in 2020. The states without data are Illinois, Nebraska, Rhode Island, South Dakota, Vermont, Wyoming, and DC. Fortunately, none of these states are [expected](https://www.nytimes.com/interactive/2020/us/elections/election-states-biden-trump.html) to have tight races or be swing states, so it should be safe to use results from 2016 as a proxy for results in 2020 for the purpose of allocating those states' electoral votes to a candidate. 
 
 ![map](Gov1347-master/figures/polls_mod_prediction_map.png)
 
-> - The state-by-state model presents unexpected results in some states that 
-are thought to be reliably republican
+> - The state-by-state model presents unexpected results in some states that are thought to be reliably republican
 > - For example, the model has Biden winning Alaska by .28% and Arkansas by .07%
 > - The model also predicts some very tight races in [key swing states](https://www.nytimes.com/interactive/2020/us/elections/election-states-biden-trump.html)
 > - For example, the model has Biden winning Florida with a .25% win margin, Georgia
@@ -147,19 +145,9 @@ closer than this model predicts
 
 ### Conclusion
 
-Both models predict that Biden will win the election, with the state model predicting a land slide win for the democrats and the national model predicting a tighter race. There are pros and cons of both the state and the national model. On major con of the state model is that there is less data to build models from. However, I believe it is more telling to predict the election on a state-by-state basis due to the electoral college system.
+Both models predict that Biden will win the election, with the state model predicting a land slide win for the democrats and the national model predicting a tighter race. There are pros and cons of both the state and the national model. One major con of the state model is that there is less data to build models from. However, I believe it is more telling to predict the election on a state-by-state basis due to the electoral college system.
 
-In normal (non-pandemic) times, it would be interesting to build a model based off of both economic and polling data. However, because of the extremity of today's economic data (see last weeks's [blog post](Gov1347-master/Econ.md)), that would difficult. 
+In normal (non-pandemic) times, it would be interesting to build a model based off of both economic and polling data. However, because of the extremity of today's economy (see last weeks's [blog post](Gov1347-master/Econ.md)), that would difficult. 
 
 In the coming weeks, I will work to build a model based off of other predictive variables in addition to polling data. 
 
-
-
-
-
-
-
-
-Whether or not you still trust polls after
-the [2016 election](https://www.pewresearch.org/fact-tank/2016/11/09/why-2016-election-polls-missed-their-mark/),
-there is no denying 
