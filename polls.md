@@ -78,6 +78,7 @@ The histogram below shows the distribution of Adjusted R Squared values for all 
 
 ![hist](Gov1347-master/figures/polls_state_r_hist.png)
 
+###### Analysis
 > - The Adjusted R Squared value varies across each model but is generally strong
 > - While some models have a lower Adj R Squared than the national model,
 the majority of state models have a stronger Adj R Squared
@@ -101,6 +102,7 @@ for each state model.
 
 ![hist](Gov1347-master/figures/poll_state_classification_hist.png)
 
+###### Analysis
 > - The classification accuracy is higher for many of the state models
 than for the national model, with 23 states predicting the correct winner
 100% of the time
@@ -134,6 +136,7 @@ Model 2 predicts the election state-by-state -- it predicts that **Biden will wi
 
 ![map](Gov1347-master/figures/polls_mod_prediction_map.png)
 
+###### Analysis
 > - The state-by-state model presents unexpected results in some states that are thought to be reliably republican
 > - For example, the model has Biden winning Alaska by .28% and Arkansas by .07%
 > - The model also predicts some very tight races in [key swing states](https://www.nytimes.com/interactive/2020/us/elections/election-states-biden-trump.html)
