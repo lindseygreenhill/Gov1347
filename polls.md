@@ -150,7 +150,7 @@ closer than this model predicts
 
 Both models predict that Biden will win the election, with the state model predicting a land slide win for the democrats and the national model predicting a tighter race. There are pros and cons of both the state and the national model. One major con of the state model is that there is less data to build models from. However, I believe it is more telling to predict the election on a state-by-state basis due to the electoral college system.
 
-In normal (non-pandemic) times, it would be interesting to build a model based off of both economic and polling data. However, because of the extremity of today's economy (see last weeks's [blog post](Gov1347-master/Econ.md)), that would difficult. 
+In normal (non-pandemic) times, it would be interesting to build a model based off of both economic and polling data. However, because of the extremity of today's economy (see last weeks's [blog post](Econ.md)), that would difficult. 
 
 In the coming weeks, I will work to build a model based off of other predictive variables in addition to polling data. 
 
