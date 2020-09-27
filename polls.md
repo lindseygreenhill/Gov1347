@@ -87,13 +87,6 @@ historical data and will break down when used to predict
 > - To test the models' predictive power, I performed leave-one-out
 cross validation for each model as I did with the national model
 
-<details>
-  <summary>Click here to see full regression results</summary>
-  
-  ![tab](Gov1347-master/figures/tab.png)
-
-</details>
-
 
 #### Model Analysis: out of sample fit/cross validation results
 
@@ -113,16 +106,6 @@ than for the national model, with 23 states predicting the correct winner
 > - The classification accuracy is very high for some [key battleground states]
 such as North Carolina (100%) and Georgia (87.5%) and very low for others
 (Florida)
-
-<details>
-  <summary>Click to see full cross validation results</summary>
-  
-  
-  ![tab](Gov1347-master/figures/accuracy_kable.png)
-  
-
-</details>
-
 
 
 ### Predicting the 2020 Election with National and State-by-State Model
