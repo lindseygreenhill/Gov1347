@@ -310,6 +310,12 @@ library(rsample)
 
 ######### 2020 predictions #########
 
+## creating list of voting bumps. non comp is .4*comp coeff
+
+covid_pop <- covid_pop %>%
+  mutate(coef = if_else(state %in% competitive, .00027, .00027*.4),
+         bump = aid_per_case * coef)
+
 
 new_unique <- unique(poll_2020_six$state)
 
@@ -347,11 +353,18 @@ for(s in new_unique){
   
   chl_df <- data.frame(avg_support = temp_2020_chl)
   
+  # trump bump
+  b <- covid_pop %>%
+    filter(state == s) %>%
+    pull(bump)
+  
   #incumbent prediction
   
   inc <- predict(temp_mod_inc, newdata = inc_df, 
                  interval = "prediction", level=.95) %>%
-    round(digits = 2)
+    round(digits = 2) + b
+  
+
   
   # challenger prediction
   
@@ -424,9 +437,10 @@ sums <- results_2020_plus %>%
 #### creating weightings. weighting so mean is either increased by 1, 2, or 3 %
 
 trump_bump <- covid_pop %>%
-  mutate(base = .0002*aid_per_case,
+  mutate(
          less = .00013*aid_per_case,
-         more = .0003*aid_per_case) %>%
+         base = .0002*aid_per_case,
+         more = .00027*aid_per_case) %>%
   pivot_longer(cols = c(base, less, more), names_to = "type", values_to = "plus")
 
 comp_bumbs <- trump_bump %>%
@@ -441,7 +455,7 @@ y = "Vote Increase",
 x = "")  +
   scale_fill_brewer(palette = "Blues",
                     name = "Coefficient",
-                    labels = c(".0002", ".00013", ".0003")) +
+                    labels = c(".0002", ".00013", ".00027")) +
   theme(
     strip.text = element_text(size = 12),
     plot.title = element_text(size = 18),
