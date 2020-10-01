@@ -170,7 +170,7 @@ ggplot(swing_states, aes(x = state, y = total)) +
   geom_hline(yintercept = mean_total)
 
 
-## incorporating this model as pv = a(avg_support) + b(aid_per_cap)
+## incorporating this model as pv = a(avg_support) + b(aid_per_cap)*competitive_state
 
 ## Updated 2020 presidential forecast incorporating polling data
 
