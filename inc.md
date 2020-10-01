@@ -23,7 +23,7 @@ vote share averaged to be >= 45% in the past three elections) than non-competive
 1% increase in federal spending
 > - For non-competitive states, this coefficient was .008
 > - In line with this finding, incumbents typically direct more federal spending to swing states during
-both election andn non election years
+both election and non-election years
 
 In summary, Kriner and Reeves' work demonstrates that when more money goes to states, thoses states tend to
 vote more for the incumbent than they otherwise would have (especially in competitive states). Although 
