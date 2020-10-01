@@ -41,6 +41,7 @@ popvote_bystate <-  read_csv("Gov1347-master/data/popvote_bystate_1948-2016.csv"
 # Minnesota, Missouri, Nevada, New Hampshire, North Carolina, Ohio,
 # Pennsylvania, Virginia, Wisconsin
 
+competitive <- popvote_bystate$state
 # merging state pop and covid data and creating an aid per capita
 
 covid_pop <- state_pop %>%
@@ -417,6 +418,38 @@ results_2020_plus <- results_2020_ec %>%
 sums <- results_2020_plus %>%
   group_by(winner) %>%
   summarise(c =  sum(votes))
+
+
+
+#### creating weightings. weighting so mean is either increased by 1, 2, or 3 %
+
+trump_bump <- covid_pop %>%
+  mutate(base = .0002*aid_per_case,
+         less = .00013*aid_per_case,
+         more = .0003*aid_per_case) %>%
+  pivot_longer(cols = c(base, less, more), names_to = "type", values_to = "plus")
+
+comp_bumbs <- trump_bump %>%
+  filter(state %in% competitive) %>%
+  ggplot(aes(x = state, y = plus, fill = type)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  theme_classic() +
+  labs(title = "Vote Increases from Different Estimated Coefficients",
+subtitle = "Competitive States",
+y = "Vote Increase",
+x = "")  +
+  scale_fill_brewer(palette = "Blues",
+                    name = "Coefficient",
+                    labels = c(".0002", ".00013", ".0003")) +
+  theme(
+    strip.text = element_text(size = 12),
+    plot.title = element_text(size = 18),
+    plot.subtitle = element_text(size = 16),
+    aspect.ratio = 1,
+    axis.title = element_text(size=16),
+    axis.text = element_text(size=13, color = "black")
+  )
 
 
 
