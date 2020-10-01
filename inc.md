@@ -67,5 +67,19 @@ funding in the form of Covid-19 aid will have an effect on the election.
 run a regression and mathematically calculate this predicted effect. Thus, the estimates
 below only reflect my own reasoning and logic. 
 
+###### Competitive State Coefficients
+
+I considered three different estimated coefficeints for competitive states:
+.000095, .00019, and .000285.
+I calculated the base case coefficient (.0002) by assuming that the average amount of Covid-19 aid will result
+in about a 1.5% vote share increase for Trump. The mean aid per case amongst all states = 7624.52.  Using the formula:
+``` coefficient = 1.5/7624.52 ```
+
+I calculated the base coefficeint to be .00019. I then calculated a coefficient about 50% less than that value
+(.000095) and 50% more than that value (.000285). 
+
+The graphic below visualises how these estimates translate into a voting bump for Trump. 
+
+
 
 
