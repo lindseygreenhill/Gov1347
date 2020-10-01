@@ -399,6 +399,8 @@ r_hist <- insamp %>%
   geom_vline(data = r_df_2, aes(xintercept = Adj_R_squared, color = "red")) +
   geom_histogram(bins = 22) +
   facet_wrap(~Model) +
+  geom_text(x = .57, y = 10, label = "National Model\n Adj R Squared",
+            color = "red") +
   theme_classic() +
   labs(title = "Distribution of Adjusted R Squared Values for 51 State Models",
        subtitle = "Distributions for both the incumbent and challenger models included",
@@ -408,6 +410,8 @@ r_hist <- insamp %>%
         axis.title = element_text(size=16),
         axis.text = element_text(size=13),
         legend.position = "none")
+
+ggsave("Gov1347-master/figures/polls_state_r_hist.png")
 
 
 
