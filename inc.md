@@ -50,11 +50,22 @@ appear to be the case. See the boxplot below for this comparison.
 
 ![box](Gov1347-master/figures/state_award_box.png)
 
-> - Competitive states actually received less aid per case than non competitive states
 
 *Note:* competitive states were determined by the same criteria as above (states where the loser's popular
 vote share averaged to be >= 45% in the past three elections). For 2020, those states 
 are Arizona, Colorado, Florida, Georgia, Iowa, Michigan, Minnesota, Missouri, Nevada, New Hampshire, North Carolina, Ohio, Pennsylvania, Virginia, and Wisconsin. 
+
+In my opinion, the fact that competitive states have not received more aid per case is encouraging,
+as it suggests that Trump didn't try to manipulate the election with pandemic aid. 
+
+#### Estimating the Effect of Aid on Vote Share
+
+Going off of Kriner and Reeves' model, I would expect that increased federal 
+funding in the form of Covid-19 aid will have an effect on the election.
+
+*Note:* Because there is no historical data to compare Covid-19 aid to, however, it is impossible to 
+run a regression and mathematically calculate this predicted effect. Thus, the estimates
+below only reflect my own reasoning and logic. 
 
 
 
