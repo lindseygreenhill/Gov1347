@@ -32,5 +32,15 @@ of Kriner and Reeve's work to estimate the effect of pandemic spending on the el
 
 ### Covid-19 Aid
 
+The maps below show the total and per-case Covid-19 federal aid for each state. I chose to include
+the per-case numbers as it standardizes values across smaller and larger states to make them 
+more comparable. 
+
+![map](Gov1347-master/figures/covid_award_maps.png)
+
+As we can see, although some state received vastly more total Covid-19 aid, the numbers are much closer
+on a per-case basis. For this reason, the rest of this blog post's analysis will use the aid per case
+numbers. 
+
 
 
