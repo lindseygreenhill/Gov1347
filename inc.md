@@ -42,5 +42,19 @@ As we can see, although some state received vastly more total Covid-19 aid, the 
 on a per-case basis. For this reason, the rest of this blog post's analysis will use the aid per case
 numbers. 
 
+#### Competitive vs. Non-Competitive States
+
+Per Kriner and Reeves' findings, I thought it was possible competitive states received more 
+funding per case than non competitive states. However, after looking at the data, that doesn't 
+appear to be the case. See the boxplot below for this comparison. 
+
+![box](Gov1347-master/figures/state_award_box.png)
+
+> - Competitive states actually received less aid per case than non competitive states
+
+*Note:* competitive states were determined by the same criteria as above (states where the loser's popular
+vote share averaged to be >= 45% in the past three elections). For 2020, those states 
+are Arizona, Colorado, Florida, Georgia, Iowa, Michigan, Minnesota, Missouri, Nevada, New Hampshire, North Carolina, Ohio, Pennsylvania, Virginia, and Wisconsin. 
+
 
 
