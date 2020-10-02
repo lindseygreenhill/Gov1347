@@ -92,7 +92,7 @@ and the less conservatiive coefficient to be **.00011**.
 
 #### Incorporating Covid-19 Effect into a Prediction
 
-I incorporated these estimates into last week's [poll model](poll.md) to see how the different
+I incorporated these estimates into last week's [poll model](polls.md) to see how the different
 estimates influence predicted election results. 
 For each of the three above estimated coefficients, 
 I calculated the updated vote share in each state for trump with this equation:
