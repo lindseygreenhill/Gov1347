@@ -94,6 +94,19 @@ and the less conservatiive coefficient to be **.00011**.
 
 I incorporated these estimates into last week's [poll model](poll.md) to see how the different
 estimates influence predicted election results. 
+For each of the three above estimated coefficients, 
+I calculated the updated vote share in each state for trump with this equation:
+``` vote_share = (state_regression_coeff)*(avg_support) + (covid_coeff_estimate)*(aid_per_case)```. 
+The vote share for Biden isn't changed by this update. 
+The results of the poll/covid model is shown below for each of the different estimated coefficients.
+
+![map](Gov1347-master/figures/covid_bump_maps)
+
+##### Analysis
+> - The prediction results vary across the different coefficients
+> - The conservative coefficient model predicts Biden wins Florida (29 electoral votes) while both the base and 
+less conservative coefficient models predict Trump wins Florida by a slim margin
+> - The less conservative model also predicts that Trump wins Ohio (18 electoral votes)
 
 
 
