@@ -103,7 +103,7 @@ The results of the poll/covid model is shown below for each of the different est
 ![map](Gov1347-master/figures/covid_bump_maps.png)
 
 ##### Analysis
-> - The prediction results vary across the different coefficients
+> - Biden wins in every scenario, but the prediction results vary across the different coefficients
 > - The conservative coefficient model predicts Biden wins Florida (29 electoral votes) while both the base and 
 less conservative coefficient models predict Trump wins Florida by a slim margin
 > - The less conservative model also predicts that Trump wins Ohio (18 electoral votes)
