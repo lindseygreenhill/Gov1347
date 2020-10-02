@@ -92,6 +92,8 @@ and the less conservatiive coefficient to be **.00011**.
 
 #### Incorporating Covid-19 Effect into a Prediction
 
+I incorporated these estimates into last week's [poll model](poll.md) to see how the different
+estimates influence predicted election results. 
 
 
 
