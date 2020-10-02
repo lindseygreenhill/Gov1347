@@ -313,7 +313,7 @@ library(rsample)
 ## creating list of voting bumps. non comp is .4*comp coeff
 
 covid_pop <- covid_pop %>%
-  mutate(coef = if_else(state %in% competitive, .00027, .00027*.4),
+  mutate(coef = if_else(state %in% competitive, .00019, .00027*.4),
          bump = aid_per_case * coef)
 
 
@@ -432,15 +432,18 @@ sums <- results_2020_plus %>%
   group_by(winner) %>%
   summarise(c =  sum(votes))
 
+base_sums <- sums
+base_results <- results_2020_plus
+
 
 
 #### creating weightings. weighting so mean is either increased by 1, 2, or 3 %
 
 trump_bump <- covid_pop %>%
   mutate(
-         less = .00013*aid_per_case,
-         base = .0002*aid_per_case,
-         more = .00027*aid_per_case) %>%
+         less = .000095*aid_per_case,
+         base = .00019*aid_per_case,
+         more = .000285*aid_per_case) %>%
   pivot_longer(cols = c(base, less, more), names_to = "type", values_to = "plus")
 
 comp_bumbs <- trump_bump %>%
@@ -451,11 +454,11 @@ comp_bumbs <- trump_bump %>%
   theme_classic() +
   labs(title = "Vote Increases from Different Estimated Coefficients",
 subtitle = "Competitive States",
-y = "Vote Increase",
+y = "Vote Share Increase",
 x = "")  +
   scale_fill_brewer(palette = "Blues",
                     name = "Coefficient",
-                    labels = c(".0002", ".00013", ".00027")) +
+                    labels = c(".00019", ".000095", ".000285")) +
   theme(
     strip.text = element_text(size = 12),
     plot.title = element_text(size = 18),
@@ -464,6 +467,8 @@ x = "")  +
     axis.title = element_text(size=16),
     axis.text = element_text(size=13, color = "black")
   )
+
+ggsave("Gov1347-master/figures/covid_bump_comp.png")
 
 
 
