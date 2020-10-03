@@ -1,4 +1,5 @@
 # Incumbency, Federal Spending, and Covid-19 Aid
+October 3, 2020
 
 ### Introduction
 
