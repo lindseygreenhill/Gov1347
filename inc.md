@@ -100,7 +100,7 @@ I calculated the updated vote share in each state for Trump with this equation:
 The vote share for Biden isn't changed by this update. 
 The results of the poll/covid model is shown below for each of the different estimated coefficients.
 
-![map](Gov1347-master/figures/covid_bump_maps.png)
+![map](Gov1347-master/figures/patchwork_prediction_aid_maps.png)
 
 ##### Analysis
 > - Incorporating Covid-19 aid into the model changes the prediction results from the 
