@@ -35,7 +35,7 @@ The maps below show the total and per-case Covid-19 federal aid for each state. 
 the per-case numbers as it standardizes values across smaller and larger states to make them 
 more comparable. 
 
-![map](Gov1347-master/figures/covid_award_maps.png)
+![map](Gov1347-master/figures/test_map_covid.png)
 
 As we can see, although some states received vastly more total Covid-19 aid, the numbers are much closer
 on a per-case basis. For this reason, the rest of this blog post's analysis will use the aid per case
