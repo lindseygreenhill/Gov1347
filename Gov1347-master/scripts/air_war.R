@@ -137,7 +137,7 @@ for(s in unique(poll_pvstate_vep_df_run$state)){
   prob_Rvote_s_2020 <- predict(PA_R_glm, newdata = data.frame(avg_poll=r_prob$avg_support), type="response")[[1]]
   prob_Dvote_s_2020 <- predict(PA_D_glm, newdata = data.frame(avg_poll=d_prob$avg_support), type="response")[[1]]
   
-  n <- 1000
+  n <- 10000
   
   ## Get predicted distribution of draws from the population
   sim_Rvotes_s_2020 <- rbinom(n = n, size = VEP_s_2020, prob = prob_Rvote_s_2020)
@@ -160,15 +160,49 @@ for(s in unique(poll_pvstate_vep_df_run$state)){
 
 # creating plot of distributions
 
-ggplot(tib, aes(prob)) +
-  geom_histogram() +
+poll_mod_preds <- tib %>%
+  group_by(state) %>%
+  mutate(winner = if_else(mean(prob) > 0, "democrat", "republican"))
+
+ggplot(poll_mod_preds, aes(prob)) +
+  geom_histogram(binwidth = 2) +
+  geom_rect(aes(fill=winner), xmin=-25, xmax=25, ymin=9900, ymax=11000) +
   facet_geo(~state) +
+  scale_fill_manual(values = c("blue", "red")) +
   theme_light() +
-  labs(title = "Distribution of Win Margin Probabilities",
+  labs(title = "Distributions of Win Margin Predictions",
+       subtitle = "Red line at 0% win margin",
        x = "Win Margin (Democrat)",
        y = "Frequency") +
-  theme(plot.title = element_text(hjust = .5)) +
-  geom_vline(xintercept = 0, col = "red")
+  theme(plot.title = element_text(hjust = .5, size = 18),
+        plot.subtitle = element_text(hjust = .5, size = 16)) +
+  geom_vline(xintercept = 0, col = "red", size = .4)
+
+library(webshot)
+
+#ggsave("Gov1347-master/figures/poll_prob_model_dist.png")
+
+### key swing states ###
+
+poll_mod_swing_preds <- tib %>%
+  filter(state %in% c("Iowa", "Ohio", "North Carolina")) %>%
+  group_by(state) %>%
+  mutate(winner = if_else(mean(prob) > 0, "democrat", "republican"))
+
+ggplot(poll_mod_swing_preds, aes(prob)) +
+  geom_histogram(binwidth = .06) +
+  #geom_rect(aes(fill=winner), xmin=-25, xmax=25, ymin=9900, ymax=11000) +
+  facet_wrap(~state) +
+  #scale_fill_manual(values = c("blue", "red")) +
+  theme_classic() +
+  labs(title = "Distributions of Win Margin Predictions",
+       subtitle = "Red line at 0% win margin",
+       x = "Win Margin (Democrat)",
+       y = "Frequency") +
+  theme(plot.title = element_text(hjust = .5, size = 18),
+        plot.subtitle = element_text(hjust = .5, size = 16)) +
+  geom_vline(xintercept = 0, col = "red", size = .4)
+
 
 
 
