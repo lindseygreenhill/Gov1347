@@ -1,6 +1,7 @@
 library(tidyverse)
 library(ggplot2)
 library(geofacet) ## map-shaped grid of ggplots
+library(ggthemes)
 
 #####------------------------------------------------------#
 ##### Read and merge data ####
@@ -100,6 +101,7 @@ poll_pvstate_vep_df_run <- poll_pvstate_vep_df %>%
 
 # creating output data frame
 output <- tibble()
+tib <- tibble()
 
 for(s in unique(poll_pvstate_vep_df_run$state)){
   
@@ -135,17 +137,41 @@ for(s in unique(poll_pvstate_vep_df_run$state)){
   prob_Rvote_s_2020 <- predict(PA_R_glm, newdata = data.frame(avg_poll=r_prob$avg_support), type="response")[[1]]
   prob_Dvote_s_2020 <- predict(PA_D_glm, newdata = data.frame(avg_poll=d_prob$avg_support), type="response")[[1]]
   
+  n <- 1000
+  
   ## Get predicted distribution of draws from the population
-  sim_Rvotes_s_2020 <- rbinom(n = 10000, size = VEP_s_2020, prob = prob_Rvote_s_2020)
-  sim_Dvotes_s_2020 <- rbinom(n = 10000, size = VEP_s_2020, prob = prob_Dvote_s_2020)
+  sim_Rvotes_s_2020 <- rbinom(n = n, size = VEP_s_2020, prob = prob_Rvote_s_2020)
+  sim_Dvotes_s_2020 <- rbinom(n = n, size = VEP_s_2020, prob = prob_Dvote_s_2020)
   
   ## Simulating a distribution of election results: Biden win margin
   sim_elxns_s_2020 <- ((sim_Dvotes_s_2020-sim_Rvotes_s_2020)/(sim_Dvotes_s_2020+sim_Rvotes_s_2020))*100
   
+  for(i in 1:n){
+    vec <- tibble(state = s, prob = sim_elxns_s_2020[i])
+    tib <- tib %>%
+      bind_rows(vec)
+  }
   vector <- tibble(state = s, sims = list(sim_elxns_s_2020))
   
   output <- output %>%
     bind_rows(vector)
   
 }
+
+# creating plot of distributions
+
+ggplot(tib, aes(prob)) +
+  geom_histogram() +
+  facet_geo(~state) +
+  theme_light() +
+  labs(title = "Distribution of Win Margin Probabilities",
+       x = "Win Margin (Democrat)",
+       y = "Frequency") +
+  theme(plot.title = element_text(hjust = .5)) +
+  geom_vline(xintercept = 0, col = "red")
+
+
+
+
+
 
