@@ -115,6 +115,7 @@ ggarrange(map_total ,map_per_case,
           nrow = 1)
 ggsave("Gov1347-master/figures/covid_award_maps.png")
 
+
 # creating data sets for non comp and comp states
 
 comp_states <- covid_pop %>%
@@ -313,7 +314,7 @@ library(rsample)
 ## creating list of voting bumps. non comp is .4*comp coeff
 
 covid_pop <- covid_pop %>%
-  mutate(coef = if_else(state %in% competitive, .00019, .00027*.4),
+  mutate(coef = if_else(state %in% competitive, .000095, .000095*.4),
          bump = aid_per_case * coef)
 
 
@@ -432,8 +433,109 @@ sums <- results_2020_plus %>%
   group_by(winner) %>%
   summarise(c =  sum(votes))
 
+conservative_sums <- sums
+conservative_results <- results_2020_plus
+
+conservative_map <- plot_usmap(data = conservative_results, regions = "states", values = "win_margin") +
+  scale_fill_gradient2(
+    high = "red", 
+    mid = "white",
+    low = "blue", 
+    breaks = c(-50,-25,0,25,50), 
+    limits = c(-50,50),
+    name = "win margin") +
+  theme_void() +
+  labs(title = "Win Margins Predictions 2020 Conservative Coefficient",
+       subtitle = "Biden wins 368 electoral votes\n Trump wins 170 electoral votes",
+       fill = "Win Margin") +
+  theme_void() +
+  theme(
+    strip.text = element_text(size = 12),
+    plot.title = element_text(hjust = .5),
+    plot.subtitle = element_text(hjust = .5),
+    aspect.ratio = 1
+  )
+
+
 base_sums <- sums
 base_results <- results_2020_plus
+
+###### creating map of 2020 results  #######
+
+library(usmap)
+states_map <- usmap::us_map()
+unique(states_map$abbr)
+
+base_map <- plot_usmap(data = base_results, regions = "states", values = "win_margin") +
+  scale_fill_gradient2(
+    high = "red", 
+    mid = "white",
+    low = "blue", 
+    breaks = c(-50,-25,0,25,50), 
+    limits = c(-50,50),
+    name = "win margin") +
+  theme_void() +
+  labs(title = "Win Margins Predictions 2020 Base Coefficient",
+       subtitle = "Biden wins 339 electoral votes\n Trump wins 199 electoral votes",
+       fill = "Win Margin") +
+  theme_void() +
+  theme(
+    strip.text = element_text(size = 12),
+    plot.title = element_text(hjust = .5),
+    plot.subtitle = element_text(hjust = .5),
+    aspect.ratio = 1
+  )
+
+
+nc_sums <- sums
+nc_results <- results_2020_plus
+nc_map <- plot_usmap(data = nc_results, regions = "states", values = "win_margin") +
+  scale_fill_gradient2(
+    high = "red", 
+    mid = "white",
+    low = "blue", 
+    breaks = c(-50,-25,0,25,50), 
+    limits = c(-50,50),
+    name = "win margin") +
+  theme_void() +
+  labs(title = "Win Margins Predictions 2020 Less Conservative Coefficient",
+       subtitle = "Biden wins 321 electoral votes\n Trump wins 217 electoral votes",
+       fill = "Win Margin") +
+  theme_void() +
+  theme(
+    strip.text = element_text(size = 12),
+    plot.title = element_text(hjust = .5),
+    plot.subtitle = element_text(hjust = .5),
+    aspect.ratio = 1
+  )
+
+conservative_sums <- sums
+conservative_results <- results_2020_plus
+
+conservative_map <- plot_usmap(data = conservative_results, regions = "states", values = "win_margin") +
+  scale_fill_gradient2(
+    high = "red", 
+    mid = "white",
+    low = "blue", 
+    breaks = c(-50,-25,0,25,50), 
+    limits = c(-50,50),
+    name = "win margin") +
+  theme_void() +
+  labs(title = "Win Margins Predictions 2020 Conservative Coefficient",
+       subtitle = "Biden wins 368 electoral votes\n Trump wins 170 electoral votes",
+       fill = "Win Margin") +
+  theme_void() +
+  theme(
+    strip.text = element_text(size = 12),
+    plot.title = element_text(hjust = .5),
+    plot.subtitle = element_text(hjust = .5),
+    aspect.ratio = 1
+  )
+
+
+
+ggarrange(conservative_map, base_map, nc_map)
+
 
 
 
