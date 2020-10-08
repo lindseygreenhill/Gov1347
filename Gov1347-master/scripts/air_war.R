@@ -180,9 +180,10 @@ ggplot(poll_mod_preds, aes(prob)) +
 
 library(webshot)
 
-#ggsave("Gov1347-master/figures/poll_prob_model_dist.png")
+ggsave("Gov1347-master/figures/poll_prob_model_dist.png")
 
 ### key swing states ###
+# make geom_density plot!!
 
 poll_mod_swing_preds <- tib %>%
   filter(state %in% c("Iowa", "Ohio", "North Carolina")) %>%
