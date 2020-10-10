@@ -15,7 +15,7 @@ prediction intervals reach below 0% or above 100%). The model works by predictin
 
 I ran a binomial logistic regression for each state with historical polling data. Using these models, I ran 10,000 simulations of the 2020 election based off of the current poll averages form [538](https://projects.fivethirtyeight.com/polls/president-general/). The simulations show the predicted win margins in each state based off of the predicted draw of the voter eligible population for Biden and Trump. The map below shows the distributions of the results from these simulations. 
 
-![map](distribution map)
+![map](Gov1347-master/figures/poll_prob_model_dist.png)
 
 #### Analysis
 > - Taking the means of these distributions as the predicted win margin, the model
@@ -41,7 +41,7 @@ The graphic below shows the distributions for North Carolina, Florida, and Wisco
 ![img](Gov1347-master/figures/swing_binomial_preds.png)
 
 #### Analysis
-> - The model estimates Arizona's win margin at just over 4%
+> - The model estimates Wisconsin's win margin at just below 4.5%
 > - The model estimates Florida's win margin at just below 3%
 > - The model estimates North Carolina's win margin at just above 2%
 
@@ -58,8 +58,8 @@ or minus 2.5%).
 Using these estimates, and knowing that 1 GRP costs about $300, we can estimate 
 how much Trump would have to spend to win these swing states. 
 
-**Arizona:** Looking at the distribution above, Trump would have to gain about about 6% vote share to have about a 2% win margin. According to Gerber, this translates into Trump needing about 1,200 more GRPs than Biden going into the election. According to Huber, this translates into Trump needing about 800 more GRPs than Biden going into the election. This equates to 
-Trump having to spend $360,000 or $240,000 more than Biden. 
+**Wisconsin:** Looking at the distribution above, Trump would have to gain about about 6.5% vote share to have about a 2% win margin. According to Gerber, this translates into Trump needing about 1,300 more GRPs than Biden going into the election. According to Huber, this translates into Trump needing about 866 more GRPs than Biden going into the election. This equates to 
+Trump having to spend $390,000 or $259,800 more than Biden. 
 
 **Florida:** Looking at the distribution above, Trump would have to gain about about 5% vote share to have about a 2% win margin. According to Gerber, this translates into Trump
 needing about 1,000 more GRPs than Biden going into the election. According to Huber, this translates into Trump needing about 666 more GRPs than Biden going into the election. This equates to Trump having to spend $300,000 or $199,800 more than Biden. 
@@ -67,6 +67,10 @@ needing about 1,000 more GRPs than Biden going into the election. According to H
 **North Carolina:** Looking at the distribution above, Trump would have to gain about about 4%
 to have about a 2% win margin. According to Gerber, this translates into Trump needing about 800 more GRPs than Biden going into the election. According to Huber, this translates into about Trump needing about 800 GRPs more GRPs than Biden going into the election. 
 
+### What does the current spending data look like?
+As of now, Biden is outspending Trump in both Florida and Wisconsin, meaning that it would be potentially difficult for Trump to spend as much as he needs to in order to shift the vote in his direction. 
+
+![spending](Gov1347-master/figures/ad_spending_2020.png)
 
 
 
