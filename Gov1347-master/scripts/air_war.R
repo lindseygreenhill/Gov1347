@@ -103,6 +103,7 @@ poll_pvstate_vep_df_run <- poll_pvstate_vep_df %>%
 output <- tibble()
 tib <- tibble()
 
+
 for(s in unique(poll_pvstate_vep_df_run$state)){
   
   ## Get relevant data
@@ -134,8 +135,8 @@ for(s in unique(poll_pvstate_vep_df_run$state)){
   ## Get predicted draw probabilities for D and 
 
   
-  prob_Rvote_s_2020 <- predict(PA_R_glm, newdata = data.frame(avg_poll=r_prob$avg_support), type="response")[[1]]
-  prob_Dvote_s_2020 <- predict(PA_D_glm, newdata = data.frame(avg_poll=d_prob$avg_support), type="response")[[1]]
+  prob_Rvote_s_2020 <- predict(s_R_glm, newdata = data.frame(avg_poll=r_prob$avg_support), type="response")[[1]]
+  prob_Dvote_s_2020 <- predict(s_D_glm, newdata = data.frame(avg_poll=d_prob$avg_support), type="response")[[1]]
   
   n <- 10000
   
@@ -157,12 +158,43 @@ for(s in unique(poll_pvstate_vep_df_run$state)){
     bind_rows(vector)
   
 }
+## ev data ##
+vector <- data.frame(state = "District of Columbia", votes = 3)
+EC <- read_csv("Gov1347-master/data/electoral_college.csv") %>%
+  select(state = State, votes = electoralVotesNumber) %>%
+  bind_rows(vector)
+
+## missing state: Vermont, Wyoming, South Dakota, Rhode Island, Nebraska, DC
 
 # creating plot of distributions
+missing <- tibble(state = c("Nebraska",
+                            "Rhode Island",
+                            "South Dakota",
+                            "Vermont",
+                            "Wyoming",
+                            "District of Columbia"),
+                  prob = c(-30, 20, -30, 20, -30, 20),
+                  winner = if_else(prob < 0, "republican", "democrat"))
+
+
+# adding a winner column in the predictions tibble
 
 poll_mod_preds <- tib %>%
   group_by(state) %>%
   mutate(winner = if_else(mean(prob) > 0, "democrat", "republican"))
+
+# counting the electoral votes
+
+poll_mod_preds_EC <- poll_mod_preds %>%
+  bind_rows(missing) %>%
+  left_join(EC, by = "state") %>%
+  group_by(state, winner) %>%
+  summarise(votes = mean(votes)) %>%
+  group_by(winner) %>%
+  summarise(total = sum(votes))
+
+
+# creating map of distributions  
 
 ggplot(poll_mod_preds, aes(prob)) +
   geom_histogram(binwidth = 2) +
@@ -173,7 +205,7 @@ ggplot(poll_mod_preds, aes(prob)) +
   labs(title = "Distributions of Win Margin Predictions",
        subtitle = "Red line at 0% win margin",
        x = "Win Margin (Democrat)",
-       y = "Frequency") +
+       y = "Density") +
   theme(plot.title = element_text(hjust = .5, size = 18),
         plot.subtitle = element_text(hjust = .5, size = 16)) +
   geom_vline(xintercept = 0, col = "red", size = .4)
@@ -186,7 +218,7 @@ ggsave("Gov1347-master/figures/poll_prob_model_dist.png")
 # make geom_density plot!!
 
 poll_mod_swing_preds <- tib %>%
-  filter(state %in% c("Iowa", "Ohio", "North Carolina")) %>%
+  filter(state %in% c("Florida", "Arizona", "North Carolina")) %>%
   group_by(state) %>%
   mutate(winner = if_else(mean(prob) > 0, "democrat", "republican"))
 
@@ -204,6 +236,59 @@ ggplot(poll_mod_swing_preds, aes(prob)) +
         plot.subtitle = element_text(hjust = .5, size = 16)) +
   geom_vline(xintercept = 0, col = "red", size = .4)
 
+ggplot(poll_mod_swing_preds, aes(prob, fill = state)) +
+  geom_density() +
+  #geom_rect(aes(fill=winner), xmin=-25, xmax=25, ymin=9900, ymax=11000) +
+  #facet_wrap(~state) +
+  #scale_fill_manual(values = c("blue", "red")) +
+  theme_classic() +
+  labs(title = "Distributions of Win Margin Predictions",
+       x = "Win Margin (Democrat)",
+       y = "Frequency") +
+  theme(plot.title = element_text(size = 18),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 14)) 
+ggsave("Gov1347-master/figures/swing_binomial_preds.png")
+
+
+## descriptive data: spending found on NPR
+## https://www.npr.org/2020/09/15/912663101/biden-is-outspending-trump-on-tv-and-just-6-states-are-the-focus-of-the-campaign
+ads_2020 <- tibble(state = c("Wisconsin", "Florida", "North Carolina"),
+                   trump = c(31.8, 82.3, 49),
+                   biden = c(44.4, 83.5, 37.1)) %>%
+  pivot_longer(cols = trump:biden, names_to = "candidate",
+               values_to = "spending")
+
+ggplot(ads_2020, aes(x = state, y = spending, fill = candidate)) +
+  geom_col(position = "dodge") +
+  scale_fill_manual(values = c("blue", "red")) +
+  theme_classic() +
+  coord_flip() +
+  labs(title = "Candidate Ad Spending 2020",
+       subtitle = "Biden leads in Wisconsin, Florida",
+       x = "",
+       y = "Spending ($ Millions)") +
+  theme(axis.text = element_text(size = 14),
+        axis.title = element_text(size = 14),
+        plot.title = element_text(size = 18),
+        plot.subtitle = element_text(size = 16))
+
+ggsave("Gov1347-master/figures/ad_spending_2020.png")
+
+
+pred_shifts <- poll_mod_preds %>%
+  mutate(shift_Gerber = if_else(state == "Wisconsin", prob - rnorm(10000, 6, 1.5),
+                           if_else(state == "Florida", prob - rnorm(10000,5,1.5),
+                                   prob - rnorm(10000, 4, 1.5))),
+         shift_Huber = if_else(state == "Wisconsin", prob - rnorm(10000, 6, 2.5),
+                               if_else(state == "Florida", prob - rnorm(10000,5,2.5),
+                                       prob - rnorm(10000, 4, 2.5))))
+
+ggplot(pred_shifts, aes(fill = state)) +
+  geom_density(aes(prob)) +
+  geom_density(aes(shift_Gerber)) +
+  geom_density(aes(shift_Huber)) +
+  theme_classic()  
 
 
 
