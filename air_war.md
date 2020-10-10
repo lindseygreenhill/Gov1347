@@ -38,7 +38,7 @@ certainly vote for [Trump](https://projects.economist.com/us-2020-forecast/presi
 
 The graphic below shows the distributions for North Carolina, Florida, and Wisconsin. 
 
-![img](Gov1347-master/figures/swing_binomial_preds.png)
+![img](Gov1347-master/figures/swing_binomial_preds2.png)
 
 #### Analysis
 > - The model estimates Wisconsin's win margin at just below 4.5%
