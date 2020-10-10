@@ -8,3 +8,5 @@
 ### [Polls - September 23, 2020](polls.md)
 
 ### [Incumbency & Federal Spending - October 3, 2020](inc.md)
+
+### [Campaign Ad Spending - October 10, 2020](air_war.md)
