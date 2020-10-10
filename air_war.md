@@ -36,7 +36,7 @@ certainly vote for [Trump](https://projects.economist.com/us-2020-forecast/presi
 
 The graphic below shows the distributions for North Carolina, Florida, and Wisconsin. 
 
-![img](Gov1347-master/figures/swing_binomial_preds2.png)
+![img](Gov1347-master/figures/swing_binomial_preds1.png)
 
 #### Analysis
 > - The model estimates Wisconsin's win margin at just below 4.5%
@@ -64,7 +64,7 @@ how much Trump would have to spend to win these swing states.
 
 The graphic below shows the previous distributions adjusted for the spending addressed above. The two different distributions are reflective of either Gerber's (red) or Huber's (blue) estimates. Huber's estimates have a larger standard error than Gerber's estimates. All shifts results in a rough 2% win margin for Trump. 
 
-![dist](Gov1347-master/figures/swing_pred_shifts_grps.png)
+![dist](Gov1347-master/figures/swing_pred_shifts_grps1.png)
 
 
 
