@@ -50,6 +50,16 @@ or minus 2.5%).
 Using these estimates, and knowing that 1 GRP costs about $300, we can estimate 
 how much Trump would have to spend to win these swing states. 
 
+**Arizona:** Looking at the distribution above, Trump would have to gain about about 6% vote share to have about a 2% win margin. According to Gerber, this translates into Trump needing about 1,200 more GRPs than Biden going into the election. According to Huber, this translates into Trump needing about 800 more GRPs than Biden going into the election. This equates to 
+Trump having to spend $360,000 or $240,000 more than Biden. 
+
+**Florida:** Looking at the distribution above, Trump would have to gain about about 5% vote share to have about a 2% win margin. According to Gerber, this translates into Trump
+needing about 1,000 more GRPs than Biden going into the election. According to Huber, this translates into Trump needing about 666 more GRPs than Biden going into the election. This equates to Trump having to spend $300,000 or $199,800 more than Biden. 
+
+**North Carolina:** Looking at the distribution above, Trump would have to gain about about 4%
+to have about a 2% win margin. According to Gerber, this translates into Trump needing about 800 more GRPs than Biden going into the election. According to Huber, this translates into about Trump needing about 800 GRPs more GRPs than Biden going into the election. 
+
+
 
 
  
