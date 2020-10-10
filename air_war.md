@@ -29,7 +29,7 @@ most professional [models](https://projects.economist.com/us-2020-forecast/presi
 > - The model also predicts that Biden will win West Virginia when West Virginia will almost
 certainly vote for [Trump](https://projects.economist.com/us-2020-forecast/president/west-virginia)
 > - The model predicts slim margins in swing states such as Florida, Georgia, Ohio, Wisconsin, New Hampshire, and Michigan
-> - The model predicts Biden's win to be more decisive than [last week's Covid-19 model](mod). 
+> - The model predicts Biden's win to be more decisive than [last week's Covid-19 model](inc.md). 
 
 *Note:* There is not poll data available to build models for a few states (Vermont, Wyoming, South Dakota, Rhode Island, Nebraska, and DC). However, as was the case in prior blog posts, I believe it is a safe bet to use prior election results in these states as a proxy for 2020. 
 
