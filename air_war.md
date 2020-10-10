@@ -39,6 +39,17 @@ The graphic below shows the distributions for Nortth Carolina, Florida, and Ariz
 
 ## Shifting the Win Margin with Ad Spending
 
+According to 2011 research by Alan Gerber and 2007 research done by Gregory Huber,
+political advertising can have persuasive effects on voters. Specifically, both 
+of these studies found that investment in Gross Point Rating (a marketing term
+that referes to the number of airings of an ad multipleid by the percent of reachable audience), leads to an increase in vote share. Specifically, Gerber estimated that 
+an addition of 1,000 GRPs buys a 5 point shift in vote share (plus or minus 1.5%), and
+Huber estimated that an addition of 1,000 GRPs buys a 7.5 point shift in vote share (plus
+or minus 2.5%). 
+
+Using these estimates, and knowing that 1 GRP costs about $300, we can estimate 
+how much Trump would have to spend to win these swing states. 
+
 
 
  
