@@ -20,15 +20,23 @@ I ran a binomial logistic regression for each state with historical polling data
 #### Analysis
 > - Taking the means of these distributions as the predicted win margin, the model
 predicts that Biden wll win with 400 electoral votes and Trump will lose will 138 electoral votes
-> - The difference between this model's results and the linear model's results is Texas
-> - However, I believe that according to recent polls Texas is more likely to go Republican
-> - The model predicts slim margins in swing states such as Iowa, Florida, Georgia, Ohio, Wisconsin, and others
+> - It is worth being skeptical about some of these results, however, as some states seem
+unrealistic
+> - For example, the model has Trump winning Arizona by double digits when my past models, as
+well as other poll based [models](https://projects.fivethirtyeight.com/polls/president-general/arizona/) have Biden winning Arizona
+> - This model also has Biden winning Texas, where all my past models have Trump winning Texas, and 
+most professional [models](https://projects.economist.com/us-2020-forecast/president/texas) predict that Trump will most likely win in Texas
+> - The model also predicts that Biden will win West Virginia when West Virginia will almost
+certainly vote for [Trump](https://projects.economist.com/us-2020-forecast/president/west-virginia)
+> - The model predicts slim margins in swing states such as Florida, Georgia, Ohio, Wisconsin, New Hampshire, and Michigan
 > - The model predicts Biden's win to be more decisive than [last week's Covid-19 model](mod). 
+
+*Note:* There is not poll data available to build models for a few states (Vermont, Wyoming, South Dakota, Rhode Island, Nebraska, and DC). However, as was the case in prior blog posts, I believe it is a safe bet to use prior election results in these states as a proxy for 2020. 
 
 
 ## Looking at Key Swing States
 
-The graphic below shows the distributions for Nortth Carolina, Florida, and Arizona. 
+The graphic below shows the distributions for North Carolina, Florida, and Wisconsin. 
 
 ![img](Gov1347-master/figures/swing_binomial_preds.png)
 
