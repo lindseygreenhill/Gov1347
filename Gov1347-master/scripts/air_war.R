@@ -218,9 +218,11 @@ ggsave("Gov1347-master/figures/poll_prob_model_dist.png")
 # make geom_density plot!!
 
 poll_mod_swing_preds <- tib %>%
-  filter(state %in% c("Florida", "Arizona", "North Carolina")) %>%
+  filter(state %in% c("Florida", "Wisconsin", "North Carolina")) %>%
   group_by(state) %>%
   mutate(winner = if_else(mean(prob) > 0, "democrat", "republican"))
+
+# histograms of swing states
 
 ggplot(poll_mod_swing_preds, aes(prob)) +
   geom_histogram(binwidth = .06) +
@@ -236,19 +238,63 @@ ggplot(poll_mod_swing_preds, aes(prob)) +
         plot.subtitle = element_text(hjust = .5, size = 16)) +
   geom_vline(xintercept = 0, col = "red", size = .4)
 
-ggplot(poll_mod_swing_preds, aes(prob, fill = state)) +
-  geom_density() +
-  #geom_rect(aes(fill=winner), xmin=-25, xmax=25, ymin=9900, ymax=11000) +
-  #facet_wrap(~state) +
-  #scale_fill_manual(values = c("blue", "red")) +
-  theme_classic() +
-  labs(title = "Distributions of Win Margin Predictions",
+# histogram of indv plot of Swing states
+Florida <- poll_mod_preds %>% filter(state == "Florida") %>%
+  ggplot(aes(prob, fill = state)) +
+  scale_fill_manual(values = "steelblue2")+
+  geom_histogram(binwidth = .005) +
+  labs(title = "Distributions of Florida Win Margin Predictions",
        x = "Win Margin (Democrat)",
        y = "Frequency") +
+  theme_classic() +
   theme(plot.title = element_text(size = 18),
         axis.title = element_text(size = 14),
-        axis.text = element_text(size = 14)) 
+        axis.text = element_text(size = 14),
+        legend.position = "none")
+Wisconsin <- poll_mod_preds %>% filter(state == "Wisconsin") %>%
+  ggplot(aes(prob, fill = state)) +
+  scale_fill_manual(values = "steelblue2")+
+  geom_histogram(binwidth = .005) +
+  labs(title = "Distributions of Wisconsin Win Margin Predictions",
+       x = "Win Margin (Democrat)",
+       y = "Frequency") +
+  theme_classic() +
+  theme(plot.title = element_text(size = 18),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 14),
+        legend.position = "none")
+
+North_Carolina <- poll_mod_preds %>% filter(state == "North Carolina") %>%
+  ggplot(aes(prob, fill = state)) +
+  scale_fill_manual(values = "steelblue2")+
+  geom_histogram(binwidth = .005) +
+  labs(title = "Distributions of North Carolina Win Margin Predictions",
+       x = "Win Margin (Democrat)",
+       y = "Frequency") +
+  theme_classic() +
+  theme(plot.title = element_text(size = 18),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 14),
+        legend.position = "none")
+library(ggpubr)
+ggarrange(Florida, Wisconsin, North_Carolina, nrow = 1)
 ggsave("Gov1347-master/figures/swing_binomial_preds.png")
+
+#   
+# 
+# ggplot(poll_mod_swing_preds, aes(prob, fill = state, ..count..)) +
+#   geom_density() +
+#   #geom_rect(aes(fill=winner), xmin=-25, xmax=25, ymin=9900, ymax=11000) +
+#   #facet_wrap(~state) +
+#   #scale_fill_manual(values = c("blue", "red")) +
+#   theme_classic() +
+#   labs(title = "Distributions of Win Margin Predictions",
+#        x = "Win Margin (Democrat)",
+#        y = "Count") +
+#   theme(plot.title = element_text(size = 18),
+#         axis.title = element_text(size = 14),
+#         axis.text = element_text(size = 14)) 
+#ggsave("Gov1347-master/figures/swing_binomial_preds.png")
 
 
 ## descriptive data: spending found on NPR
@@ -267,7 +313,8 @@ ggplot(ads_2020, aes(x = state, y = spending, fill = candidate)) +
   labs(title = "Candidate Ad Spending 2020",
        subtitle = "Biden leads in Wisconsin, Florida",
        x = "",
-       y = "Spending ($ Millions)") +
+       y = "Spending ($ Millions)",
+       caption = "Data from NPR") +
   theme(axis.text = element_text(size = 14),
         axis.title = element_text(size = 14),
         plot.title = element_text(size = 18),
@@ -276,19 +323,68 @@ ggplot(ads_2020, aes(x = state, y = spending, fill = candidate)) +
 ggsave("Gov1347-master/figures/ad_spending_2020.png")
 
 
-pred_shifts <- poll_mod_preds %>%
-  mutate(shift_Gerber = if_else(state == "Wisconsin", prob - rnorm(10000, 6, 1.5),
-                           if_else(state == "Florida", prob - rnorm(10000,5,1.5),
-                                   prob - rnorm(10000, 4, 1.5))),
-         shift_Huber = if_else(state == "Wisconsin", prob - rnorm(10000, 6, 2.5),
-                               if_else(state == "Florida", prob - rnorm(10000,5,2.5),
-                                       prob - rnorm(10000, 4, 2.5))))
+ pred_shifts <- poll_mod_swing_preds %>%
+   mutate(shift_Gerber = if_else(state == "Wisconsin", prob - rnorm(10000, 6.5, 1.5),
+                            if_else(state == "Florida", prob - rnorm(10000,5.5,1.5),
+                                    prob - rnorm(10000, 4.5, 1.5))),
+          shift_Huber = if_else(state == "Wisconsin", prob - rnorm(10000, 6.5, 2.5),
+                                if_else(state == "Florida", prob - rnorm(10000,5.5,2.5),
+                                        prob - rnorm(10000, 4.5, 2.5))))
+ 
+# ggplot(pred_shifts, aes(fill = state)) +
+#   geom_histogram(aes(prob, bindwidth = .01)) +
+#   geom_histogram(aes(shift_Gerber, binwidth = .01))
+#   geom_density(aes(prob, ..scaled..)) +
+#   geom_density(aes(shift_Gerber, ..scaled..)) +
+#   #geom_density(aes(shift_Huber)) +
+#   theme_classic()  
 
-ggplot(pred_shifts, aes(fill = state)) +
-  geom_density(aes(prob)) +
-  geom_density(aes(shift_Gerber)) +
-  geom_density(aes(shift_Huber)) +
-  theme_classic()  
+Flo_shifts <- pred_shifts %>%
+  filter(state == "Florida") %>%
+  ggplot() +
+  geom_histogram(aes(shift_Gerber, fill = "indian_red"), alpha = .6) +
+  geom_histogram(aes(shift_Huber, fill = "steelblue2"), alpha = .6) +
+  labs(title = "Distributions of Adjusted \nFlorida Win Margin Predictions",
+       x = "Win Margin (Democrat)",
+       y = "Frequency") +
+  theme_classic() +
+  theme(plot.title = element_text(size = 18),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 14),
+        legend.position = "none")
+
+W_shifts <- pred_shifts %>%
+  filter(state == "Wisconsin") %>%
+  ggplot() +
+  geom_histogram(aes(shift_Gerber, fill = "indian_red"), alpha = .6) +
+  geom_histogram(aes(shift_Huber, fill = "steelblue2"), alpha = .6) +
+  labs(title = "Distributions of Adjusted \nWisconsin Win Margin Predictions",
+       x = "Win Margin (Democrat)",
+       y = "Frequency") +
+  theme_classic() +
+  theme(plot.title = element_text(size = 18),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 14),
+        legend.position = "none")
+
+NC_shifts <- pred_shifts %>%
+  filter(state == "North Carolina") %>%
+  ggplot() +
+  geom_histogram(aes(shift_Gerber, fill = "indian_red"), alpha = .6) +
+  geom_histogram(aes(shift_Huber, fill = "steelblue2"), alpha = .6) +
+  labs(title = "Distributions of Adjusted \nNorth Carolina Win Margin Predictions",
+       x = "Win Margin (Democrat)",
+       y = "Frequency") +
+  theme_classic() +
+  theme(plot.title = element_text(size = 18),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 14),
+        legend.position = "none")
+
+ggarrange(Flo_shifts, W_shifts, NC_shifts, nrow = 1)
+
+
+ggsave("Gov1347-master/figures/swing_pred_shifts_grps.png")
 
 
 
