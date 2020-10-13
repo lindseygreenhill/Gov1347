@@ -1,0 +1,25 @@
+
+\begin{table}[!htbp] \centering 
+  \caption{The electoral effects of demographic change (across states)} 
+  \label{} 
+\scriptsize 
+\begin{tabular}{@{\extracolsep{3pt}}lcc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{2}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-3} 
+\\[-1.8ex] & \multicolumn{2}{c}{pv} \\ 
+\\[-1.8ex] & (1) & (2)\\ 
+\hline \\[-1.8ex] 
+ Black\_change & 0.784 (1.852) &  \\ 
+  Hispanic\_change & 2.177$^{***}$ (0.817) &  \\ 
+  Asian\_change & 0.473 (2.289) &  \\ 
+  Female\_change & 6.806$^{**}$ (3.293) &  \\ 
+  age3045\_change & 0.214 (1.108) &  \\ 
+  age4565\_change & $-$0.355 (1.098) &  \\ 
+  age65\_change &  &  \\ 
+ \hline \\[-1.8ex] 
+\hline 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table} 

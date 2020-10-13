@@ -243,7 +243,7 @@ Florida <- poll_mod_preds %>% filter(state == "Florida") %>%
   ggplot(aes(prob, fill = state)) +
   scale_fill_manual(values = "steelblue2")+
   geom_histogram(binwidth = .005) +
-  labs(title = "Distributions of Florida Win Margin Predictions",
+  labs(title = "Distributions of Florida\nWin Margin Predictions",
        x = "Win Margin (Democrat)",
        y = "Frequency") +
   theme_classic() +
@@ -255,7 +255,7 @@ Wisconsin <- poll_mod_preds %>% filter(state == "Wisconsin") %>%
   ggplot(aes(prob, fill = state)) +
   scale_fill_manual(values = "steelblue2")+
   geom_histogram(binwidth = .005) +
-  labs(title = "Distributions of Wisconsin Win Margin Predictions",
+  labs(title = "Distributions of Wisconsin\n Win Margin Predictions",
        x = "Win Margin (Democrat)",
        y = "Frequency") +
   theme_classic() +
@@ -268,7 +268,7 @@ North_Carolina <- poll_mod_preds %>% filter(state == "North Carolina") %>%
   ggplot(aes(prob, fill = state)) +
   scale_fill_manual(values = "steelblue2")+
   geom_histogram(binwidth = .005) +
-  labs(title = "Distributions of North Carolina Win Margin Predictions",
+  labs(title = "Distributions of North Carolina\n Win Margin Predictions",
        x = "Win Margin (Democrat)",
        y = "Frequency") +
   theme_classic() +
@@ -278,7 +278,7 @@ North_Carolina <- poll_mod_preds %>% filter(state == "North Carolina") %>%
         legend.position = "none")
 library(ggpubr)
 ggarrange(Florida, Wisconsin, North_Carolina, nrow = 1)
-ggsave("Gov1347-master/figures/swing_binomial_preds.png")
+ggsave("Gov1347-master/figures/swing_binomial_preds1.png")
 
 #   
 # 
@@ -344,7 +344,7 @@ Flo_shifts <- pred_shifts %>%
   ggplot() +
   geom_histogram(aes(shift_Gerber, fill = "indian_red"), alpha = .6) +
   geom_histogram(aes(shift_Huber, fill = "steelblue2"), alpha = .6) +
-  labs(title = "Distributions of Adjusted \nFlorida Win Margin Predictions",
+  labs(title = "Distributions of Adjusted \nFlorida Win Margin",
        x = "Win Margin (Democrat)",
        y = "Frequency") +
   theme_classic() +
@@ -358,7 +358,7 @@ W_shifts <- pred_shifts %>%
   ggplot() +
   geom_histogram(aes(shift_Gerber, fill = "indian_red"), alpha = .6) +
   geom_histogram(aes(shift_Huber, fill = "steelblue2"), alpha = .6) +
-  labs(title = "Distributions of Adjusted \nWisconsin Win Margin Predictions",
+  labs(title = "Distributions of Adjusted \nWisconsin Win Margin",
        x = "Win Margin (Democrat)",
        y = "Frequency") +
   theme_classic() +
@@ -372,7 +372,7 @@ NC_shifts <- pred_shifts %>%
   ggplot() +
   geom_histogram(aes(shift_Gerber, fill = "indian_red"), alpha = .6) +
   geom_histogram(aes(shift_Huber, fill = "steelblue2"), alpha = .6) +
-  labs(title = "Distributions of Adjusted \nNorth Carolina Win Margin Predictions",
+  labs(title = "Distributions of Adjusted \nNorth Carolina Win Margin",
        x = "Win Margin (Democrat)",
        y = "Frequency") +
   theme_classic() +
@@ -384,7 +384,7 @@ NC_shifts <- pred_shifts %>%
 ggarrange(Flo_shifts, W_shifts, NC_shifts, nrow = 1)
 
 
-ggsave("Gov1347-master/figures/swing_pred_shifts_grps.png")
+ggsave("Gov1347-master/figures/swing_pred_shifts_grps1.png")
 
 
 
