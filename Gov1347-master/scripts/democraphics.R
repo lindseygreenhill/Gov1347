@@ -118,21 +118,41 @@ stargazer(mod_dem_demog_change, mod_rep_demog_change, out = "Gov1347-master/figu
          keep = c(1:7, 62:66), omit.table.layout = "sn",
          title = "The electoral effects of demographic change (across states)")
 
+# creating visualization of only polls regression
+
+polls_mod_gg <- ggplot(df_pivot, aes(x = avg_support, y = pv_democrat)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_classic()
+
+# creating 2020 data (section)
+
+# demographic data
+
+demog_2020_change <- demog %>%
+  filter(year %in% c(2016, 2018)) %>%
+  group_by(state) %>%
+  mutate(Asian_change = Asian - lag(Asian, order_by = year),
+         Black_change = Black - lag(Black, order_by = year),
+         Hispanic_change = Hispanic - lag(Hispanic, order_by = year),
+         Indigenous_change = Indigenous - lag(Indigenous, order_by = year),
+         White_change = White - lag(White, order_by = year),
+         Female_change = Female - lag(Female, order_by = year),
+         Male_change = Male - lag(Male, order_by = year),
+         age20_change = age20 - lag(age20, order_by = year),
+         age3045_change = age3045 - lag(age3045, order_by = year),
+         age4565_change = age4565 - lag(age4565, order_by = year),
+         age65_change = age65 - lag(age65, order_by = year)
+  ) %>%
+  filter(year == 2018)
+demog_2020_change <- as.data.frame(demog_2020_change)
+rownames(demog_2020_change) <- demog_2020_change$state
+demog_2020_change <- demog_2020_change[state.abb, ]
+
+# polling data
 
 
 
+
   
   
-  
-  data_state_six <- state_pv %>% 
-  full_join(state_avg) %>% 
-  filter(weeks_left == 6) %>% 
-  group_by(state,year,party, pv, incumbent_party) %>% 
-  summarise(avg_support=mean(avg_poll)) %>%
-  filter(!(state %in% c("ME-1","ME-2","NE-1","NE-2","NE-3")))
-  
-  popvote_df %>% 
-  full_join(poll_df %>% 
-              filter(weeks_left == 6) %>% 
-              group_by(year,party) %>% 
-              summarise(avg_support=mean(avg_support))) 
