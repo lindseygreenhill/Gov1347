@@ -5,7 +5,9 @@ library(ggplot2)
 library(webshot)
 library(kableExtra)
 library(gt)
+library(statebins)
 library(stargazer)
+library(rsample)
 
 #####------------------------------------------------------#
 ##### Read and merge data ####
@@ -80,11 +82,15 @@ dat_change <- dem_poll_state_df %>%
          age65_change = age65 - lag(age65, order_by = year)
   )
 
+# filtering out na values from dat_change
+
+dat_change <- dat_change %>%
+  drop_na()
+
 # subsetting the data 
 df_pivot <- dat_change %>%
   pivot_wider(names_from = party,
-              values_from = pv, 
-              names_prefix = "pv_")
+              values_from = c(pv, avg_support))
 
 # models 
 
@@ -150,6 +156,364 @@ rownames(demog_2020_change) <- demog_2020_change$state
 demog_2020_change <- demog_2020_change[state.abb, ]
 
 # polling data
+
+{
+  poll_2020_url <- "https://projects.fivethirtyeight.com/2020-general-data/presidential_poll_averages_2020.csv"
+  poll_2020_df <- read_csv(poll_2020_url)
+  
+  elxnday_2020 <- as.Date("11/3/2020", "%m/%d/%Y")
+  dnc_2020 <- as.Date("8/20/2020", "%m/%d/%Y")
+  rnc_2020 <- as.Date("8/27/2020", "%m/%d/%Y")
+  
+  colnames(poll_2020_df) <- c("year","state","poll_date","candidate_name","avg_support","avg_support_adj")
+  
+  # this data has all states except for Illinois, Nebraska, South Dakota,
+  # Wyoming, DC, Rhode Island. Those states do not have local polls available
+  # from 538
+  
+  poll_2020_three <- poll_2020_df %>%
+    mutate(party = case_when(candidate_name == "Donald Trump" ~ "republican",
+                             candidate_name == "Joseph R. Biden Jr." ~ "democrat"),
+           poll_date = as.Date(poll_date, "%m/%d/%Y"),
+           days_left = round(difftime(elxnday_2020, poll_date, unit="days")),
+           weeks_left = round(difftime(elxnday_2020, poll_date, unit="weeks")),
+           before_convention = case_when(poll_date < dnc_2020 & party == "democrat" ~ TRUE,
+                                         poll_date < rnc_2020 & party == "republican" ~ TRUE,
+                                         TRUE ~ FALSE),
+           incumbent_party = if_else(party == "republican", TRUE, FALSE)) %>%
+    filter(!is.na(party)) %>%
+    filter(!(state %in% c("National","ME-1","ME-2","NE-1","NE-2","NE-3"))) %>%
+    filter(weeks_left == 3) %>%
+    group_by(state, party, incumbent_party) %>%
+    summarise(avg_support = mean(avg_support), .groups = "drop")
+}
+
+dem_2020 <- poll_2020_three %>%
+  filter(party == "democrat", state != "District of Columbia")
+rep_2020 <- poll_2020_three %>%
+  filter(party == "republican", state != "District of Columbia")
+
+# predicting 2020 with poll only model
+
+results_dem <- data.frame(pred = predict(mod_dem_polls, newdata = dem_2020),
+                        state = state.abb)
+
+results_rep <- data.frame(pred = predict(mod_rep_polls, newdata = rep_2020),
+                          state = state.abb)
+
+poll_mod_results <- results_dem %>%
+  left_join(results_rep, by = "state",
+            suffix = c("_dem", "_rep")) %>%
+  mutate(winner = if_else(pred_dem > pred_rep, "democrat",
+                          "republican"))
+
+# graphic of state bin prediction results (need to count EC)
+
+plot_poll_mod <- poll_mod_results %>%  ##`statebins` needs state to be character, not factor!
+  mutate(state = as.character(state)) %>%
+  ggplot(aes(state = state, fill = winner)) +
+  geom_statebins() +
+  theme_statebins() +
+  scale_fill_manual(values = c("steelblue2", "indianred")) +
+  labs(title = "2020 Presidential Election Prediction",
+       subtitle = "Poll Only Model",
+       fill = "") +
+  theme(legend.position = "none")
+
+# predicting 2020 with poll + demographics model 
+
+dem_2020$state_ab <- state.abb[match(dem_2020$state, state.name)]
+
+dem_2020_demog <- dem_2020 %>%
+  left_join(demog_2020_change, by = c("state_ab" = "state")) %>%
+  select(state_ab, avg_support,
+         Black_change, 
+         Hispanic_change,
+           Asian_change,
+           Female_change)
+
+# prediction
+
+results_dem_plus <- data.frame(pred = predict(mod_dem_polls_dem, newdata = dem_2020_demog),
+                          state = state.abb)
+
+# need to use prior republican results because we don't have a model for republican vote share.
+
+plus_mod_results <- results_dem_plus %>%
+  left_join(results_rep, by = "state",
+            suffix = c("_dem", "_rep")) %>%
+  mutate(winner = if_else(pred_dem > pred_rep, "democrat",
+                          "republican"))
+
+# graphic of state bin prediction results (need to count EC)
+
+plot_plus_mod <- plus_mod_results %>%  ##`statebins` needs state to be character, not factor!
+  mutate(state = as.character(state)) %>%
+  ggplot(aes(state = state, fill = winner)) +
+  geom_statebins() +
+  theme_statebins() +
+  scale_fill_manual(values = c("steelblue2", "indianred")) +
+  labs(title = "2020 Presidential Election Prediction",
+       subtitle = "Poll and Demographics Model",
+       fill = "") +
+  theme(legend.position = "none")
+
+
+# okay I now want to compare how this model performs historically compared to
+# only state models which I can take code from from my polls script. Also I want
+# to show those distributions in a histogram or soemthing. And then I want to
+# weight those compared to how sparse the data is
+
+### Model Selection: In sample Sample Evaluation ########
+
+
+### Model Selection: Out of Sample Evaluation ########
+mod_rep_polls <- lm(pv_republican ~ avg_support, data = df_pivot)
+
+mod_dem_polls_dem <- mod_dem_polls <- lm(pv_democrat ~ avg_support + 
+                                           Black_change + 
+                                           Hispanic_change +
+                                           Asian_change +
+                                           Female_change, data = df_pivot)
+
+outsamp <- tibble()
+
+for(s in unique(dat_change$state)){
+  outsamp_df <- tibble()
+  
+  # get subsetted data for each state
+  
+  temp_data_s <- dat_change %>%
+    filter(state == s)
+  
+  # getting list of years for that state
+  
+  all_years <- unique(temp_data_s$year)
+  
+  # getting dem data
+  
+  temp_dem <- temp_data_s %>%
+    filter(party == "democrat")
+  
+  # getting rep data
+  
+  temp_rep <- temp_data_s %>%
+    filter(party == "republican")
+  
+  # for state only model. not sure if this will work because of rows
+  
+  outsamp_dflist <- lapply(all_years, function(year){
+    true_dem <- unique(temp_data_s$year == year & temp_data_s$party == "democrat")
+    true_rep <- unique(temp_data_s$year == year & temp_data_s$party == "republican")
+    
+    # model for dem and rep with only state df MIGHT BE PROBLEM WITH NAs
+    
+    mod_state_dem <- lm(pv ~ avg_support + 
+                          Black_change + 
+                          Hispanic_change +
+                          Asian_change +
+                          Female_change, data = temp_dem)
+    mod_state_rep <- lm(pv ~ avg_support, data = temp_rep)
+    
+    # creating prediction from those models 
+    
+    pred_state_dem <- predict(mod_state_dem, temp_dem[temp_dem$year == year,])
+    pred_state_rep <- predict(mod_state_rep, temp_rep[temp_rep$year == year,])
+    
+    cbind.data.frame(year,
+                     state_margin_error = (pred_state_dem - pred_state_rep) - (true_dem - true_rep),
+                     state_winner_correct = (pred_state_dem > pred_state_rep) == (true_dem > true_rep))
+  })
+  
+  # creating error for state
+  
+  outsamp_df <- do.call(rbind, outsamp_dflist) %>%
+    mutate(state = s)
+  
+  # adding error to main accuracy df
+  
+  outsamp <- outsamp %>%
+    bind_rows(outsamp_df)
+}
+
+for(s in unique(dat_change$state)){
+  outsamp_df <- tibble()
+  
+  # get subsetted data for each state
+  
+  temp_data_s <- dat_change %>%
+    filter(state == s)
+  
+  # getting list of years for that state
+  
+  all_years <- unique(temp_data_s$year)
+  
+  # getting dem data
+  
+  temp_dem <- temp_data_s %>%
+    filter(party == "democrat")
+  
+  # getting rep data
+  
+  temp_rep <- temp_data_s %>%
+    filter(party == "republican")
+  
+  # for state only model. not sure if this will work because of rows
+  
+  outsamp_dflist <- lapply(all_years, function(year){
+    true_dem <- unique(temp_data_s$year == year & temp_data_s$party == "democrat")
+    true_rep <- unique(temp_data_s$year == year & temp_data_s$party == "republican")
+    
+    # model for dem and rep with only state df MIGHT BE PROBLEM WITH NAs
+    
+    mod_state_dem <- lm(pv ~ avg_support + 
+                          Black_change + 
+                          Hispanic_change +
+                          Asian_change +
+                          Female_change, data = temp_dem)
+    mod_state_rep <- lm(pv ~ avg_support, data = temp_rep)
+    
+    # creating prediction from those models 
+    
+    pred_state_dem <- predict(mod_state_dem, temp_dem[temp_dem$year == year,])
+    pred_state_rep <- predict(mod_state_rep, temp_rep[temp_rep$year == year,])
+    
+    cbind.data.frame(year,
+                     state_margin_error = (pred_state_dem - pred_state_rep) - (true_dem - true_rep),
+                     state_winner_correct = (pred_state_dem > pred_state_rep) == (true_dem > true_rep))
+  })
+  
+  # creating error for state
+  
+  outsamp_df <- do.call(rbind, outsamp_dflist) %>%
+    mutate(state = s)
+  
+  # adding error to main accuracy df
+  
+  outsamp <- outsamp %>%
+    bind_rows(outsamp_df)
+}
+
+# states that I can build models off of
+counts <- dat_change %>% group_by(state, party) %>% count() %>%
+  filter(n > 2)
+
+unique(counts$state)
+
+accuracy <- tibble()
+for(s in unique(counts$state)){
+  #print(s)
+  outsamp_df <- tibble()
+  
+  # get subsetted data for each state
+  
+  temp_data_s <- dat_change %>%
+    filter(state == s)
+  
+  # getting list of years for that state
+  
+  all_years <- unique(temp_data_s$year)
+  
+  # getting dem data
+  
+  temp_dem <- temp_data_s %>%
+    filter(party == "democrat")
+  
+  # getting rep data
+  
+  temp_rep <- temp_data_s %>%
+    filter(party == "republican")
+  
+  for(y in all_years){
+    
+    # true dem for that year 
+    
+    true_dem <- temp_data_s %>%
+      filter(year == y,
+             party == "democrat")
+    
+    
+    # true rep for that year 
+    
+    true_rep <- temp_data_s %>%
+      filter(year == y,
+             party == "republican")
+    
+    # dem model df
+    
+    dem_pred_df <- temp_dem %>%
+      filter(year != y)
+    
+    # rep model df
+    
+    rep_pred_df <- temp_rep %>%
+      filter(year != y)
+    
+    # dem model 
+    
+    mod_state_dem <- lm(pv ~ avg_support +
+                          Black_change +
+                          Hispanic_change +
+                          Asian_change +
+                          Female_change, data = dem_pred_df)
+    
+    # rep model
+    
+    mod_state_rep <- lm(pv ~ avg_support, data = rep_pred_df)
+    
+    # creating predictions
+    
+    pred_state_dem <- predict(mod_state_dem, newdata = true_dem)
+    pred_state_rep <- predict(mod_state_rep, newdata = true_rep)
+    #print(pred_state_dem)
+    
+    tib <- tibble(state = s,
+                  year = y,
+                  state_winner_correct = (pred_state_dem > pred_state_rep) == (true_dem$pv > true_rep$pv))
+    
+    accuracy <- accuracy %>%
+      bind_rows(tib)
+    
+    
+  }
+  
+  # for state only model. not sure if this will work because of rows
+  # 
+  # outsamp_dflist <- lapply(all_years, function(year){
+  #   true_dem <- unique(temp_data_s$year == year & temp_data_s$party == "democrat")
+  #   true_rep <- unique(temp_data_s$year == year & temp_data_s$party == "republican")
+  #   
+  #   # model for dem and rep with only state df MIGHT BE PROBLEM WITH NAs
+  #   
+  #   mod_state_dem <- lm(pv ~ avg_support + 
+  #                         Black_change + 
+  #                         Hispanic_change +
+  #                         Asian_change +
+  #                         Female_change, data = temp_dem)
+  #   mod_state_rep <- lm(pv ~ avg_support, data = temp_rep)
+  #   
+  #   # creating prediction from those models 
+  #   
+  #   pred_state_dem <- predict(mod_state_dem, temp_dem[temp_dem$year == year,])
+  #   pred_state_rep <- predict(mod_state_rep, temp_rep[temp_rep$year == year,])
+  #   
+  #   cbind.data.frame(year,
+  #                    state_margin_error = (pred_state_dem - pred_state_rep) - (true_dem - true_rep),
+  #                    state_winner_correct = (pred_state_dem > pred_state_rep) == (true_dem > true_rep))
+  # })
+  
+  # creating error for state
+  
+  # outsamp_df <- do.call(rbind, outsamp_dflist) %>%
+  #   mutate(state = s)
+  
+  # adding error to main accuracy df
+  
+  #outsamp <- outsamp %>%
+   # bind_rows(outsamp_df)
+}
+
+
 
 
 
