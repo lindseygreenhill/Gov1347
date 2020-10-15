@@ -8,6 +8,7 @@ library(gt)
 library(statebins)
 library(stargazer)
 library(rsample)
+library(ggpubr)
 
 #####------------------------------------------------------#
 ##### Read and merge data ####
@@ -556,11 +557,78 @@ for(s in unique(dat_change$state)){
   
 }
 
+battleground <- c("Arizona", "Georgia",
+                  "Ohio",
+                  "Florida",
+                  "New Hampshire",
+                  "Nevada",
+                  "Michigan",
+                  "Pennsylvania",
+                  "Minnesota",
+                  "Wisconsin",
+                  "Michigan",
+                  "North Carolina")
+
 accuracy_combined <- accuracy_state_mods %>%
   bind_rows(accuracy_pooled, .id = "model") %>%
   mutate(model = if_else(model == 1, "state", "pooled")) %>%
   group_by(model, state) %>%
   summarize(avg_correct = mean(state_winner_correct)) %>%
-  arrange(state)
-  
-  
+  arrange(state) %>%
+  mutate(status = if_else(state %in% battleground,
+                          "battleground",
+                          "not_battleground"))
+
+acc_2 <- accuracy_combined %>%
+  pivot_wider(names_from = model,
+              values_from = avg_correct,
+              names_prefix = "accuracy_")
+
+bg <- accuracy_combined %>%
+  filter(status == "battleground")
+
+nbg <- accuracy_combined %>%
+  filter(status != "battleground")
+
+plot_bg <- bg %>%
+  ggplot(aes(x = state, y = avg_correct, fill = model))+
+  geom_col(position = position_dodge(width = .5)) +
+  theme_classic() +
+  scale_fill_manual(values = c("dodgerblue3", "coral2"),
+                    name =  "Model") +
+  labs(title = "Model Performance: Classification Accuracy",
+       subtitle = "Battleground States",
+       y = "Accuracy",
+       x = ""
+       ) +
+  coord_flip() +
+  theme(plot.title = element_text(size = 16),
+        plot.subtitle = element_text(size = 16),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 14),
+        legend.position = "bottom")
+
+plot_nbg <- nbg %>%
+  ggplot(aes(x = state, y = avg_correct, fill = model))+
+  geom_col(position = position_dodge(width = .5)) +
+  theme_classic() +
+  scale_fill_manual(values = c("dodgerblue3", "coral2"),
+                    name =  "Model") +
+  labs(title = "Model Performance: Classification Accuracy",
+       subtitle = "Non-Battleground States",
+       y = "Accuracy",
+       x = ""
+  ) +
+  coord_flip() +
+  theme(plot.title = element_text(size = 16),
+        plot.subtitle = element_text(size = 16),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 14),
+        legend.position = "bottom")
+
+ggarrange(plot_bg, plot_nbg)
+
+ggsave("Gov1347-master/figures/demog_mods_classifications.png")
+
+## going to do weighting based off of model performance. If performed equally, going to 
+# give  a .5 and  .5. If one of them  outperformed I'm going to give them .75 and .25
