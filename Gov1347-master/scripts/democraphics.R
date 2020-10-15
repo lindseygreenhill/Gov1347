@@ -400,7 +400,7 @@ counts <- dat_change %>% group_by(state, party) %>% count() %>%
 
 unique(counts$state)
 
-accuracy <- tibble()
+accuracy_state_mods <- tibble()
 for(s in unique(counts$state)){
   #print(s)
   outsamp_df <- tibble()
@@ -471,52 +471,96 @@ for(s in unique(counts$state)){
                   year = y,
                   state_winner_correct = (pred_state_dem > pred_state_rep) == (true_dem$pv > true_rep$pv))
     
-    accuracy <- accuracy %>%
+    accuracy_state_mods <- accuracy_state_mods %>%
       bind_rows(tib)
     
     
   }
   
-  # for state only model. not sure if this will work because of rows
-  # 
-  # outsamp_dflist <- lapply(all_years, function(year){
-  #   true_dem <- unique(temp_data_s$year == year & temp_data_s$party == "democrat")
-  #   true_rep <- unique(temp_data_s$year == year & temp_data_s$party == "republican")
-  #   
-  #   # model for dem and rep with only state df MIGHT BE PROBLEM WITH NAs
-  #   
-  #   mod_state_dem <- lm(pv ~ avg_support + 
-  #                         Black_change + 
-  #                         Hispanic_change +
-  #                         Asian_change +
-  #                         Female_change, data = temp_dem)
-  #   mod_state_rep <- lm(pv ~ avg_support, data = temp_rep)
-  #   
-  #   # creating prediction from those models 
-  #   
-  #   pred_state_dem <- predict(mod_state_dem, temp_dem[temp_dem$year == year,])
-  #   pred_state_rep <- predict(mod_state_rep, temp_rep[temp_rep$year == year,])
-  #   
-  #   cbind.data.frame(year,
-  #                    state_margin_error = (pred_state_dem - pred_state_rep) - (true_dem - true_rep),
-  #                    state_winner_correct = (pred_state_dem > pred_state_rep) == (true_dem > true_rep))
-  # })
-  
-  # creating error for state
-  
-  # outsamp_df <- do.call(rbind, outsamp_dflist) %>%
-  #   mutate(state = s)
-  
-  # adding error to main accuracy df
-  
-  #outsamp <- outsamp %>%
-   # bind_rows(outsamp_df)
 }
 
+accuracy_pooled <- tibble()
+for(s in unique(dat_change$state)){
+  
+  # get subsetted data for each state
+  
+  temp_data_s <- dat_change %>%
+    filter(state == s)
+  
+  # getting list of years for that state
+  
+  all_years <- unique(temp_data_s$year)
+  
+  # getting dem data. This is different temporary df as above because it is
+  # pooled model and it used all the states
+  
+  temp_dem <- dat_change %>%
+    filter(party == "democrat")
+  
+  temp_rep <- dat_change %>%
+    filter(party == "republican")
+  
+  for(y in all_years){
+    
+    # true dem for that year. this is for an individual state year
+    
+    true_dem <- temp_data_s %>%
+      filter(year == y,
+             party == "democrat")
+    # print(true_dem)
+    
+    
+    # true rep for that year 
+    
+    true_rep <- temp_data_s %>%
+      filter(year == y,
+             party == "republican")
+    
+    # dem model df. getting rid of one state year observation
+    
+    dem_pred_df <- temp_dem %>%
+      filter(!(state == s & year == y))
+    
+    # rep model df
+    
+    rep_pred_df <- temp_rep %>%
+      filter(!(state == s & year == y))
+    
+    # dem model 
+    
+    mod_pooled_dem <- lm(pv ~ avg_support +
+                          Black_change +
+                          Hispanic_change +
+                          Asian_change +
+                          Female_change, data = dem_pred_df)
+    
+    # rep model
+    
+    mod_pooled_rep <- lm(pv ~ avg_support, data = rep_pred_df)
+    
+    # creating predictions
+    
+    pred_state_dem <- predict(mod_pooled_dem, newdata = true_dem)
+    pred_state_rep <- predict(mod_pooled_rep, newdata = true_rep)
+    #print(pred_state_dem)
+    
+    tib <- tibble(state = s,
+                  year = y,
+                  state_winner_correct = (pred_state_dem > pred_state_rep) == (true_dem$pv > true_rep$pv))
+    
+    accuracy_pooled <- accuracy_pooled %>%
+      bind_rows(tib)
+    
+    
+  }
+  
+}
 
-
-
-
-
+accuracy_combined <- accuracy_state_mods %>%
+  bind_rows(accuracy_pooled, .id = "model") %>%
+  mutate(model = if_else(model == 1, "state", "pooled")) %>%
+  group_by(model, state) %>%
+  summarize(avg_correct = mean(state_winner_correct)) %>%
+  arrange(state)
   
   
