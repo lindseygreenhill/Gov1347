@@ -1,0 +1,46 @@
+
+% Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Fri, Oct 16, 2020 - 13:39:42
+\begin{table}[!htbp] \centering 
+  \caption{Pooled Models Poll vs. Demographics} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{3}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-4} 
+\\[-1.8ex] & \multicolumn{2}{c}{pv\_democrat} & pv\_republican \\ 
+\\[-1.8ex] & (1) & (2) & (3)\\ 
+\hline \\[-1.8ex] 
+ avg\_support\_democrat & 1.155$^{***}$ & 1.125$^{***}$ &  \\ 
+  & (0.032) & (0.035) &  \\ 
+  & & & \\ 
+ Black\_change &  & $-$0.710 &  \\ 
+  &  & (0.639) &  \\ 
+  & & & \\ 
+ Hispanic\_change &  & 0.382 &  \\ 
+  &  & (0.285) &  \\ 
+  & & & \\ 
+ Asian\_change &  & 0.409 &  \\ 
+  &  & (0.763) &  \\ 
+  & & & \\ 
+ Female\_change &  & 1.738 &  \\ 
+  &  & (1.120) &  \\ 
+  & & & \\ 
+ avg\_support\_republican &  &  & 1.028$^{***}$ \\ 
+  &  &  & (0.038) \\ 
+  & & & \\ 
+ Constant & $-$3.539$^{**}$ & $-$2.307 & 2.512 \\ 
+  & (1.458) & (1.590) & (1.655) \\ 
+  & & & \\ 
+\hline \\[-1.8ex] 
+Observations & 116 & 116 & 160 \\ 
+R$^{2}$ & 0.919 & 0.924 & 0.826 \\ 
+Adjusted R$^{2}$ & 0.919 & 0.921 & 0.825 \\ 
+Residual Std. Error & 2.297 (df = 114) & 2.263 (df = 110) & 3.683 (df = 158) \\ 
+F Statistic & 1,297.634$^{***}$ (df = 1; 114) & 269.013$^{***}$ (df = 5; 110) & 749.404$^{***}$ (df = 1; 158) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{3}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 

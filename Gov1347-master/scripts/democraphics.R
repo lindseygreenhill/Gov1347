@@ -500,8 +500,8 @@ ggsave("Gov1347-master/figures/demog_mods_classifications.png")
 # Utah, Vermont, Rhode Island, New Mexico, Connecticut)
 
 weights <- acc_2 %>%
-  mutate(weight_pooled = if_else(accuracy_pooled == accuracy_state, .5,
-                                 if_else(accuracy_pooled > accuracy_state, .75, .25)),
+  mutate(weight_pooled = if_else(accuracy_pooled == accuracy_state, .8,
+                                 if_else(accuracy_pooled > accuracy_state, 1, .5)),
          weight_state = 1 - weight_pooled) %>%
   mutate(weight_pooled = if_else(state %in% c("Utah",
                                               "Vermont",
@@ -519,6 +519,9 @@ weights <- acc_2 %>%
 # doing loop to predict all states
 
 results_base <- tibble()
+
+results_female_decrease <- tibble()
+results_female_increase <- tibble()
 
 for(s in unique(acc_2$state)){
   print(s)
@@ -567,15 +570,50 @@ for(s in unique(acc_2$state)){
   rep_prediction <- pooled_w * predict(mod_rep_polls, newdata = r_pred_df) +
     state_w * predict(mod_state_rep, newdata = r_pred_df)
   
+  # increase in female
+  
+  dem_prediction_i <- (pooled_w * (predict(mod_dem_polls_dem, newdata = d_pred_df) +
+                         (1.28-.64)*d_pred_df$Hispanic_change)) +
+    state_w * predict(mod_state_dem, newdata = d_pred_df)
+  
+  rep_prediction_i <- pooled_w * predict(mod_rep_polls, newdata = r_pred_df) +
+    state_w * predict(mod_state_rep, newdata = r_pred_df)
+  
+  # decrease in female
+  
+  dem_prediction_d <- (pooled_w * (predict(mod_dem_polls_dem, newdata = d_pred_df) +
+                                     (0)*d_pred_df$Hispanic_change)) +
+    state_w * predict(mod_state_dem, newdata = d_pred_df)
+  
+  rep_prediction_d <- pooled_w * predict(mod_rep_polls, newdata = r_pred_df) +
+    state_w * predict(mod_state_rep, newdata = r_pred_df)
+  
   vec <- tibble(state = s,
                 dem = dem_prediction,
                 rep = rep_prediction)
+  vec_i <- tibble(state = s,
+                  dem = dem_prediction_i,
+                  rep = rep_prediction_i)
+  vec_d <- tibble(state = s,
+                  dem = dem_prediction_d,
+                  rep = rep_prediction_d)
   
   results_base <- results_base %>%
     bind_rows(vec)
-  
+  results_female_decrease <- results_female_decrease %>%
+    bind_rows(vec_d)
+  results_female_increase <- results_female_increase %>%
+    bind_rows(vec_i)
+    
   
 }
+
+results_i <- results_female_increase %>%
+  mutate(winner = if_else(dem > rep, "democrat",
+                          "republican"))
+results_d <- results_female_decrease %>%
+  mutate(winner = if_else(dem > rep, "democrat",
+                          "republican"))
 
 results_base <- results_base %>%
   mutate(winner = if_else(dem > rep, "democrat",
@@ -614,11 +652,50 @@ results_base_final <- results_base %>%
   bind_rows(m) %>%
   left_join(EC, by = "state") %>%
   select(-votes.x) %>%
-  rename(votes = votes.y)
+  rename(votes = votes.y) %>%
+  mutate(win_margin = dem - rep)
+
+results_increase_final <- results_i %>%
+  bind_rows(m) %>%
+  left_join(EC, by = "state")
+
+results_increase_final %>%
+  group_by(winner) %>%
+  summarize(votes = sum(votes))
+
+results_decrease_final <- results_d %>%
+  bind_rows(m) %>%
+  left_join(EC, by = "state")
+
+results_decrease_final %>%
+  group_by(winner) %>%
+  summarize(votes = sum(votes))
 
 results_base_final %>%
   group_by(winner) %>%
   summarize(votes = sum(votes))
+
+# getting state name abbreviations for state bins function
+
+results_base_final$state_ab <- state.abb[match(results_base_final$state, state.name)]
+
+
+base_results_plot <- results_base_final %>%  ##`statebins` needs state to be character, not factor!
+  mutate(state = as.character(state)) %>%
+  ggplot(aes(state = state, fill = winner)) +
+  geom_statebins() +
+  theme_statebins() +
+  scale_fill_manual(values = c("steelblue2", "indianred")) +
+  labs(title = "2020 Presidential Election Prediction (Base Demographic + Polling Model)",
+       subtitle = "Biden Wins with 356 Electoral Votes",
+       fill = "") +
+  theme(legend.position = "none")
+
+ggsave("Gov1347-master/figures/demog_pred_map.png")
+
+# Biden wins Iowa by less than .25%, Georgia by .34$, Arizona by 1%, Florida by 3%, Trump wins Ohio by .45%
+
+# perturbing the coefficients. Double Asian effect
 
 
 
