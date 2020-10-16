@@ -63,4 +63,9 @@ much more data than each individual state model, I generally gave the pooled mod
   > - Biden wins with 356 electoral votes and Trump loses with 182 electoral votes
   > - Biden wins key swing states of Arizona, Georgia, Florida, North Carolina, Wisconsin,
   Pennsylvania, and Iowa
-  > - 
+  > - Biden wins Iowa by a tight .25% win margin and Georgia by a tight .34% win margin
+  
+ #### Sensitivity Analysis:
+  > - I changed the weightings of the pooled and state models to see if that changed my prediction
+  > - Giving the state models more weight resulted in Biden winning with 364 votes (see map below)
+  > - Giving the pooled model more weight results in Biden winning with 356 votes (the same as the initial prediction)
