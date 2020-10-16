@@ -95,10 +95,10 @@ df_pivot <- dat_change %>%
 
 # models 
 
-mod_dem_polls <- lm(pv_democrat ~ avg_support, data = df_pivot)
-mod_rep_polls <- lm(pv_republican ~ avg_support, data = df_pivot)
+mod_dem_polls <- lm(pv_democrat ~ avg_support_democrat, data = df_pivot)
+mod_rep_polls <- lm(pv_republican ~ avg_support_republican, data = df_pivot)
 
-mod_dem_polls_dem <- mod_dem_polls <- lm(pv_democrat ~ avg_support + 
+mod_dem_polls_dem <- lm(pv_democrat ~ avg_support_democrat + 
                                            Black_change + 
                                            Hispanic_change +
                                            Asian_change +
@@ -106,24 +106,7 @@ mod_dem_polls_dem <- mod_dem_polls <- lm(pv_democrat ~ avg_support +
 
 stargazer(mod_dem_polls, mod_dem_polls_dem, type = "text")
 
-mod_dem_demog_change <- lm(pv ~ Black_change + Hispanic_change + Asian_change +
-                         Female_change +
-                         age3045_change + age4565_change + age65_change +
-                         as.factor(region), data = dem_df)
 
-mod_rep_demog_change <- lm(pv ~ Black_change + Hispanic_change + Asian_change +
-                             Female_change +
-                             age3045_change + age4565_change + age65_change +
-                             as.factor(region), data = rep_df)
-
-stargazer(mod_dem_demog_change, type = "text",
-          keep = 1:7)
-
-stargazer(mod_dem_demog_change, mod_rep_demog_change, out = "Gov1347-master/figures/star_test.latex",
-          header=FALSE, type='latex', no.space = TRUE,
-         column.sep.width = "3pt", font.size = "scriptsize", single.row = TRUE,
-         keep = c(1:7, 62:66), omit.table.layout = "sn",
-         title = "The electoral effects of demographic change (across states)")
 
 # creating visualization of only polls regression
 
@@ -190,9 +173,11 @@ demog_2020_change <- demog_2020_change[state.abb, ]
 }
 
 dem_2020 <- poll_2020_three %>%
-  filter(party == "democrat", state != "District of Columbia")
+  filter(party == "democrat", state != "District of Columbia") %>%
+  rename(avg_support_democrat = avg_support)
 rep_2020 <- poll_2020_three %>%
-  filter(party == "republican", state != "District of Columbia")
+  filter(party == "republican", state != "District of Columbia") %>%
+  rename(avg_support_republican = avg_support)
 
 # predicting 2020 with poll only model
 
@@ -227,7 +212,7 @@ dem_2020$state_ab <- state.abb[match(dem_2020$state, state.name)]
 
 dem_2020_demog <- dem_2020 %>%
   left_join(demog_2020_change, by = c("state_ab" = "state")) %>%
-  select(state_ab, avg_support,
+  select(state, avg_support_democrat,
          Black_change, 
          Hispanic_change,
            Asian_change,
@@ -269,131 +254,7 @@ plot_plus_mod <- plus_mod_results %>%  ##`statebins` needs state to be character
 
 
 ### Model Selection: Out of Sample Evaluation ########
-mod_rep_polls <- lm(pv_republican ~ avg_support, data = df_pivot)
 
-mod_dem_polls_dem <- mod_dem_polls <- lm(pv_democrat ~ avg_support + 
-                                           Black_change + 
-                                           Hispanic_change +
-                                           Asian_change +
-                                           Female_change, data = df_pivot)
-
-outsamp <- tibble()
-
-for(s in unique(dat_change$state)){
-  outsamp_df <- tibble()
-  
-  # get subsetted data for each state
-  
-  temp_data_s <- dat_change %>%
-    filter(state == s)
-  
-  # getting list of years for that state
-  
-  all_years <- unique(temp_data_s$year)
-  
-  # getting dem data
-  
-  temp_dem <- temp_data_s %>%
-    filter(party == "democrat")
-  
-  # getting rep data
-  
-  temp_rep <- temp_data_s %>%
-    filter(party == "republican")
-  
-  # for state only model. not sure if this will work because of rows
-  
-  outsamp_dflist <- lapply(all_years, function(year){
-    true_dem <- unique(temp_data_s$year == year & temp_data_s$party == "democrat")
-    true_rep <- unique(temp_data_s$year == year & temp_data_s$party == "republican")
-    
-    # model for dem and rep with only state df MIGHT BE PROBLEM WITH NAs
-    
-    mod_state_dem <- lm(pv ~ avg_support + 
-                          Black_change + 
-                          Hispanic_change +
-                          Asian_change +
-                          Female_change, data = temp_dem)
-    mod_state_rep <- lm(pv ~ avg_support, data = temp_rep)
-    
-    # creating prediction from those models 
-    
-    pred_state_dem <- predict(mod_state_dem, temp_dem[temp_dem$year == year,])
-    pred_state_rep <- predict(mod_state_rep, temp_rep[temp_rep$year == year,])
-    
-    cbind.data.frame(year,
-                     state_margin_error = (pred_state_dem - pred_state_rep) - (true_dem - true_rep),
-                     state_winner_correct = (pred_state_dem > pred_state_rep) == (true_dem > true_rep))
-  })
-  
-  # creating error for state
-  
-  outsamp_df <- do.call(rbind, outsamp_dflist) %>%
-    mutate(state = s)
-  
-  # adding error to main accuracy df
-  
-  outsamp <- outsamp %>%
-    bind_rows(outsamp_df)
-}
-
-for(s in unique(dat_change$state)){
-  outsamp_df <- tibble()
-  
-  # get subsetted data for each state
-  
-  temp_data_s <- dat_change %>%
-    filter(state == s)
-  
-  # getting list of years for that state
-  
-  all_years <- unique(temp_data_s$year)
-  
-  # getting dem data
-  
-  temp_dem <- temp_data_s %>%
-    filter(party == "democrat")
-  
-  # getting rep data
-  
-  temp_rep <- temp_data_s %>%
-    filter(party == "republican")
-  
-  # for state only model. not sure if this will work because of rows
-  
-  outsamp_dflist <- lapply(all_years, function(year){
-    true_dem <- unique(temp_data_s$year == year & temp_data_s$party == "democrat")
-    true_rep <- unique(temp_data_s$year == year & temp_data_s$party == "republican")
-    
-    # model for dem and rep with only state df MIGHT BE PROBLEM WITH NAs
-    
-    mod_state_dem <- lm(pv ~ avg_support + 
-                          Black_change + 
-                          Hispanic_change +
-                          Asian_change +
-                          Female_change, data = temp_dem)
-    mod_state_rep <- lm(pv ~ avg_support, data = temp_rep)
-    
-    # creating prediction from those models 
-    
-    pred_state_dem <- predict(mod_state_dem, temp_dem[temp_dem$year == year,])
-    pred_state_rep <- predict(mod_state_rep, temp_rep[temp_rep$year == year,])
-    
-    cbind.data.frame(year,
-                     state_margin_error = (pred_state_dem - pred_state_rep) - (true_dem - true_rep),
-                     state_winner_correct = (pred_state_dem > pred_state_rep) == (true_dem > true_rep))
-  })
-  
-  # creating error for state
-  
-  outsamp_df <- do.call(rbind, outsamp_dflist) %>%
-    mutate(state = s)
-  
-  # adding error to main accuracy df
-  
-  outsamp <- outsamp %>%
-    bind_rows(outsamp_df)
-}
 
 # states that I can build models off of
 counts <- dat_change %>% group_by(state, party) %>% count() %>%
@@ -632,3 +493,137 @@ ggsave("Gov1347-master/figures/demog_mods_classifications.png")
 
 ## going to do weighting based off of model performance. If performed equally, going to 
 # give  a .5 and  .5. If one of them  outperformed I'm going to give them .75 and .25
+
+
+## doing 2020 predictions with weighted ensemble model ######
+# models without state data get 100% of weight put on pooled (
+# Utah, Vermont, Rhode Island, New Mexico, Connecticut)
+
+weights <- acc_2 %>%
+  mutate(weight_pooled = if_else(accuracy_pooled == accuracy_state, .5,
+                                 if_else(accuracy_pooled > accuracy_state, .75, .25)),
+         weight_state = 1 - weight_pooled) %>%
+  mutate(weight_pooled = if_else(state %in% c("Utah",
+                                              "Vermont",
+                                              "Rhode Island",
+                                              "New Mexico",
+                                              "Connecticut"), 1,
+                                 weight_pooled),
+         weight_state = 1  - weight_pooled)
+
+# predictions 
+
+# these are the pooled models I just took from above code
+
+
+# doing loop to predict all states
+
+results_base <- tibble()
+
+for(s in unique(acc_2$state)){
+  print(s)
+  
+  # extracting weights
+  
+  pooled_w <- weights$weight_pooled[weights$state == s]
+  state_w <- weights$weight_state[weights$state == s]
+  
+  #print(pooled_w)
+  
+  # state data
+  
+  temp_data_dem <- dat_change %>%
+    filter(state == s, party == "democrat") %>%
+    rename(avg_support_democrat = avg_support)
+  
+  temp_data_rep <- dat_change %>%
+    filter(state == s, party == "republican")  %>%
+    rename(avg_support_republican = avg_support)
+  
+  # dem model state
+  
+  mod_state_dem <- lm(pv ~ avg_support_democrat +
+                        Black_change +
+                        Hispanic_change +
+                        Asian_change +
+                        Female_change, data = temp_data_dem)
+  
+  # rep model state
+  
+  mod_state_rep <- lm(pv ~ avg_support_republican, data = temp_data_rep)
+  
+  # prediction data
+  
+  d_pred_df <- dem_2020_demog %>% 
+    filter(state == s)
+  r_pred_df <- rep_2020 %>%
+    filter(state == s)
+  
+  # predictions using weights from above
+  
+  dem_prediction <- pooled_w * predict(mod_dem_polls_dem, newdata = d_pred_df) +
+    state_w * predict(mod_state_dem, newdata = d_pred_df)
+  
+  rep_prediction <- pooled_w * predict(mod_rep_polls, newdata = r_pred_df) +
+    state_w * predict(mod_state_rep, newdata = r_pred_df)
+  
+  vec <- tibble(state = s,
+                dem = dem_prediction,
+                rep = rep_prediction)
+  
+  results_base <- results_base %>%
+    bind_rows(vec)
+  
+  
+}
+
+results_base <- results_base %>%
+  mutate(winner = if_else(dem > rep, "democrat",
+                          "republican")) %>%
+  left_join(EC, by = "state") 
+
+missing_states <- EC %>%
+  filter(!(state %in% results_base$state))
+
+# getting predictions for missing states
+
+m <- tibble()
+
+for(s in missing_states$state){
+  print(s)
+  pred_dem <- dem_2020 %>%
+    filter(state == s)
+  pred_rep <- rep_2020 %>%
+    filter(state == s)
+  
+  dem <- predict(mod_dem_polls, newdata = pred_dem)
+  
+  rep <- predict(mod_rep_polls, newdata = pred_rep)
+  
+  vec <- tibble(state = s,
+                dem = dem, 
+                rep = rep,
+                winner = if_else(dem > rep,
+                                 "democrat",
+                                 "republican"))
+  m <- m %>%
+    bind_rows(vec)
+}
+
+results_base_final <- results_base %>%
+  bind_rows(m) %>%
+  left_join(EC, by = "state") %>%
+  select(-votes.x) %>%
+  rename(votes = votes.y)
+
+results_base_final %>%
+  group_by(winner) %>%
+  summarize(votes = sum(votes))
+
+
+
+
+
+
+
+
