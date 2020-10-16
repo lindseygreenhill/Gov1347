@@ -11,5 +11,4 @@
 
 ### [Campaign Ad Spending - October 10, 2020](air_war.md)
 
-
-![tab](Gov1347-master/figures/star_test.png)
+### [Demographics - October 17, 2020](demographics.md)
