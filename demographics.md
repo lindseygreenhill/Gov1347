@@ -57,7 +57,7 @@ much more data than each individual state model, I generally gave the pooled mod
  
  The map below shows this week's prediction results. 
  
- ![map](Gov1347-master/figures/demog_sens_map_test.png)
+ ![map](Gov1347-master/figures/demog_pred_map.png)
  
  #### Discussion
   > - Biden wins with 356 electoral votes and Trump loses with 182 electoral votes
@@ -71,7 +71,7 @@ I changed the weightings of the pooled and state models to see if that changed m
   > - Giving the state models more weight resulted in Biden winning with 364 votes (see map below)
   > - Giving the pooled model more weight results in Biden winning with 356 votes (the same as the initial prediction)
   
- ![img](Gov1347-master/figures/sensitivity_analysis_demog.png)
+ ![img](Gov1347-master/figures/demog_sens_map_test.png)
  
  > - The difference between these two predictions in Louisiana, suggesting that the individual state model for Louisiana is not very good. It is valuable to use pooled models for states such as Louisiana. 
  
