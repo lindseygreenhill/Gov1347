@@ -65,7 +65,16 @@ much more data than each individual state model, I generally gave the pooled mod
   Pennsylvania, and Iowa
   > - Biden wins Iowa by a tight .25% win margin and Georgia by a tight .34% win margin
   
- #### Sensitivity Analysis:
-  > - I changed the weightings of the pooled and state models to see if that changed my prediction
+ #### Sensitivity Analysis
+I changed the weightings of the pooled and state models to see if that changed my prediction
   > - Giving the state models more weight resulted in Biden winning with 364 votes (see map below)
   > - Giving the pooled model more weight results in Biden winning with 356 votes (the same as the initial prediction)
+  
+ ![img](Gov1347-master/figures/sensitivity_analysis_demog.png)
+ 
+ > - The difference between these two predictions in Louisiana, suggesting that the individual state model for Louisiana is not very good. It is valuable to use pooled models for states such as Louisiana. 
+ 
+ ### Conclusion
+ 
+Introducing demographics into a model leaves room for prediction regarding voter turnout for different demographic groups. In the future, it would be interesting to simulate how a changes in different demographic groups' turnouts will affect the election. For example, what would happen if female voters turned out in a greater number than the historical trend? 
+On a concluding note, the use of a pooled model is helpful for predicting the results in states that don't have a lot of data (such as Louisiana) and I will most likely continue to use this type of weighted ensemble in my final prediction. 
