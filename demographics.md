@@ -57,7 +57,7 @@ much more data than each individual state model, I generally gave the pooled mod
  
  The map below shows this week's prediction results. 
  
- ![map](Gov1347-master/figures/demog_pred_map.png)
+ ![map](Gov1347-master/figures/demog_sens_map_test.png)
  
  #### Discussion
   > - Biden wins with 356 electoral votes and Trump loses with 182 electoral votes
