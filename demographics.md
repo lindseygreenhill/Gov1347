@@ -33,3 +33,5 @@ The table below shows the results of three different pooled models.
 ### Model Selection: State vs. Pooled models 
 
 Now that I've built a pooled model that incorporates demographics, it is worth checking how a pooled model performs vs. a model built off of individual state data. I compared the predictive abilities of these two different types of models using leave one out classification accuracy analysis. I ran this analysis for every state-year observation in the data. The graphic below shows the proportion of elections each model correctly predicted in each state. 
+
+![fig](Gov1347-master/figures/demog_mods_classifications.png)
