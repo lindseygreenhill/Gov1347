@@ -21,7 +21,7 @@ The table below shows the results of three different pooled models.
 
 ![tab](Gov1347-master/figures/star_test.png)
 
-##### Discussion
+#### Discussion
 
 > - The first model includes polls taken three weeks out from the election for all states and predicts the Democrat popular vote
 > - The second model includes the same polls and demographic changes within states and predicts the Democrat popular vote
@@ -38,4 +38,23 @@ Now that I've built a pooled model that incorporates demographics, it is worth c
 
 ![fig](Gov1347-master/figures/demog_mods_classifications.png)
 
-##### Discussion
+#### Discussion
+
+> - The pooled and state models correctly predict the same proportion of elections in most states with some exeptions
+> - The pooled model outperforms the state models in the battleground states of Ohio, Michigan, and Georgia 
+> - The state model outperforms in Arizona
+
+### Predicting 2020 with an Ensemble Model
+I predicted the results of the 2020 election using a weighted ensemble of both indiviudal state models and the pooled models. 
+I chose the weightings according to each model's out of sample model performancy (see above). As the pooled model incorporates
+much more data than each individual state model, I generally gave the pooled model more weight. I assigned the weights as follows:
+ > - If the pooled model and state model performed equally well, I assigned the pooled model a weight of .8 and the state model a weight of .2
+ > - If the pooled model outperforms the state model, I assigned the pooled model a weight of 1 and the state model a weight of 0
+ > - If the pooled model underperformed the state model, I assigned the pooled model a weight of .5 and the state model a weight of .5
+ 
+ **Note:** I did not have adequate data to use the demographic model in about 10 states (Texas, Maryland, Kentucky, Mississippi, Nebraska, Idaho, Hawaii, Wyoming, Delaware, Alaska, and DC). In those cases, I used a poll only model. 
+ #### Results
+ 
+ The map below shows this week's prediction results. 
+ 
+ ![map](Gov1347-master/figures/demog_pred_map.png)
