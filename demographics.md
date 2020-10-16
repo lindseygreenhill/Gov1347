@@ -58,3 +58,9 @@ much more data than each individual state model, I generally gave the pooled mod
  The map below shows this week's prediction results. 
  
  ![map](Gov1347-master/figures/demog_pred_map.png)
+ 
+ #### Discussion
+  > - Biden wins with 356 electoral votes and Trump loses with 182 electoral votes
+  > - Biden wins key swing states of Arizona, Georgia, Florida, North Carolina, Wisconsin,
+  Pennsylvania, and Iowa
+  > - 
