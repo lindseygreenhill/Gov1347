@@ -1,4 +1,4 @@
-# Do Demographic Changes Affect Election Results?
+# Do Demographics Predict Elections?
 
 October 17, 2020
 
