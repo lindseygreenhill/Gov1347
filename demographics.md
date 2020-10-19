@@ -37,6 +37,7 @@ Now that I've built a pooled model that incorporates demographics, it is worth c
 
 ![fig](Gov1347-master/figures/demog_mods_classifications.png)
 
+
 #### Discussion
 
 > - The pooled and state models correctly predict the same proportion of elections in most states with some exceptions
@@ -54,13 +55,12 @@ much more data than each individual state model, I generally gave the pooled mod
  
  **Note:** I did not have adequate data to use the demographic model in about 10 states (Texas, Maryland, Kentucky, Mississippi, Nebraska, Idaho, Hawaii, Wyoming, Delaware, Alaska, and DC). In those cases, I used a poll only model. 
  
- #### Results
- 
+ Results:
  The map below shows this week's prediction results. 
  
  ![map](Gov1347-master/figures/demog_pred_map.png)
  
- #### Discussion
+ Discussion:
  
   > - Biden wins with 356 electoral votes and Trump loses with 182 electoral votes
   > - Biden wins key swing states of Arizona, Georgia, Florida, North Carolina, Wisconsin,
