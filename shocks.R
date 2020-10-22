@@ -4,6 +4,7 @@ library(webshot)
 library(kableExtra)
 library(gt)
 library(statebins)
+library(janitor)
 library(stargazer)
 library(rsample)
 library(ggpubr)
@@ -39,6 +40,11 @@ state_pv <- read_csv("Gov1347-master/data/popvote_bystate_1948-2016.csv") %>%
   select(year,state, party, pv) %>%
   filter(year >= 1972) %>%
   left_join(pv_df, by = c("year", "party"))
+
+## state pop ##
+state_pop <- read_csv("Gov1347-master/data/state_pop.csv") %>%
+  clean_names() %>%
+  select(state = name, population = popestimate2019)
 
 ## 2020 polling data ###
 
@@ -86,5 +92,115 @@ covid_state <- read_csv("Gov1347-master/data/state_covid.csv") %>%
 
 covid_poll <- poll_2020_inc %>%
   left_join(covid_state, by = c("state_ab" = "state",
-                                "poll_date" = "date"))
+                                "poll_date" = "date")) %>%
+  left_join(state_pop, by = "state") %>%
+  mutate(case_per_cap = tot_cases / population,
+         death_per_cap = tot_death / population) %>%
+  group_by(state) %>%
+  mutate(poll_change = avg_support - lag(avg_support, order_by = poll_date),
+         death_rate = tot_death / tot_cases)
+
+## battleground states ###
+
+battleground <- c("Arizona", "Georgia",
+                  "Ohio",
+                  "Florida",
+                  "New Hampshire",
+                  "Nevada",
+                  "Michigan",
+                  "Pennsylvania",
+                  "Minnesota",
+                  "Wisconsin",
+                  "Michigan",
+                  "North Carolina")
+
+## looking at new cases per day ##
+
+covid_poll %>%
+  filter(state %in% battleground) %>%
+  ggplot(aes(x = poll_date, y = new_case)) +
+  geom_point(alpha = .4) +
+  facet_wrap(~state) +
+  theme_classic() +
+  labs(x = "Date",
+       y = "New Cases",
+       title = "New Covid-19 Cases in Battleground States") +
+  theme(plot.title = element_text(size = 16),
+        axis.text = element_text(size = 13),
+        axis.title = element_text(size = 14))
+
+ggsave("Gov1347-master/figures/cases_by_day_bg.png")
+
+
+covid_poll %>%
+  filter(state %in% battleground) %>%
+  ggplot(aes(x = new_case, y = avg_support)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~state) +
+  theme_classic() +
+  labs(title = "Trump Poll Support vs New Cases",
+       subtitle = "Battleground States",
+       y = "Average Support",
+       x = "New Cases") +
+  theme(plot.title = element_text(size = 16),
+        plot.subtitle = element_text(size = 15),
+        axis.text = element_text(size = 13),
+        axis.title = element_text(size = 14))
+
+ggsave("Gov1347-master/figures/new_cases_vs_poll_bg.png")
+
+## looking at death rate ##
+
+covid_poll %>%
+  filter(state %in% battleground) %>%
+  ggplot(aes(x = poll_date, y = death_rate)) +
+  geom_point(alpha = .4) +
+  facet_wrap(~state) +
+  theme_classic() +
+  labs(x = "Date",
+       y = "Death Rate",
+       title = "Covid-19 Death Rate in Battleground States") +
+  theme(plot.title = element_text(size = 16),
+        axis.text = element_text(size = 13),
+        axis.title = element_text(size = 14))
+
+ggsave("Gov1347-master/figures/death_rate_by_day_bg.png")
+
+
+covid_poll %>%
+  filter(state %in% battleground) %>%
+  ggplot(aes(x = death_rate, y = avg_support)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~state) +
+  theme_classic() +
+  labs(title = "Trump Poll Support vs Death Rate",
+       subtitle = "Battleground States",
+       y = "Average Support",
+       x = "Death Rate") +
+  theme(plot.title = element_text(size = 16),
+        plot.subtitle = element_text(size = 15),
+        axis.text = element_text(size = 13),
+        axis.title = element_text(size = 14))
+
+ggsave("Gov1347-master/figures/death_rate_vs_poll_bg.png")
+  
+
+summary(lm(poll_change ~ new_case, data = covid_poll))
+
+
+
+summary(lm(poll_change ~ new_death, data = covid_poll))
+
+ggplot(covid_poll, aes(x = new_death, y = poll_change)) +
+  geom_point()
+
+ggplot(covid_poll, aes(x = death_per_cap, y = poll_change)) +
+  geom_point()
+
+ggplot(covid_poll, aes(x = case_per_cap, y = poll_change)) +
+  geom_point()
+
+
 
