@@ -1,4 +1,4 @@
-# Covid-19, Blame, and Incumbency
+# Covid-19, Blame, and Trump Support
 
 October 24, 2020
 
