@@ -24,6 +24,8 @@ If voters do blame Trump for the pandemic, it's possible that it would be reflec
 
 ![img](Gov1347-master/figures/poll_change_vs_cases.png)
 
+#### Discussion
+
 > - This figure suggests that voters do not punish Trump simply because of an increase in Covid-19 cases
 > - It makes sense that the pandemic would not shift the polls in strongly blue or strongly red states, so this could be masking the relationship of poll changes in battleground states
 > - However, running a regression that accounts for battleground status does not reveal for any statistically significant relationships either
@@ -38,6 +40,7 @@ First, we will look at the same metric as above, cases per 100,000 in each battl
 
 ![img](Gov1347-master/figures/arranged_covid_cases_per_hun.png)
 
+#### Discussion
 > - It is evident that the rate at which Covid-19 is growing hasn't slowed in some states
 > - In some states there is a positive correlation between cases and Trump support
 > - In some states there is a negative correlaiton between cases and Trump support
@@ -47,8 +50,14 @@ First, we will look at the same metric as above, cases per 100,000 in each battl
 
 ### Death Rate
 
-Death rate is another way to look at how damaging Covid-19 is to a certain state. Perhaps it is the case that voters will respond more to death than just illness and that relationship will be reflected in the polls. The graphic below shows the change in death rate over time in battleground states as well as the relationship between poll support for Trump and death rate. 
+Death rate is another way to look at how damaging Covid-19 is in a certain state. Perhaps it is the case that voters will respond more to death than just illness and that relationship will be reflected in the polls. The graphic below shows the change in death rate over time in battleground states as well as the relationship between poll support for Trump and death rate. 
 
 ![img](Gov1347-master/figures/death_rt_arranged.png)
+
+#### Discussion
+
+> - There does not seem to be a consistent linear relationship between death rate and poll support for Trump
+> - As with looking at cases per capita, some states show a negative correlation and other states show a positive correlation
+> - This inconsistency makes it difficult to predict how Covid-19 will affect the election across states or even within states
 
 
