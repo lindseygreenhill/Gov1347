@@ -8,6 +8,7 @@ library(janitor)
 library(stargazer)
 library(rsample)
 library(ggpubr)
+library(gganimate)
 
 #### reading in data ####
 
@@ -185,9 +186,33 @@ covid_poll %>%
         axis.title = element_text(size = 14))
 
 ggsave("Gov1347-master/figures/death_rate_vs_poll_bg.png")
+
+## doing animation of new cases per day for whole country ##
+
+covid_animation <- covid_poll %>%
+  ggplot(aes(state = state, fill = new_case)) +
+  geom_statebins() +
+  transition_time(poll_date) +
+  theme_classic() +
+  scale_fill_continuous(name = "New Cases",
+                    high = "indianred",
+                    low = "steelblue2") +
+  labs(title = "Date: {frame_time}")
+
+a  <- animate(covid_animation, nframes = 400, duration = 40,
+        fps = 5, end_pause = 10, rewind = TRUE)
+
+magick::image_write(a, path="Gov1347-master/figures/new_cases.gif")
+
+covid_poll <- covid_poll %>%
+  mutate(battleground = if_else(state %in% battleground,
+                                1,
+                                0))
   
 
-summary(lm(poll_change ~ new_case, data = covid_poll))
+summary(lm(poll_change ~ death_per_cap, data = covid_poll))
+
+summary(lm(poll_change ~ death_per_cap*battleground, data = covid_poll))
 
 
 
