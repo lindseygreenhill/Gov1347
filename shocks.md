@@ -45,4 +45,10 @@ First, we will look at the same metric as above, cases per 100,000 in each battl
 > - This implies that voters have not directly punished Trump for growth in cases
 > - Thus, it would be difficult to estimate how Covid-19 will effect the election from this metric
 
+### Death Rate
+
+Death rate is another way to look at how damaging Covid-19 is to a certain state. Perhaps it is the case that voters will respond more to death than just illness and that relationship will be reflected in the polls. The graphic below shows the change in death rate over time in battleground states as well as the relationship between poll support for Trump and death rate. 
+
+![img](Gov1347-master/figures/death_rt_arranged.png)
+
 
