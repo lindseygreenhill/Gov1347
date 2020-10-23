@@ -20,3 +20,7 @@ For some brief context of the historical and current state of Covid-19 in each s
 
 ### Is there a relationship between polls and worsening of Covid-19?
 
+If voters do blame Trump for the pandemic, it's possible that it would be reflected in the polls. I would expect that if this were the case, a worsening of Covid-19 conditions would lead to a decrease in support for Trump. The graffic below shows the relationship between shifts in polls and cases per 100,000 across states. As you can see, there doesn't appear to be a relationship between the two variables. 
+
+![img](Gov1347-master/figures/poll_change_vs_cases.png)
+
