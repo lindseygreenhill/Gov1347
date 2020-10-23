@@ -14,6 +14,8 @@ For some brief context of the historical and current state of Covid-19 in each s
 
 ![ani](Gov1347-master/figures/case_per_hun.gif)
 
+#### Discussion
+
 > - It is apparent that cases per capita is continuing to grow as we near the election
 > - Southern states seem to be hit relatively hard on a per capita basis 
 > - Battleground states such as Arizona, Georgia, and Florida seem to have some of the highest case rates for their populations
