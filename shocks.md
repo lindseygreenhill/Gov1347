@@ -8,7 +8,7 @@ Covid-19 is obviously at the forfront of many voters minds today. As proven in t
 
 In this blog post I will investigate this question through looking at the relationship of average poll support for Trump and different measures of Covid-19 progression such as death rate and cases per capita. 
 
-### Background: how did Covid-19 affect different states? 
+## Background: how did Covid-19 affect different states? 
 
 For some brief context of the historical and current state of Covid-19 in each state, see the visual below that shows Covid-19 cases per 100,000 people in each state. 
 
@@ -18,7 +18,7 @@ For some brief context of the historical and current state of Covid-19 in each s
 > - Southern states seem to be hit relatively hard on a per capita basis 
 > - Battleground states such as Arizona, Georgia, and Florida seem to have some of the highest case rates for their populations
 
-### Is there a relationship between polls and worsening of Covid-19?
+## Is there a relationship between polls and worsening of Covid-19?
 
 If voters do blame Trump for the pandemic, it's possible that it would be reflected in the polls. I would expect that if this were the case, a worsening of Covid-19 conditions would lead to a decrease in support for Trump. The graffic below shows the relationship between shifts in polls and cases per 100,000 across states. As you can see, there doesn't appear to be a relationship between the two variables, and running a regression shows no statistically significant relationship betwen the two variables as well. 
 
@@ -28,8 +28,21 @@ If voters do blame Trump for the pandemic, it's possible that it would be reflec
 > - It makes sense that the pandemic would not shift the polls in strongly blue or strongly red states, so this could be masking the relationship of poll changes in battleground states
 > - However, running a regression that accounts for battleground status does not reveal for any statistically significant relationships either
 
-### Covid in Battleground States
+## Covid in Battleground States
 
 It is interesting to look at analysis of Covid-19 metrics and poll support for Trump in individual battleground states. 
+
+### Cases per Capita
+
+First, we will look at the same metric as above, cases per 100,000 in each battleground state. The graphics below show the evolution of that metric in each state as well as the relationship between Trump Support in each state and that number. 
+
+![img](Gov1347-master/figures/arranged_covid_cases_per_hun.png)
+
+> - It is evident that the rate at which Covid-19 is growing hasn't slowed in some states
+> - In some states there is a positive correlation between cases and Trump support
+> - In some states there is a negative correlaiton between cases and Trump support
+> - There doesn't appear to be a strong linear relationship across states and even in individual states
+> - This implies that voters have not directly punished Trump for growth in cases
+> - Thus, it would be difficult to estimate how Covid-19 will effect the election from this metric
 
 
