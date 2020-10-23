@@ -28,4 +28,8 @@ If voters do blame Trump for the pandemic, it's possible that it would be reflec
 > - It makes sense that the pandemic would not shift the polls in strongly blue or strongly red states, so this could be masking the relationship of poll changes in battleground states
 > - However, running a regression that accounts for battleground status does not reveal for any statistically significant relationships either
 
+### Covid in Battleground States
+
+It is interesting to look at analysis of Covid-19 metrics and poll support for Trump in individual battleground states. 
+
 
