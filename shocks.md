@@ -10,7 +10,7 @@ In this blog post I will investigate this question through looking at the relati
 
 ## Background: how did Covid-19 affect different states? 
 
-For some brief context of the historical and current state of Covid-19 in each state, see the visual below that shows Covid-19 cases per 100,000 people in each state. 
+For some brief context of the historical and current rates of Covid-19 in each state, see the visual below that shows Covid-19 cases per 100,000 people in each state. 
 
 ![ani](Gov1347-master/figures/case_per_hun.gif)
 
@@ -22,7 +22,7 @@ For some brief context of the historical and current state of Covid-19 in each s
 
 ## Is there a relationship between polls and worsening of Covid-19?
 
-If voters do blame Trump for the pandemic, it's possible that it would be reflected in the polls. I would expect that if this were the case, a worsening of Covid-19 conditions would lead to a decrease in support for Trump. The graffic below shows the relationship between shifts in polls and cases per 100,000 across states. As you can see, there doesn't appear to be a relationship between the two variables, and running a regression shows no statistically significant relationship betwen the two variables as well. 
+If voters do blame Trump for the pandemic, it's possible that it would be reflected in the polls. I would expect that if this were the case, a worsening of Covid-19 conditions would lead to a decrease in support for Trump. The graffic below shows the relationship between shifts in polls and cases per 100,000 across states. As you can see, there doesn't appear to be a relationship between the two variables, and running a regression shows no statistically significant relationship between the two variables as well. 
 
 ![img](Gov1347-master/figures/poll_change_vs_cases.png)
 
@@ -38,7 +38,7 @@ It is interesting to look at analysis of Covid-19 metrics and poll support for T
 
 ### Cases per Capita
 
-First, we will look at the same metric as above, cases per 100,000 in each battleground state. The graphics below show the evolution of that metric in each state as well as the relationship between Trump Support in each state and that number. 
+First, we will look at the same metric as above– cases per 100,000 in each battleground state. The graphics below show the evolution of that metric in each state and the relationship between Trump Support in each state and that number. 
 
 ![img](Gov1347-master/figures/arranged_covid_cases_per_hun.png)
 
@@ -61,5 +61,9 @@ Death rate is another way to look at how damaging Covid-19 is in a certain state
 > - There does not seem to be a consistent linear relationship between death rate and poll support for Trump
 > - As with looking at cases per capita, some states show a negative correlation and other states show a positive correlation
 > - This inconsistency makes it difficult to predict how Covid-19 will affect the election across states or even within states
+
+## Conclusion
+
+I did not find any consistent relationship between Covid-19 rates and support for Trump. While this could suggest that voters don't punish Trump simply because Covid-19 exists, I believe that voters will still punish Trump indirectly for consequences of Covid-19 in areas such as the economy. Alternatively, it is possible that voters will reward Trump for pandemic aid or stimulus checks, as discussed in a previous [blog post](). However, without a clear relationship of how shifts in Covid-19 affect support for Trump, I think it is best to leave pure Covid-19 data out of my predictive model. 
 
 
