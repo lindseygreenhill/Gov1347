@@ -12,3 +12,5 @@
 ### [Campaign Ad Spending - October 10, 2020](air_war.md)
 
 ### [Demographics - October 17, 2020](demographics.md)
+
+### [Covid-19 - October 24, 2020](shocks.md)
