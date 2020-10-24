@@ -64,6 +64,6 @@ Death rate is another way to look at how damaging Covid-19 is in a certain state
 
 ## Conclusion
 
-I did not find any consistent relationship between Covid-19 rates and support for Trump. While this could suggest that voters don't punish Trump simply because Covid-19 exists, I believe that voters will still punish Trump indirectly for consequences of Covid-19 in areas such as the economy. Alternatively, it is possible that voters will reward Trump for pandemic aid or stimulus checks, as discussed in a previous [blog post](). However, without a clear relationship of how shifts in Covid-19 affect support for Trump, I think it is best to leave pure Covid-19 data out of my predictive model. 
+I did not find any consistent relationship between Covid-19 rates and support for Trump. While this could suggest that voters don't punish Trump simply because Covid-19 exists, I believe that voters will still punish Trump indirectly for consequences of Covid-19 in areas such as the economy. Alternatively, it is possible that voters will reward Trump for pandemic aid or stimulus checks, as discussed in a previous [blog post](inc.md). However, without a clear relationship of how shifts in Covid-19 affect support for Trump, I think it is best to leave pure Covid-19 data out of my predictive model. 
 
 
