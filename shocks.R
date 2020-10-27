@@ -101,6 +101,9 @@ covid_poll <- poll_2020_inc %>%
   mutate(poll_change = avg_support - lag(avg_support, order_by = poll_date),
          death_rate = tot_death / tot_cases)
 
+covid_poll <- covid_poll %>%
+  mutate(cases_per_hun_thous = case_per_cap * 100000)
+
 ## battleground states ###
 
 battleground <- c("Arizona", "Georgia",
@@ -149,11 +152,48 @@ covid_poll %>%
         axis.text = element_text(size = 13),
         axis.title = element_text(size = 14))
 
-ggsave("Gov1347-master/figures/new_cases_vs_poll_bg.png")
+# looking at cases per capita
+
+case_per_hun <- covid_poll %>%
+  filter(state %in% battleground) %>%
+  ggplot(aes(x = poll_date, y = cases_per_hun_thous)) +
+  geom_point(alpha = .4) +
+  facet_wrap(~state) +
+  theme_classic() +
+  labs(x = "Date",
+       y = "Cases per 100,000 people",
+       title = "Covid-19 Cases in Battleground States") +
+  theme(plot.title = element_text(size = 16),
+        axis.text = element_text(size = 13),
+        axis.title = element_text(size = 14))
+
+
+
+supp_vs_cases <- covid_poll %>%
+  filter(state %in% battleground) %>%
+  ggplot(aes(x = cases_per_hun_thous, y = avg_support)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~state) +
+  theme_classic() +
+  labs(title = "Trump Poll Support vs Cases per 100,000",
+       subtitle = "Battleground States",
+       y = "Average Support",
+       x = "Cases per 100,000") +
+  theme(plot.title = element_text(size = 16),
+        plot.subtitle = element_text(size = 15),
+        axis.text = element_text(size = 13),
+        axis.title = element_text(size = 14))
+
+ggarrange(case_per_hun, supp_vs_cases)
+
+
+
+
 
 ## looking at death rate ##
 
-covid_poll %>%
+death_rt_time <- covid_poll %>%
   filter(state %in% battleground) %>%
   ggplot(aes(x = poll_date, y = death_rate)) +
   geom_point(alpha = .4) +
@@ -169,7 +209,8 @@ covid_poll %>%
 ggsave("Gov1347-master/figures/death_rate_by_day_bg.png")
 
 
-covid_poll %>%
+
+death_rate_vs_poll <- covid_poll %>%
   filter(state %in% battleground) %>%
   ggplot(aes(x = death_rate, y = avg_support)) +
   geom_point() +
@@ -177,7 +218,6 @@ covid_poll %>%
   facet_wrap(~state) +
   theme_classic() +
   labs(title = "Trump Poll Support vs Death Rate",
-       subtitle = "Battleground States",
        y = "Average Support",
        x = "Death Rate") +
   theme(plot.title = element_text(size = 16),
@@ -186,6 +226,8 @@ covid_poll %>%
         axis.title = element_text(size = 14))
 
 ggsave("Gov1347-master/figures/death_rate_vs_poll_bg.png")
+
+ggarrange(death_rt_time, death_rate_vs_poll)
 
 ## doing animation of new cases per day for whole country ##
 
@@ -208,6 +250,26 @@ covid_poll <- covid_poll %>%
   mutate(battleground = if_else(state %in% battleground,
                                 1,
                                 0))
+
+covid_capita_animation <- covid_poll %>%
+  ggplot(aes(state = state, fill = cases_per_hun_thous)) +
+  geom_statebins() +
+  transition_time(poll_date) +
+  theme_classic() +
+  scale_fill_continuous(name = "Cases per 100,000",
+                        high = "indianred",
+                        low = "steelblue2") +
+  labs(title = "Covid-19 Cases per 100,000",
+       subtitle = "Date: {frame_time}") +
+  theme(plot.title = element_text(size = 16),
+        plot.subtitle = element_text(size = 15),
+        axis.text = element_text(size = 13),
+        axis.title = element_text(size = 14))
+
+a_2  <- animate(covid_capita_animation, nframes = 400, duration = 40,
+              fps = 5, end_pause = 10, rewind = TRUE)
+
+magick::image_write(a_2, path="Gov1347-master/figures/case_per_hun.gif")
   
 
 summary(lm(poll_change ~ death_per_cap, data = covid_poll))
@@ -226,6 +288,25 @@ ggplot(covid_poll, aes(x = death_per_cap, y = poll_change)) +
 
 ggplot(covid_poll, aes(x = case_per_cap, y = poll_change)) +
   geom_point()
+
+
+
+lm(avg_support ~ cases_per_hun_thous + state, data = covid_poll)
+
+ggplot(covid_poll, aes(x = cases_per_hun_thous,y = poll_change)) +
+  geom_point(alpha = .5)+
+  theme_classic() +
+  geom_smooth(method = "lm") +
+  labs(title = "Poll Change vs. Cases per 100,000",
+       subtitle = "Seemingly no correlation",
+       x = "Cases per 100,000",
+       y = "Poll Change") +
+  theme(plot.title = element_text(size = 16),
+        plot.subtitle = element_text(size = 15),
+        axis.text = element_text(size = 13),
+        axis.title = element_text(size = 14))
+
+ggsave("Gov1347-master/figures/poll_change_vs_cases.png")
 
 
 
