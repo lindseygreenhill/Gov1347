@@ -326,10 +326,15 @@ for(s in unique(counts$state)){
     # dem model 
     
     mod_state_dem <- lm(pv ~ avg_support +
-                          Black_change +
-                          Hispanic_change +
-                          Asian_change +
-                          Female_change, data = dem_pred_df)
+                          Black_change + 
+                        Hispanic_change +
+                        Asian_change +
+                        Female_change +
+                        White_change +
+                        age20_change +
+                        age3045_change +
+                        age4565_change, data = dem_pred_df)
+    print(summary(mod_state_dem))
     
     # rep model
     
@@ -406,7 +411,11 @@ for(s in unique(dat_change$state)){
                            Black_change +
                            Hispanic_change +
                            Asian_change +
-                           Female_change, data = dem_pred_df)
+                           Female_change +
+                           White_change +
+                           age20_change +
+                           age3045_change +
+                           age4565_change, data = dem_pred_df)
     
     # rep model
     
@@ -667,6 +676,12 @@ results_base_final <- results_base %>%
   rename(votes = votes.y) %>%
   mutate(win_margin = dem - rep)
 
+results_base_final_1 <- results_base %>%
+  bind_rows(m) %>%
+  left_join(EC, by = "state") %>%
+  select(-votes.x) %>%
+  rename(votes = votes.y) %>%
+  mutate(win_margin = dem - rep)
 results_increase_final <- results_i %>%
   bind_rows(m) %>%
   left_join(EC, by = "state")
@@ -683,7 +698,7 @@ results_decrease_final %>%
   group_by(winner) %>%
   summarize(votes = sum(votes))
 
-results_base_final %>%
+results_base_final_1 %>%
   group_by(winner) %>%
   summarize(votes = sum(votes))
 
@@ -692,567 +707,128 @@ results_base_final %>%
 results_base_final$state_ab <- state.abb[match(results_base_final$state, state.name)]
 
 
-base_results_plot <- results_base_final %>%  ##`statebins` needs state to be character, not factor!
-  mutate(state = as.character(state)) %>%
-  ggplot(aes(state = state, fill = winner)) +
-  geom_statebins() +
-  theme_statebins() +
-  scale_fill_manual(values = c("steelblue2", "indianred")) +
-  labs(title = "2020 Presidential Election Prediction (Base Demographic + Polling Model)",
-       subtitle = "Biden Wins with 356 Electoral Votes",
-       fill = "") +
-  theme(legend.position = "none")
-
-ggsave("Gov1347-master/figures/demog_pred_map.png")
-
-# Biden wins Iowa by less than .25%, Georgia by .34$, Arizona by 1%, Florida by 3%, Trump wins Ohio by .45%
-
-# perturbing the coefficients. Double Asian effect
-
-
-results_base <- tibble()
-
-results_female_decrease <- tibble()
-results_female_increase <- tibble()
-
-for(s in unique(acc_2$state)){
-  print(s)
-  
-  # extracting weights
-  
-  pooled_w <- weights$weight_pooled[weights$state == s]
-  state_w <- weights$weight_state[weights$state == s]
-  
-  #print(pooled_w)
-  
-  # state data
-  
-  temp_data_dem <- dat_change %>%
-    filter(state == s, party == "democrat") %>%
-    rename(avg_support_democrat = avg_support)
-  
-  temp_data_rep <- dat_change %>%
-    filter(state == s, party == "republican")  %>%
-    rename(avg_support_republican = avg_support)
-  
-  # dem model state
-  
-  mod_state_dem <- lm(pv ~ avg_support_democrat +
-                        Black_change +
-                        Hispanic_change +
-                        Asian_change +
-                        Female_change, data = temp_data_dem)
-  
-  # rep model state
-  
-  mod_state_rep <- lm(pv ~ avg_support_republican, data = temp_data_rep)
-  
-  # prediction data
-  
-  d_pred_df <- dem_2020_demog %>% 
-    filter(state == s)
-  r_pred_df <- rep_2020 %>%
-    filter(state == s)
-  
-  # predictions using weights from above
-  
-  dem_prediction <- pooled_w * predict(mod_dem_polls_dem, newdata = d_pred_df) +
-    state_w * predict(mod_state_dem, newdata = d_pred_df)
-  
-  rep_prediction <- pooled_w * predict(mod_rep_polls, newdata = r_pred_df) +
-    state_w * predict(mod_state_rep, newdata = r_pred_df)
-  
-  # increase in female
-  
-  dem_prediction_i <- (pooled_w * (predict(mod_dem_polls_dem, newdata = d_pred_df) +
-                                     (1.28-.64)*d_pred_df$Hispanic_change)) +
-    state_w * predict(mod_state_dem, newdata = d_pred_df)
-  
-  rep_prediction_i <- pooled_w * predict(mod_rep_polls, newdata = r_pred_df) +
-    state_w * predict(mod_state_rep, newdata = r_pred_df)
-  
-  # decrease in female
-  
-  dem_prediction_d <- (pooled_w * (predict(mod_dem_polls_dem, newdata = d_pred_df) +
-                                     (0)*d_pred_df$Hispanic_change)) +
-    state_w * predict(mod_state_dem, newdata = d_pred_df)
-  
-  rep_prediction_d <- pooled_w * predict(mod_rep_polls, newdata = r_pred_df) +
-    state_w * predict(mod_state_rep, newdata = r_pred_df)
-  
-  vec <- tibble(state = s,
-                dem = dem_prediction,
-                rep = rep_prediction)
-  vec_i <- tibble(state = s,
-                  dem = dem_prediction_i,
-                  rep = rep_prediction_i)
-  vec_d <- tibble(state = s,
-                  dem = dem_prediction_d,
-                  rep = rep_prediction_d)
-  
-  results_base <- results_base %>%
-    bind_rows(vec)
-  results_female_decrease <- results_female_decrease %>%
-    bind_rows(vec_d)
-  results_female_increase <- results_female_increase %>%
-    bind_rows(vec_i)
-  
-  
-}
-
-results_i <- results_female_increase %>%
-  mutate(winner = if_else(dem > rep, "democrat",
-                          "republican"))
-results_d <- results_female_decrease %>%
-  mutate(winner = if_else(dem > rep, "democrat",
-                          "republican"))
-
-results_base <- results_base %>%
-  mutate(winner = if_else(dem > rep, "democrat",
-                          "republican")) %>%
-  left_join(EC, by = "state") 
-
-missing_states <- EC %>%
-  filter(!(state %in% results_base$state))
-
-# getting predictions for missing states
-
-m <- tibble()
-
-for(s in missing_states$state){
-  print(s)
-  pred_dem <- dem_2020 %>%
-    filter(state == s)
-  pred_rep <- rep_2020 %>%
-    filter(state == s)
-  
-  dem <- predict(mod_dem_polls, newdata = pred_dem)
-  
-  rep <- predict(mod_rep_polls, newdata = pred_rep)
-  
-  vec <- tibble(state = s,
-                dem = dem, 
-                rep = rep,
-                winner = if_else(dem > rep,
-                                 "democrat",
-                                 "republican"))
-  m <- m %>%
-    bind_rows(vec)
-}
-
-results_base_final <- results_base %>%
-  bind_rows(m) %>%
-  left_join(EC, by = "state") %>%
-  select(-votes.x) %>%
-  rename(votes = votes.y) %>%
-  mutate(win_margin = dem - rep)
-
-results_increase_final <- results_i %>%
-  bind_rows(m) %>%
-  left_join(EC, by = "state")
-
-results_increase_final %>%
-  group_by(winner) %>%
-  summarize(votes = sum(votes))
-
-results_decrease_final <- results_d %>%
-  bind_rows(m) %>%
-  left_join(EC, by = "state")
-
-results_decrease_final %>%
-  group_by(winner) %>%
-  summarize(votes = sum(votes))
-
-results_base_final %>%
-  group_by(winner) %>%
-  summarize(votes = sum(votes))
-
-# getting state name abbreviations for state bins function
-
-results_base_final$state_ab <- state.abb[match(results_base_final$state, state.name)]
-
-
-base_results_plot <- results_base_final %>%  ##`statebins` needs state to be character, not factor!
-  mutate(state = as.character(state)) %>%
-  ggplot(aes(state = state, fill = winner)) +
-  geom_statebins() +
-  theme_statebins() +
-  scale_fill_manual(values = c("steelblue2", "indianred")) +
-  labs(title = "2020 Presidential Election Prediction (Base Demographic + Polling Model)",
-       subtitle = "Biden Wins with 356 Electoral Votes",
-       fill = "") +
-  theme(legend.position = "none")
-
-ggsave("Gov1347-master/figures/demog_pred_map.png")
-
-# Biden wins Iowa by less than .25%, Georgia by .34$, Arizona by 1%, Florida by 3%, Trump wins Ohio by .45%
-
-# perturbing the coefficients. Double Asian effect
-
-
-
-
-
-
-
-
-results_base <- tibble()
-
-results_female_decrease <- tibble()
-results_female_increase <- tibble()
-
-for(s in unique(acc_2$state)){
-  print(s)
-  
-  # extracting weights
-  
-  pooled_w <- weights$weight_pooled[weights$state == s]
-  state_w <- weights$weight_state[weights$state == s]
-  
-  #print(pooled_w)
-  
-  # state data
-  
-  temp_data_dem <- dat_change %>%
-    filter(state == s, party == "democrat") %>%
-    rename(avg_support_democrat = avg_support)
-  
-  temp_data_rep <- dat_change %>%
-    filter(state == s, party == "republican")  %>%
-    rename(avg_support_republican = avg_support)
-  
-  # dem model state
-  
-  mod_state_dem <- lm(pv ~ avg_support_democrat +
-                        Black_change +
-                        Hispanic_change +
-                        Asian_change +
-                        Female_change, data = temp_data_dem)
-  
-  # rep model state
-  
-  mod_state_rep <- lm(pv ~ avg_support_republican, data = temp_data_rep)
-  
-  # prediction data
-  
-  d_pred_df <- dem_2020_demog %>% 
-    filter(state == s)
-  r_pred_df <- rep_2020 %>%
-    filter(state == s)
-  
-  # predictions using weights from above
-  
-  dem_prediction <- pooled_w * predict(mod_dem_polls_dem, newdata = d_pred_df) +
-    state_w * predict(mod_state_dem, newdata = d_pred_df)
-  
-  rep_prediction <- pooled_w * predict(mod_rep_polls, newdata = r_pred_df) +
-    state_w * predict(mod_state_rep, newdata = r_pred_df)
-  
-  # increase in female
-  
-  dem_prediction_i <- (pooled_w * (predict(mod_dem_polls_dem, newdata = d_pred_df) +
-                                     (1.28-.64)*d_pred_df$Hispanic_change)) +
-    state_w * predict(mod_state_dem, newdata = d_pred_df)
-  
-  rep_prediction_i <- pooled_w * predict(mod_rep_polls, newdata = r_pred_df) +
-    state_w * predict(mod_state_rep, newdata = r_pred_df)
-  
-  # decrease in female
-  
-  dem_prediction_d <- (pooled_w * (predict(mod_dem_polls_dem, newdata = d_pred_df) +
-                                     (0)*d_pred_df$Hispanic_change)) +
-    state_w * predict(mod_state_dem, newdata = d_pred_df)
-  
-  rep_prediction_d <- pooled_w * predict(mod_rep_polls, newdata = r_pred_df) +
-    state_w * predict(mod_state_rep, newdata = r_pred_df)
-  
-  vec <- tibble(state = s,
-                dem = dem_prediction,
-                rep = rep_prediction)
-  vec_i <- tibble(state = s,
-                  dem = dem_prediction_i,
-                  rep = rep_prediction_i)
-  vec_d <- tibble(state = s,
-                  dem = dem_prediction_d,
-                  rep = rep_prediction_d)
-  
-  results_base <- results_base %>%
-    bind_rows(vec)
-  results_female_decrease <- results_female_decrease %>%
-    bind_rows(vec_d)
-  results_female_increase <- results_female_increase %>%
-    bind_rows(vec_i)
-  
-  
-}
-
-results_i <- results_female_increase %>%
-  mutate(winner = if_else(dem > rep, "democrat",
-                          "republican"))
-results_d <- results_female_decrease %>%
-  mutate(winner = if_else(dem > rep, "democrat",
-                          "republican"))
-
-results_base <- results_base %>%
-  mutate(winner = if_else(dem > rep, "democrat",
-                          "republican")) %>%
-  left_join(EC, by = "state") 
-
-missing_states <- EC %>%
-  filter(!(state %in% results_base$state))
-
-# getting predictions for missing states
-
-m <- tibble()
-
-for(s in missing_states$state){
-  print(s)
-  pred_dem <- dem_2020 %>%
-    filter(state == s)
-  pred_rep <- rep_2020 %>%
-    filter(state == s)
-  
-  dem <- predict(mod_dem_polls, newdata = pred_dem)
-  
-  rep <- predict(mod_rep_polls, newdata = pred_rep)
-  
-  vec <- tibble(state = s,
-                dem = dem, 
-                rep = rep,
-                winner = if_else(dem > rep,
-                                 "democrat",
-                                 "republican"))
-  m <- m %>%
-    bind_rows(vec)
-}
-
-results_base_final <- results_base %>%
-  bind_rows(m) %>%
-  left_join(EC, by = "state") %>%
-  select(-votes.x) %>%
-  rename(votes = votes.y) %>%
-  mutate(win_margin = dem - rep)
-
-results_increase_final <- results_i %>%
-  bind_rows(m) %>%
-  left_join(EC, by = "state")
-
-results_increase_final %>%
-  group_by(winner) %>%
-  summarize(votes = sum(votes))
-
-results_decrease_final <- results_d %>%
-  bind_rows(m) %>%
-  left_join(EC, by = "state")
-
-results_decrease_final %>%
-  group_by(winner) %>%
-  summarize(votes = sum(votes))
-
-results_base_final %>%
-  group_by(winner) %>%
-  summarize(votes = sum(votes))
-
-# getting state name abbreviations for state bins function
-
-results_base_final$state_ab <- state.abb[match(results_base_final$state, state.name)]
-
-
-base_results_plot <- results_base_final %>%  ##`statebins` needs state to be character, not factor!
-  mutate(state = as.character(state)) %>%
-  ggplot(aes(state = state, fill = winner)) +
-  geom_statebins() +
-  theme_statebins() +
-  scale_fill_manual(values = c("steelblue2", "indianred")) +
-  labs(title = "2020 Presidential Election Prediction (Base Demographic + Polling Model)",
-       subtitle = "Biden Wins with 356 Electoral Votes",
-       fill = "") +
-  theme(legend.position = "none")
-
-ggsave("Gov1347-master/figures/demog_pred_map.png")
-
-# Biden wins Iowa by less than .25%, Georgia by .34$, Arizona by 1%, Florida by 3%, Trump wins Ohio by .45%
-
-# perturbing the coefficients. Double Asian effect
-
-
-### Sensitivity Analysis ####
-weights_2 <- acc_2 %>%
-  mutate(weight_pooled = if_else(accuracy_pooled == accuracy_state, .6,
-                                 if_else(accuracy_pooled > accuracy_state, .9, .4)),
-         weight_state = 1 - weight_pooled) %>%
-  mutate(weight_pooled = if_else(state %in% c("Utah",
-                                              "Vermont",
-                                              "Rhode Island",
-                                              "New Mexico",
-                                              "Connecticut"), 1,
-                                 weight_pooled),
-         weight_state = 1  - weight_pooled)
-
-results_base_s <- tibble()
-
-
-for(s in unique(acc_2$state)){
-  
-  # extracting weights
-  
-  pooled_w <- weights_2$weight_pooled[weights_2$state == s]
-  state_w <- weights_2$weight_state[weights_2$state == s]
-  
-  #print(pooled_w)
-  
-  # state data
-  
-  temp_data_dem <- dat_change %>%
-    filter(state == s, party == "democrat") %>%
-    rename(avg_support_democrat = avg_support)
-  
-  temp_data_rep <- dat_change %>%
-    filter(state == s, party == "republican")  %>%
-    rename(avg_support_republican = avg_support)
-  
-  # dem model state
-  
-  mod_state_dem <- lm(pv ~ avg_support_democrat +
-                        Black_change +
-                        Hispanic_change +
-                        Asian_change +
-                        Female_change, data = temp_data_dem)
-  
-  # rep model state
-  
-  mod_state_rep <- lm(pv ~ avg_support_republican, data = temp_data_rep)
-  
-  # prediction data
-  
-  d_pred_df <- dem_2020_demog %>% 
-    filter(state == s)
-  r_pred_df <- rep_2020 %>%
-    filter(state == s)
-  
-  # predictions using weights from above
-  
-  dem_prediction <- pooled_w * predict(mod_dem_polls_dem, newdata = d_pred_df) +
-    state_w * predict(mod_state_dem, newdata = d_pred_df)
-  
-  rep_prediction <- pooled_w * predict(mod_rep_polls, newdata = r_pred_df) +
-    state_w * predict(mod_state_rep, newdata = r_pred_df)
-  
-  # increase in female
-  
-  dem_prediction_i <- (pooled_w * (predict(mod_dem_polls_dem, newdata = d_pred_df) +
-                                     (1.28-.64)*d_pred_df$Hispanic_change)) +
-    state_w * predict(mod_state_dem, newdata = d_pred_df)
-  
-  rep_prediction_i <- pooled_w * predict(mod_rep_polls, newdata = r_pred_df) +
-    state_w * predict(mod_state_rep, newdata = r_pred_df)
-  
-  # decrease in female
-  
-  dem_prediction_d <- (pooled_w * (predict(mod_dem_polls_dem, newdata = d_pred_df) +
-                                     (0)*d_pred_df$Hispanic_change)) +
-    state_w * predict(mod_state_dem, newdata = d_pred_df)
-  
-  rep_prediction_d <- pooled_w * predict(mod_rep_polls, newdata = r_pred_df) +
-    state_w * predict(mod_state_rep, newdata = r_pred_df)
-  
-  vec <- tibble(state = s,
-                dem = dem_prediction,
-                rep = rep_prediction)
-  
-  results_base_s <- results_base_s %>%
-    bind_rows(vec)
-  
-}
-
-
-results_base_s <- results_base_s %>%
-  mutate(winner = if_else(dem > rep, "democrat",
-                          "republican")) %>%
-  left_join(EC, by = "state") 
-
-missing_states_s <- EC %>%
-  filter(!(state %in% results_base$state))
-
-# getting predictions for missing states
-
-m_s<- tibble()
-
-for(s in missing_states_s$state){
-  pred_dem <- dem_2020 %>%
-    filter(state == s)
-  pred_rep <- rep_2020 %>%
-    filter(state == s)
-  
-  dem <- predict(mod_dem_polls, newdata = pred_dem)
-  
-  rep <- predict(mod_rep_polls, newdata = pred_rep)
-  
-  vec <- tibble(state = s,
-                dem = dem, 
-                rep = rep,
-                winner = if_else(dem > rep,
-                                 "democrat",
-                                 "republican"))
-  m_s <- m_s %>%
-    bind_rows(vec)
-}
-
-results_base_s_final <- results_base_s %>%
-  bind_rows(m) %>%
-  left_join(EC, by = "state") %>%
-  select(-votes.x) %>%
-  rename(votes = votes.y) %>%
-  mutate(win_margin = dem - rep)
-
-
-results_base_s_final %>%
-  group_by(winner) %>%
-  summarize(votes = sum(votes))
-
-pooled_less <- results_base_s_final
-less_plot <- pooled_less %>%
+base_results_plot <- results_base_final_1 %>%  ##`statebins` needs state to be character, not factor!
   mutate(state = as.character(state)) %>%
   ggplot(aes(state = state, fill = winner)) +
   geom_statebins() +
   theme_statebins() +
   scale_fill_manual(values = c("steelblue2", "indianred")) +
   labs(title = "2020 Presidential Election Prediction",
-       subtitle = "More weight to state models",
+       subtitle = "Biden Wins with 327 Electoral Votes",
        fill = "") +
   theme(legend.position = "none")
 
-## don't go past here!!
+ggsave("Gov1347-master/figures/demog_pred_map_final.png")
 
+# win margin plot
 
-pooled_more <- results_base_s_final
-
-more_plot <- pooled_more %>%
+base_results_plot_wm <- results_base_final_1 %>%  ##`statebins` needs state to be character, not factor!
   mutate(state = as.character(state)) %>%
-  ggplot(aes(state = state, fill = winner)) +
+  ggplot(aes(state = state, fill = win_margin)) +
   geom_statebins() +
   theme_statebins() +
-  scale_fill_manual(values = c("steelblue2", "indianred")) +
-  labs(title = "2020 Presidential Election Prediction",
-       subtitle = "More weight to pooled model",
+  scale_fill_gradient2(high = "steelblue2",
+                      low = "indianred",
+                      mid = "white") +
+  labs(title = "2020 Presidential Election Prediction (Win Margin)",
+       subtitle = "Biden Wins with 327 Electoral Votes",
        fill = "") +
   theme(legend.position = "none")
 
-
-ggarrange(less_plot, more_plot)
-ggsave("Gov1347-master/figures/sensitivity_analysis_demog.png")
+ggsave("Gov1347-master/figures/demog_pred_map_wm_final.png")
 
 
+## in samp fit for pool model
 
+## doing the bootstrapping ### 
+# using dat_change
 
+for(s in unique(counts$state)){
+  
+  # prediction data
+  
+  d_pred <- dem_2020_demog %>% 
+    filter(state == s) %>%
+    rename(avg_support = avg_support_democrat)
+  
+  r_pred <- rep_2020 %>%
+    filter(state == s) %>%
+    rename(avg_support = avg_support_republican)
+  
+  # weights from classification
+  
+  pooled_w <- weights$weight_pooled[weights$state == s]
+  state_w <- weights$weight_state[weights$state == s]
+  
+  # boostrapping
+  
+  boot_size <- 10
+  s_vec_dem <- c(rep(NA,boot_size))
+  s_vec_rep <- c(rep(NA,boot_size))
+  sample_size <- nrow(dat_change)
 
-
-
-
-
-
-
-
-
+  # # create bootstrapped samples
+   for(i in 1:boot_size){
+     samp <- sample_n(dat_change, size = sample_size,
+                   replace = TRUE)
+  #   
+  #   # for each sample, build a model for pooled and for state
+  #   
+  #   # pooled models
+  #   
+     pooled_mod_dem <- lm(pv ~ avg_support + 
+                               Black_change + 
+                               Hispanic_change +
+                               Asian_change +
+                             Female_change +
+                               White_change +
+                               age20_change +
+                               age3045_change +
+                               age4565_change, data = samp %>%
+                            filter(party == "democrat"))
+  #   
+     pooled_mod_rep <- lm(pv ~ avg_support,
+                          data = samp %>%
+                            filter(party == "republican"))
+     
+  #   # state models
+  #   
+     state_mod_dem <- lm(pv ~ avg_support + 
+                            Black_change + 
+                            Hispanic_change +
+                            Asian_change +
+                            Female_change +
+                            White_change +
+                            age20_change +
+                            age3045_change +
+                            age4565_change, data = samp %>%
+                            filter(state == s,
+                                   party == "democrat"))
+     
+     state_mod_rep <- lm(pv ~ avg_support,
+                          data = samp %>%
+                            filter(state == s,
+                                   party == "republican"))
+    
+    # predict a result from each model using the preassigned weights
+    
+     dem_prediction <- pooled_w * predict(pooled_mod_dem, newdata = d_pred) +
+       state_w * predict(state_mod_dem, newdata = d_pred)
+    
+    rep_prediction <- pooled_w * predict(pooled_mod_rep, newdata = r_pred) +
+      state_w * predict(state_mod_rep, newdata = r_pred)
+    
+    # store those results in a vector
+    
+    s_vec_dem[i] <- dem_prediction
+    s_vec_rep[i] <- rep_prediction
+    
+    
+  }
+  
+  
+  # take the median, 5%, and 95% percentile values from that vector
+  # store those numbers in a tibble of results
+}
 
 
