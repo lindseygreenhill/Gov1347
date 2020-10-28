@@ -743,6 +743,8 @@ ggsave("Gov1347-master/figures/demog_pred_map_wm_final.png")
 ## doing the bootstrapping ### 
 # using dat_change
 
+boot_results <- tibble()
+
 for(s in unique(counts$state)){
   
   # prediction data
@@ -762,7 +764,7 @@ for(s in unique(counts$state)){
   
   # boostrapping
   
-  boot_size <- 10
+  boot_size <- 1000
   s_vec_dem <- c(rep(NA,boot_size))
   s_vec_rep <- c(rep(NA,boot_size))
   sample_size <- nrow(dat_change)
@@ -824,11 +826,29 @@ for(s in unique(counts$state)){
     s_vec_rep[i] <- rep_prediction
     
     
-  }
+   }
+  
+  boot_results <- boot_results %>%
+    bind_rows(tibble(state = s,
+              dem_results = list(s_vec_dem),
+              rep_results = list(s_vec_rep)))
   
   
   # take the median, 5%, and 95% percentile values from that vector
   # store those numbers in a tibble of results
 }
+boot_results %>% unnest() %>%
+  ggplot() +
+  geom_histogram(aes(x = dem_results)) +
+  facet_wrap(~state)
 
+boot_results_calc <- boot_results %>%
+  unnest(c(dem_results, rep_results)) %>%
+  group_by(state) %>%
+  summarize(med_dem = median(dem_results),
+            fifth_dem = quantile(dem_results, prob = .05),
+            nin_f_dem = quantile(dem_results, prob = .95),
+            med_rep = median(rep_results),
+            fifth_rep = quantile(rep_results, prob = .05),
+            nin_f_rep = quantile(rep_results, prob = .95))
 
