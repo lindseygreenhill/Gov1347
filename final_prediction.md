@@ -10,7 +10,7 @@ My final prediction model is a two sided ensemble model that uses both recent po
 
 The first component of my ensemble is a pooled model built from data across states. The Democrat model regresses popular vote on the average poll support one week out from the election and various demographic variables (see below for list). The Republican model regresses popular vote on just the average poll support one week out from the election.
 
-*Note:* I chose to only use polls one week away from the election, because in general polls are more accurate the closer they are to the [election](https://www.semanticscholar.org/paper/Election-forecasting%3A-Too-far-out-Jennings-Lewis-Beck/7d0621cd3f984483652caf09e7764c88233948d7). I chose to **not include** fundamentals economic data in my model because of the unprecedented nature of 2020, as I discussed in a previous [blog post](econ.md). 
+*Note:* I chose to only use polls one week away from the election, because in general polls are more accurate the closer they are to the [election](https://www.semanticscholar.org/paper/Election-forecasting%3A-Too-far-out-Jennings-Lewis-Beck/7d0621cd3f984483652caf09e7764c88233948d7). I chose to **not include** fundamentals economic data in my model because of the unprecedented nature of 2020, as I discussed in a previous [blog post](Econ.md). 
 
 See the table below for regression results.
 
