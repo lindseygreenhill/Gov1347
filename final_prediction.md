@@ -12,7 +12,7 @@ I chose to **not include** fundamentals economic data because of the unprecedent
 
 See the table below for regression results.
 
-![img](Gov1347-master/figures/star_final.html)
+![img](Gov1347-master/figures/star_final.png)
 
 #### Discussion:
 
