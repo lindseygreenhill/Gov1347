@@ -110,9 +110,12 @@ mod_dem_polls_dem <- lm(pv_democrat ~ avg_support_democrat +
 
 
 
-stargazer(mod_dem_polls, mod_dem_polls_dem, mod_rep_polls,
-          title = "Pooled Models Poll vs. Demographics",
+stargazer(mod_dem_polls_dem, mod_rep_polls,
+          title = "Democrat and Republican Pooled Models",
           out = "Gov1347-master/figures/star_final.html")
+
+stargazer( mod_dem_polls_dem, mod_rep_polls,
+          type = "text")
 
 
 
@@ -441,7 +444,9 @@ battleground <- c("Arizona", "Georgia",
                   "Minnesota",
                   "Wisconsin",
                   "Michigan",
-                  "North Carolina")
+                  "North Carolina",
+                  "Iowa",
+                  "Texas")
 
 accuracy_combined <- accuracy_state_mods %>%
   bind_rows(accuracy_pooled, .id = "model") %>%
@@ -516,11 +521,11 @@ weights <- acc_2 %>%
   mutate(weight_pooled = if_else(accuracy_pooled == accuracy_state, .8,
                                  if_else(accuracy_pooled > accuracy_state, 1, .5)),
          weight_state = 1 - weight_pooled) %>%
-  mutate(weight_pooled = if_else(state %in% c("Utah",
-                                              "Vermont",
-                                              "Rhode Island",
-                                              "New Mexico",
-                                              "Connecticut"), 1,
+  mutate(weight_pooled = if_else(state %in% c("Montana",
+                                              "Delaware",
+                                              "South Carolina",
+                                              "Mississippi",
+                                              "Kansas"), 1,
                                  weight_pooled),
          weight_state = 1  - weight_pooled)
 
@@ -658,7 +663,7 @@ base_results_plot <- results_base_final_1 %>%  ##`statebins` needs state to be c
   theme_statebins() +
   scale_fill_manual(values = c("steelblue2", "indianred")) +
   labs(title = "2020 Presidential Election Prediction",
-       subtitle = "Biden Wins with 340 Electoral Votes",
+       subtitle = "Biden Wins with 356 Electoral Votes",
        fill = "") +
   theme(legend.position = "none")
 
@@ -675,153 +680,20 @@ base_results_plot_wm <- results_base_final_1 %>%  ##`statebins` needs state to b
                       low = "indianred",
                       mid = "white") +
   labs(title = "2020 Presidential Election Prediction (Win Margin)",
-       subtitle = "Biden Wins with 340 Electoral Votes",
+       subtitle = "Biden Wins with 356 Electoral Votes",
        fill = "") +
   theme(legend.position = "none")
 
 ggsave("Gov1347-master/figures/demog_pred_map_wm_final.png")
+
+ggarrange(base_results_plot, base_results_plot_wm)
+ggsave("Gov1347-master/figures/final_prediction_map.png")
 
 
 ## in samp fit for pool model
 
 ## doing the bootstrapping ### 
 # using dat_change
-
-boot_results <- tibble()
-
-for(s in unique(counts$state)){
-  
-  # prediction data
-  
-  d_pred <- dem_2020_demog %>% 
-    filter(state == s) %>%
-    rename(avg_support = avg_support_democrat)
-  
-  r_pred <- rep_2020 %>%
-    filter(state == s) %>%
-    rename(avg_support = avg_support_republican)
-  
-  # weights from classification
-  
-  pooled_w <- weights$weight_pooled[weights$state == s]
-  state_w <- weights$weight_state[weights$state == s]
-  
-  # boostrapping
-  
-  boot_size <- 10
-  s_vec_dem <- c(rep(NA,boot_size*1000))
-  s_vec_rep <- c(rep(NA,boot_size*1000))
-  sample_size <- nrow(dat_change)
-
-  # # create bootstrapped samples
-   for(i in 1:boot_size){
-     samp <- sample_n(dat_change, size = sample_size,
-                   replace = TRUE)
-  #   
-  #   # for each sample, build a model for pooled and for state
-  #   
-  #   # pooled models
-  #   
-     pooled_mod_dem <- lm(pv ~ avg_support + 
-                               Black_change + 
-                               Hispanic_change +
-                               Asian_change +
-                             Female_change +
-                               White_change +
-                               age20_change +
-                               age3045_change +
-                               age4565_change, data = samp %>%
-                            filter(party == "democrat"))
-  #   
-     pooled_mod_rep <- lm(pv ~ avg_support,
-                          data = samp %>%
-                            filter(party == "republican"))
-     
-  #   # state models
-  #   
-     state_mod_dem <- lm(pv ~ avg_support, data = samp %>%
-                            filter(state == s,
-                                   party == "democrat"))
-     
-     state_mod_rep <- lm(pv ~ avg_support,
-                          data = samp %>%
-                            filter(state == s,
-                                   party == "republican"))
-    
-    # predict a result from each model using the preassigned weights
-     
-     dem_pooled_point <- predict(pooled_mod_dem, newdata = d_pred)
-     dem_state_point <- predict(state_mod_dem, newdata = d_pred)
-     rep_pooled_point <- predict(pooled_mod_rep, newdata = r_pred)
-     rep_state_point <- predict(state_mod_rep, newdata = r_pred)
-     dem_pooled_se <- predict(pooled_mod_dem, newdata = d_pred,
-                             interval = "prediction",
-                             se.fit=T)$se.fit
-     dem_state_se <- predict(state_mod_dem, newdata = d_pred,
-                             interval = "prediction",
-                             se.fit=T)$se.fit
-     rep_pooled_se <- predict(pooled_mod_rep, newdata = r_pred,
-                              interval = "prediction",
-                              se.fit=T)$se.fit
-     rep_state_se <- predict(state_mod_rep, newdata = r_pred,
-                             interval="prediction",
-                             se.fit=T)$se.fit
-     print(dem_pooled_se)
-     print(dem_state_se)
-     
-     loop <-((i-1)*1000 + 1)
-     loop_end <- i*1000
-     
-     for(j in loop:loop_end){
-       dem_prediction <- pooled_w * rnorm(1, mean = dem_pooled_point, sd = dem_pooled_se) +
-         state_w * rnorm(1, mean = dem_state_point, sd = dem_state_se)
-       rep_prediction <- pooled_w * rnorm(1, mean = rep_pooled_point, sd = rep_pooled_se) +
-         state_w * rnorm(1, mean = rep_state_point, sd = rep_state_se)
-
-       
-       s_vec_dem[j] <- dem_prediction
-       s_vec_rep[j] <- rep_prediction
-       
-     }
-    
-    #  dem_prediction <- pooled_w * predict(pooled_mod_dem, newdata = d_pred) +
-    #    state_w * predict(state_mod_dem, newdata = d_pred)
-    # 
-    # rep_prediction <- pooled_w * predict(pooled_mod_rep, newdata = r_pred) +
-    #   state_w * predict(state_mod_rep, newdata = r_pred)
-
-    
-    # store those results in a vector
-    
-    # s_vec_dem[i] <- dem_prediction
-    # s_vec_rep[i] <- rep_prediction
-    
-    
-   }
-  
-  boot_results <- boot_results %>%
-    bind_rows(tibble(state = s,
-              dem_results = list(s_vec_dem),
-              rep_results = list(s_vec_rep)))
-  
-  
-  # take the median, 5%, and 95% percentile values from that vector
-  # store those numbers in a tibble of results
-}
-boot_results %>% unnest() %>%
-  ggplot() +
-  geom_histogram(aes(x = dem_results)) +
-  facet_wrap(~state)
-
-boot_results_calc <- boot_results %>%
-  unnest(c(dem_results, rep_results)) %>%
-  group_by(state) %>%
-  summarize(med_dem = median(dem_results),
-            fifth_dem = quantile(dem_results, prob = .05),
-            nin_f_dem = quantile(dem_results, prob = .95),
-            med_rep = median(rep_results),
-            fifth_rep = quantile(rep_results, prob = .05),
-            nin_f_rep = quantile(rep_results, prob = .95))
 
 
 
@@ -850,7 +722,7 @@ for(s in unique(counts$state)){
   
   # boostrapping
   
-  boot_size <- 10
+  boot_size <- 300
   s_vec_dem <- c(rep(NA,boot_size*1000))
   s_vec_rep <- c(rep(NA,boot_size*1000))
   sample_size <- nrow(dat_change)
@@ -897,17 +769,10 @@ for(s in unique(counts$state)){
     rep_pooled_point <- predict(pooled_mod_rep, newdata = r_pred)
     rep_state_point <- predict(state_mod_rep, newdata = r_pred)
     dem_pooled_se <- summary(pooled_mod_dem)$sigma
-    dem_state_se <- predict(state_mod_dem, newdata = d_pred,
-                            interval = "prediction",
-                            se.fit=T)$se.fit
-    rep_pooled_se <- predict(pooled_mod_rep, newdata = r_pred,
-                             interval = "prediction",
-                             se.fit=T)$se.fit
-    rep_state_se <- predict(state_mod_rep, newdata = r_pred,
-                            interval="prediction",
-                            se.fit=T)$se.fit
-    print(dem_pooled_se)
-    print(dem_state_se)
+    dem_state_se <- summary(state_mod_dem)$sigma
+    rep_pooled_se <- summary(pooled_mod_rep)$sigma
+    rep_state_se <- summary(state_mod_rep)$sigma
+
     
     loop <-((i-1)*1000 + 1)
     loop_end <- i*1000
@@ -923,18 +788,6 @@ for(s in unique(counts$state)){
       s_vec_rep[j] <- rep_prediction
       
     }
-    
-    #  dem_prediction <- pooled_w * predict(pooled_mod_dem, newdata = d_pred) +
-    #    state_w * predict(state_mod_dem, newdata = d_pred)
-    # 
-    # rep_prediction <- pooled_w * predict(pooled_mod_rep, newdata = r_pred) +
-    #   state_w * predict(state_mod_rep, newdata = r_pred)
-    
-    
-    # store those results in a vector
-    
-    # s_vec_dem[i] <- dem_prediction
-    # s_vec_rep[i] <- rep_prediction
     
     
   }
@@ -963,3 +816,133 @@ boot_results_calc <- boot_results %>%
             fifth_rep = quantile(rep_results, prob = .05),
             nin_f_rep = quantile(rep_results, prob = .95))
 
+ggplot(boot_results_calc, aes(x = state)) +
+  geom_pointrange(aes(y = med_dem, ymin = fifth_dem, ymax = nin_f_dem),
+                  colour = "blue") +
+  geom_pointrange(aes(y = med_rep, ymin = fifth_rep, ymax = nin_f_rep),
+                      colour = "red") +
+  coord_flip() +
+  theme_classic()
+
+bg_intervals <- boot_results_calc %>%
+  filter(state %in% battleground) %>%
+  ggplot(aes(x = state)) +
+  geom_pointrange(aes(y = med_dem, ymin = fifth_dem, ymax = nin_f_dem),
+                  colour = "blue") +
+  geom_pointrange(aes(y = med_rep, ymin = fifth_rep, ymax = nin_f_rep),
+                  colour = "red") +
+  coord_flip() +
+  theme_classic() +
+  labs(title = "Prediction Intervals: Battleground States",
+       x = "",
+       y = "Popular Vote") +
+  theme(plot.title = element_text(size = 16),
+        plot.subtitle = element_text(size = 16),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 14))
+
+nbg_intervals <- boot_results_calc %>%
+  filter(!(state %in% battleground)) %>%
+  ggplot(aes(x = state)) +
+  geom_pointrange(aes(y = med_dem, ymin = fifth_dem, ymax = nin_f_dem),
+                  colour = "blue") +
+  geom_pointrange(aes(y = med_rep, ymin = fifth_rep, ymax = nin_f_rep),
+                  colour = "red") +
+  coord_flip() +
+  theme_classic() +
+  labs(title = "Prediction Intervals: Non-Battleground States",
+       x = "",
+       y = "Popular Vote") +
+  theme(plot.title = element_text(size = 16),
+        plot.subtitle = element_text(size = 16),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 14))
+
+ggarrange(bg_intervals, nbg_intervals)
+ggsave("Gov1347-master/figures/final_pred_intervals.png")
+# getting in sample statistics for state models 
+
+library(rsample)
+
+insamp <- tibble()
+
+for(s in unique(counts$state)){
+  
+  # temp data
+  samp <- dat_change
+  
+  
+  # state models
+    
+  state_mod_dem <- lm(pv ~ avg_support, data = samp %>%
+                        filter(state == s,
+                               party == "democrat"))
+  
+  state_mod_rep <- lm(pv ~ avg_support,
+                      data = samp %>%
+                        filter(state == s,
+                               party == "republican"))
+
+  
+  # summarising
+  
+  sum_dem <- summary(state_mod_dem)
+  #print(sum_inc)
+  sum_rep <- summary(state_mod_rep)
+  
+  # errors
+  
+  vector_dem <- tibble(State = s,
+                       Model = "Democrat",
+                       Estimate = sum_dem$coefficients[2,1],
+                       MSE = mean(abs(state_mod_dem$residuals)),
+                       Adj_R_Squared = sum_dem$adj.r.squared
+  )
+  vector_rep <- tibble(State = s,
+                       Model = "Republican",
+                       Estimate = sum_rep$coefficients[2,1],
+                       MSE = mean(abs(state_mod_rep$residuals)),
+                       Adj_R_Squared = sum_rep$adj.r.squared
+  )
+  
+  insamp <- insamp %>%
+    bind_rows(vector_rep, vector_dem)
+  
+}
+
+d_in <- insamp %>%
+  filter(Model == "Democrat") %>%
+  drop_na()
+r_in <- insamp %>%
+  filter(Model == "Republican") %>%
+  drop_na()
+
+
+insamp_dem_hist <-
+  ggplot(d_in, aes(x = Adj_R_Squared)) +
+  geom_histogram(binwidth = .05) +
+  theme_classic() +
+  geom_vline(xintercept = .927,
+             color = "red",
+             linetype = "dotted",
+             size = 1.5) +
+  labs(title = "Distribution of Adj R Squared: Democrat",
+       subtitle = "Pooled Model Adj R Squared = .927",
+       x = "Adj R Squared",
+       y = "Count")
+
+insamp_rep_hist <-
+  ggplot(r_in, aes(x = Adj_R_Squared)) +
+  geom_histogram(binwidth = .05) +
+  theme_classic() +
+  geom_vline(xintercept = .901,
+             color = "red",
+             linetype = "dotted",
+             size = 1.5) +
+  labs(title = "Distribution of Adj R Squared: Republican",
+       subtitle = "Pooled Model Adj R Squared = .901",
+       x = "Adj R Squared",
+       y = "Count")
+
+ggarrange(insamp_dem_hist, insamp_rep_hist)
+ggsave("Gov1347-master/figures/final_state_r_hist.png")
