@@ -6,7 +6,7 @@ My final prediction model is a two sided ensemble model that uses both recent po
 
 The first component of my ensemble is a pooled model built from data across states. The Democrat model regresses popular vote on the average poll support one week out from the election and various demographic variables (see below for list). The Republican model regresses popular vote on just the average poll support one week out from the election.
 
-I chose to only use polls one week away from the election, because historically polls are more accurate the closer they are to the election. (https://www.semanticscholar.org/paper/Election-forecasting%3A-Too-far-out-Jennings-Lewis-Beck/7d0621cd3f984483652caf09e7764c88233948d7)
+I chose to only use polls one week away from the election, because historically polls are more accurate the closer they are to the [election](https://www.semanticscholar.org/paper/Election-forecasting%3A-Too-far-out-Jennings-Lewis-Beck/7d0621cd3f984483652caf09e7764c88233948d7).
 
 I chose to **not include** fundamentals economic data because of the unprecedented nature of 2020, as I discussed in a previous [blog post](econ.md). 
 
@@ -68,7 +68,7 @@ To predict the 2020 election, I used the average poll support for either Trump o
 ### Uncertainty:
 I simulated uncertainty in my model by taking advantage of bootstrapping. To find prediction intervals, I looked at the results of models built off of 300 bootstrapped samples. For each bootstrapped sample, I built a pooled and state model for every state. I then calculated a point prediction for each model using the same 2020 data as above and I also calculated the standard error of each model. For each model, I then took 1000 random samples from a normal distribution constructed with the aforementioned point prediction as the center and standard error as sigma. To get a prediction value, I combined the pooled and state model samples using the same weights as above. I saved each prediction value in a vector to create a distribution from which I could calculate prediction intervals. I calculated prediction intervals by taking the 5th and 95th percentile of the prediction value distributions. The graphic below shows these prediction intervals. 
 
-![img[(Gov1347-master/figures/final_pred_intervals.png)
+![img](Gov1347-master/figures/final_pred_intervals.png)
 
 #### Discussion:
 > - There is a fair amount of uncertainty in many battleground states
