@@ -12,6 +12,8 @@ I chose to **not include** fundamentals economic data because of the unprecedent
 
 See the table below for regression results.
 
+![img](Gov1347-master/figures/star_final.html)
+
 #### Discussion:
 
 > - The Republiican model shows that there is on average a small positive relationship between polls and popular vote, specifically that as average poll support increases by 1%, actual popular vote share increases by .041%
