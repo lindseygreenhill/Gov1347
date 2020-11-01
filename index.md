@@ -14,3 +14,5 @@
 ### [Demographics - October 17, 2020](demographics.md)
 
 ### [Covid-19 - October 24, 2020](shocks.md)
+
+### [Final Election Prediction - November 1, 2020](final_prediction.md)
