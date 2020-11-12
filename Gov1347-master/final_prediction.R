@@ -946,3 +946,8 @@ insamp_rep_hist <-
 
 ggarrange(insamp_dem_hist, insamp_rep_hist)
 ggsave("Gov1347-master/figures/final_state_r_hist.png")
+
+results_base_final_2 <- results_base_final_1 %>%
+  mutate(dem_2p = dem * 100 / (dem + rep),
+         rep_2p = 100 - dem_2p) %>%
+  select(state, dem_2p, rep_2p)
