@@ -5,11 +5,13 @@ library(webshot)
 library(kableExtra)
 library(gt)
 library(statebins)
+library(reshape2)
 library(stargazer)
 library(rsample)
 library(janitor)
 library(ggpubr)
 library(ggrepel)
+library(Metrics)
 
 # getting current election results from google sheets
 
@@ -106,25 +108,54 @@ pred_vs_actual_margins <-  pred_results_c %>%
        subtitle = "Model tended to underestimate Trump",
        x = "Predicted Margin",
        y = "Actual Margin")
-# RMSE calculations
 
-# first doing trump RMSE. Right now it's really high mostly because of NY. As
-# votes come in it should go down
+# plot of errors. This is actual minus predicted
 
-trump_RMSE <- pred_results_c %>%
-  mutate(trump_pop_vote = trump_pop_vote * 100) %>%
-  mutate(sq_error = (trump_pop_vote - trump_pred)^2) %>%
-  summarize(RMSE = sqrt(sum(sq_error)))
+errors <- pred_results_c %>%
+  mutate(error = biden_margin - pred_win_margin) %>%
+  select(state, error) %>%
+  arrange(error) %>%
+  ggplot(aes(x = reorder(state, error), y = error)) +
+  geom_col(fill = "indianred") +
+  coord_flip() +
+  theme_classic() +
+  labs(title = "Prediction Errors",
+       subtitle = "Model systematically underestimated Trump",
+       x = "",
+       y = "Prediction Error")
 
-# very high. Mostly because of Idaho, RH, NY
+ggarrange(pred_vs_actual_margins, errors)
 
-biden_RMSE <- pred_results_c %>%
-  mutate(biden_pop_vote = biden_pop_vote * 100) %>%
-  mutate(sq_error = (biden_pop_vote - biden_pred)^2) %>%
-  summarize(RMSE = sqrt(sum(sq_error)))
+RMSE_all <- rmse(actual = pred_results_c$biden_margin, predicted = pred_results_c$pred_win_margin)
 
-# very high, Mostly because of NY, RI, ND, ID, WV, SD, NE, MT, UT
+# battleground states
 
-margin_RMSE <- pred_results_c %>%
-  mutate(sq_error = (biden_margin - pred_win_margin)^2) %>%
-  summarize(RMSE = sqrt(sum(sq_error)))
+battleground <- c("Arizona", "Georgia",
+                  "Ohio",
+                  "Florida",
+                  "New Hampshire",
+                  "Nevada",
+                  "Michigan",
+                  "Pennsylvania",
+                  "Minnesota",
+                  "Wisconsin",
+                  "Michigan",
+                  "North Carolina",
+                  "Iowa",
+                  "Texas")
+
+pred_battleground <- pred_results_c %>%
+  filter(state %in% battleground)
+
+pred_not_battleground <- pred_results_c %>%
+  filter(!state %in% battleground)
+
+RMSE_bg <- rmse(actual = pred_battleground$biden_margin, predicted = pred_battleground$pred_win_margin)
+RMSE_nbg <- rmse(actual = pred_not_battleground$biden_margin, predicted = pred_not_battleground$pred_win_margin)
+
+RMSE_tab <- tibble(States = c("All States", "Battleground States", "Non Battleground States"),
+                   RMSE = c(RMSE_all, RMSE_bg, RMSE_nbg)) %>%
+  gt() %>%
+  tab_header(title = "Model RMSE",
+             subtitle = "Model performed better in Battleground States")
+
