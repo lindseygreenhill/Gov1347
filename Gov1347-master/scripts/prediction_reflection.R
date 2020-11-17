@@ -13,19 +13,13 @@ library(ggpubr)
 library(ggrepel)
 library(Metrics)
 
-# getting current election results from google sheets
+# getting current election results from csv
 
-results <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1faxciehjNpYFNivz-Kiu5wGl32ulPJhdJTDsULlza5E/edit#gid=0") %>%
-  clean_names() %>%
-  slice(-1) %>%
-  mutate(state = geographic_name,
-         total_vote = as.double(total_vote),
-         biden_votes = as.double(joseph_r_biden_jr),
-         trump_votes = as.double(donald_j_trump),
-         biden_pop_vote = biden_votes / total_vote,
-         trump_pop_vote = trump_votes / total_vote,
-         biden_margin = 100*(biden_pop_vote - trump_pop_vote)) %>%
-  select(state, biden_pop_vote, trump_pop_vote, biden_margin)
+results <- read_csv("Gov1347-master/data/popvote_bystate_1948-2020.csv") %>%
+  filter(year == 2020) %>%
+  mutate(biden_pop_vote = D / total,
+         trump_pop_vote = R / total,
+         biden_margin = 100*(biden_pop_vote - trump_pop_vote))
 
 # reading in final prediction data
 
