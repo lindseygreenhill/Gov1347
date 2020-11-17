@@ -153,3 +153,7 @@ RMSE_tab <- tibble(States = c("All States", "Battleground States", "Non Battlegr
   tab_header(title = "Model RMSE",
              subtitle = "Model performed better in Battleground States")
 
+
+# hypothetical test. Adjust the polling numbers used to predict by the error.
+# Also adjust the hispanic voting effect. 
+
