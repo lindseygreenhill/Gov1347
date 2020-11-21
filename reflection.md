@@ -33,3 +33,14 @@ My model correctly predicted 48 out of 51 states (including DC), but how close w
 > - In states where I predicted Trump would win (those in the bottom left quadrant), I for the most part underestimated Trump's win margin
 > - In states where I predicted Biden would win (those in the top right quadrant), I for the most part overestimated his Biden's win margin
 > - The states that I predicted Biden would win but didn't are in the bottom right quadrant (Florida, North Carolina, and Iowa)
+
+The graphic below visualizes these errors in another way. 
+
+![errors_2](Gov1347-master/figures/reflection_margin_errors_bar.png)
+
+##### Discussion
+
+> - My model performed the worst in New York, where I predicted Biden would win with a 30.8% margin. As of the last time I checked, Biden only by 12.7 points. However, not all of the votes had been counted so that margin could change.
+> - The only states I overestimated Biden's vote margin are Louisiana, Maryland, and Illinois.
+> - My model was very close in Illinois, Hawaii, Geogia, Vermont, California, and Colorado. 
+> - As I discussed above, the takeaway from these errors is that I underestimated Trump in most states. 
