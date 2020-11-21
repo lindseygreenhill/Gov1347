@@ -45,3 +45,9 @@ The graphic below visualizes these errors in another way.
 > - The only states I overestimated Biden's vote margin are Louisiana, Maryland, and Illinois.
 > - My model was very close in Illinois, Hawaii, Geogia, Vermont, California, and Colorado. 
 > - As I discussed above, the takeaway from these errors is that I underestimated Trump in most states. 
+
+### Some statistics
+
+Overall given the data above, my model had a RMSE of **6.7**. It performed slightly better in battleground states (AZ, GE, OH, FL, NH, NV, MI, PA, MN, WI, NC, IA, TX) than non battleground states. 
+
+![tab](Gov1347-master/figures/reflection_RMSE.png)
