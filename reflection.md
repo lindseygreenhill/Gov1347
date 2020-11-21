@@ -48,6 +48,16 @@ The graphic below visualizes these errors in another way.
 
 ### Some statistics
 
-Overall given the data above, my model had a RMSE of **6.7**. It performed slightly better in battleground states (AZ, GE, OH, FL, NH, NV, MI, PA, MN, WI, NC, IA, TX) than non battleground states. 
+Overall given the data above, my model had a RMSE of **6.7**. It performed slightly better in battleground states (AZ, GE, OH, FL, NH, NV, MI, PA, MN, WI, NC, IA, TX) than non battleground states. For reference, the RMSE of Nate Silver's 538 model was 
 
 ![tab](Gov1347-master/figures/reflection_RMSE.png)
+
+### Where did it go wrong?
+
+There are a few places where my model could've gone wrong. For one, my model relied heavily on **polling data**, and, as with 2016, the polls for 2020 were not particularly accurate. Secondly, my model also relied on demographic data, and I 
+
+#### What went wrong in the polls?
+
+There are a few theories as to what was wrong with the polls. 
+ > - Most believe that the education distribution problem from 2016 were corrected for 2020
+ > - 
