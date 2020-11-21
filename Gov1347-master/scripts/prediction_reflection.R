@@ -64,6 +64,7 @@ results_plot <- pred_results_c %>%  ##`statebins` needs state to be character, n
   theme(legend.position = "none")
 
 ggarrange(prediction_plot, results_plot)
+ggsave("Gov1347-master/figures/reflection_results_map.png")
 
 
 # showing close ups of states I got wrong (FL, NC, IA)
@@ -82,8 +83,10 @@ pred_results_c %>%
   theme_classic() +
   labs(x = "",
        y = "Biden Vote Margin",
-       title = "Missing States Winn Margins",
+       title = "Missing States Win Margins",
        subtitle = "Trump wins tight races NC, IA, FL")
+
+ggsave("Gov1347-master/figures/reflection_missing_states.png")
 
 
 # doing plot of how win margins are
@@ -103,6 +106,8 @@ pred_vs_actual_margins <-  pred_results_c %>%
        x = "Predicted Margin",
        y = "Actual Margin")
 
+ggsave("Gov1347-master/figures/reflection_margin_errors.png")
+
 # plot of errors. This is actual minus predicted
 
 errors <- pred_results_c %>%
@@ -118,7 +123,9 @@ errors <- pred_results_c %>%
        x = "",
        y = "Prediction Error")
 
-ggarrange(pred_vs_actual_margins, errors)
+ggsave("Gov1347-master/figures/reflection_margin_errors_bar.png")
+
+# ggarrange(pred_vs_actual_margins, errors)
 
 RMSE_all <- rmse(actual = pred_results_c$biden_margin, predicted = pred_results_c$pred_win_margin)
 
@@ -152,6 +159,8 @@ RMSE_tab <- tibble(States = c("All States", "Battleground States", "Non Battlegr
   gt() %>%
   tab_header(title = "Model RMSE",
              subtitle = "Model performed better in Battleground States")
+
+gtsave(RMSE_tab, "Gov1347-master/figures/reflection_RMSE.png")
 
 
 # hypothetical test. Adjust the polling numbers used to predict by the error.
