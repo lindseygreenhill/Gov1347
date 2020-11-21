@@ -18,6 +18,7 @@ My model predicted that Biden would win with 356 electoral votes. So, where was 
 > - My model incorrectly predicted 3 states (Florida, North Carolina, and Iowa)
 > - All of these states went to Trump
 > - These states' 50 electoral votes (FL 29, NC 15, IA 6) make up the difference between the actual electoral vote count and my predicted vote count 
+> - These results translate into my model being abouot 94% accurate
 
 *Note:* My model did not account for the different electoral vote districts in Nebraska and Maine, which both ended up voting for the opposite party from the rest of the state. Maine's electoral district voted republican and Nebraska's voted democrat. If I redid my model, I would account for these districts. 
 
