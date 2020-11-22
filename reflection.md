@@ -58,6 +58,12 @@ There are a few places where my model could've gone wrong. For one, my model rel
 
 #### What went wrong in the polls?
 
-There are a few theories as to what was wrong with the polls. 
- > - Most believe that the education distribution problem from 2016 were corrected for 2020
- > - 
+There are a few theories as to what was wrong with the polls. I've summarised a few of them below.
+
+ > - First, some think that Covid-19/quarantine exaggerated response bias as democrats answered polls at higher rates
+ > - At the same time, Republican voters answered polls at lower rates (according to the NYT, due in part to a general distrust of institutions and the media)
+ > - The record turnout rate this year also made it more difficult for pollsters to predict what the electorate would be like (which affects how they weight the poll results)
+ > - The shy Trump theory is still plausible (people won't expose themselves as a Trump supporter), but not likely to be the main culprit in 2020 
+ 
+ *Note:* Summarised from [NPR](https://www.npr.org/2020/11/19/936317341/why-were-the-polls-off-pollsters-have-some-early-theories) and [NYT](https://www.nytimes.com/2020/11/12/us/politics/election-polls-trump-biden.html)
+
