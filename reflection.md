@@ -5,7 +5,7 @@ Lindsey Greenhill
 
 #### Introduction
 
-Joe Biden won the 2020 election with 306 electoral votes. Donald Trump lost with 232. This blog post will look at how well [my model](final_prediction.md) predicted these results. Spoiler alert: it left something to be desired. 
+Joe Biden won the 2020 election with 306 electoral votes. Donald Trump lost with 232. This blog post will look at how well my model predicted these results. Spoiler alert: it left something to be desired. To get a detailed summary of my model, look at my [Final Prediction](final_prediction.md) blog post. As a quick refresher, my model is an ensemble of pooled and indosyncratic models that incorporate both polling and demographic data. 
 
 ### What happened on a state by state basis?
 
@@ -61,7 +61,7 @@ My model incorrectly predicted that Biden would win Iowa, North Carolina, and Fl
 
 ### Some statistics
 
-Overall given the data above, my model had a RMSE of **6.7**. It performed slightly better in battleground states (AZ, GE, OH, FL, NH, NV, MI, PA, MN, WI, NC, IA, TX) than non battleground states. For reference, the RMSE of Nate Silver's 538 model was 
+Overall given the data above, my model had a RMSE of **6.7**. It performed slightly better in battleground states (AZ, GE, OH, FL, NH, NV, MI, PA, MN, WI, NC, IA, TX) than non battleground states. 
 
 ![tab](Gov1347-master/figures/reflection_RMSE.png)
 
