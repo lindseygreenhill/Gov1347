@@ -80,6 +80,9 @@ There are a few theories as to what was wrong with the polls. I've summarised a 
  
  *Note:* Summarised from [NPR](https://www.npr.org/2020/11/19/936317341/why-were-the-polls-off-pollsters-have-some-early-theories) and [NYT](https://www.nytimes.com/2020/11/12/us/politics/election-polls-trump-biden.html)
  
- #### And the demographics?
+#### And the demographics?
+
+There are two demographic groups that did not vote the way they were supposed to in key areas. First and very publicized, Hispanics in Miami Dade county did not support Biden as fervently as many believed they would. As a reminder, my model predicts that an increase in the Hispanic population is correlated with an increase in the Democrat vote share. However, the Hispanic population in Miami Dade county (heavily comprised of Cubans) voted more Republican than they had historically. Many believe that this support for Trump is why Biden lost Florida. 
+ 
  
 
