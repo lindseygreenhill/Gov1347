@@ -90,7 +90,7 @@ There are two demographic groups that did not vote the way they were supposed to
 There are a few different quantitative tests one could run to test the above hypotheses. 
 
 > - To test how the polls were affected by Corona, you could gather data to test if the response bias meaningfully influenced the polls, but gathering this data retrospectively could be difficult.
-> - Testing the shy Trump theory could also be difficult. If one assumes that social pressure is large reason why a voter might not want to admit their intentions to vote for Trump, you could compare polling results in areas that largely favor Biden vs. areas that largely favor Trump, as some have [already done].
+> - Testing the shy Trump theory could also be difficult. If one assumes that social pressure is large reason why a voter might not want to admit their intentions to vote for Trump, you could compare polling results in areas that largely favor Biden vs. areas that largely favor Trump, as some have [already done](https://www.pewresearch.org/fact-tank/2020/11/13/understanding-how-2020s-election-polls-performed-and-what-it-might-mean-for-other-kinds-of-survey-work/).
  
  
 
