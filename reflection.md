@@ -83,6 +83,14 @@ There are a few theories as to what was wrong with the polls. I've summarised a 
 #### And the demographics?
 
 There are two demographic groups that did not vote the way they were supposed to in key areas. First and very publicized, Hispanics in [Miami Dade county](https://www.nytimes.com/2020/11/21/us/miami-hispanic-voters.html) did not support Biden as fervently as many believed they would. As a reminder, my model predicts that an increase in the Hispanic population is correlated with an increase in the Democrat vote share. However, the Hispanic population in Miami Dade county (heavily comprised of Cubans) voted more Republican than they had historically. Many believe that this support for Trump is why Biden lost Florida. Second, Trump actually won more of the black vote than other Republican candidates in [recent elections](https://www.theguardian.com/commentisfree/2020/nov/14/joe-biden-trump-black-latino-republicans). My model predicts that on average an increase in Black voters corresponds with an increase in the Democrat vote share. If Black voters did in fact vote more for Trump than predicted, that would throw off my results in favor of Biden.
+
+
+### How could I test these theories?
+
+There are a few different quantitative tests one could run to test the above hypotheses. 
+
+> - To test how the polls were affected by Corona, you could gather data to test if the response bias meaningfully influenced the polls, but gathering this data retrospectively could be difficult.
+> - Testing the shy Trump theory could also be difficult. If one assumes that social pressure is large reason why a voter might not want to admit their intentions to vote for Trump, you could compare polling results in areas that largely favor Biden vs. areas that largely favor Trump, as some have [already done].
  
  
 
