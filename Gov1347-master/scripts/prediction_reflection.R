@@ -99,7 +99,7 @@ pred_vs_actual_margins <-  pred_results_c %>%
   geom_hline(yintercept = 0,  size = .25) +
   geom_abline(intercept = 0, slope = 1, color = "blue",
               linetype = "dashed") +
-  geom_text(check_overlap = TRUE) +
+  geom_text() +
     theme_classic() +
   labs(title = "Actual vs Predicted Biden Vote Margin",
        subtitle = "Model tended to underestimate Trump",
