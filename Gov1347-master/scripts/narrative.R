@@ -35,8 +35,9 @@ stargazer::stargazer(fit1, fit2, type = "text")
 
 avg_latino <- mean(ns_df_1$vote_lm[ns_df_1$is_hispanic == 1]) - 1
 
+# plot of nationailties
 
-ns_df_1 %>%
+plot_1 <- ns_df_1 %>%
   filter(is_hispanic == 1) %>%
   group_by(hispanic) %>%
   summarise(mean_vote = mean(vote_lm)) %>%
@@ -49,20 +50,56 @@ ns_df_1 %>%
                      breaks = c(0,1),
                      labels = c("Trump", "Biden")) +
   coord_flip()  +
-  theme_classic()
+  theme_classic() +
+  labs(title = "Avg Vote amongst Nationalities",
+        subtitle = "Predicted votes vary greatly",
+        x = "Nationality",
+        y = "Average Vote")  +
+  theme(legend.position = "none")
+
+ggsave("Gov1347-master/figures/narrative_nation_vote.png")
+
+# recoding pres approval to numbers
+
+ns_df_2 <- ns_df_1 %>%
+  filter(pres_approval != "Not sure") %>%
+  mutate(pres_approval = case_when(pres_approval == "Strongly approve" ~ 1,
+                                   pres_approval == "Somewhat approve" ~ 2,
+                                   pres_approval == "Somewhat disapprove" ~ 3,
+                                   pres_approval == "Strongly disapprove" ~ 4))
+
+ns_df_2 %>% filter(is_hispanic == 1) %>%
+  ggplot(aes(x = pres_approval))+
+  geom_histogram(binwidth = .5)
+
+fit_3 <- lm(pres_approval ~ is_hispanic, data = ns_df_2)
+summary(fit_3)
+
+fit_4 <- lm(pres_approval ~ hispanic, data = ns_df_2)
+summary(fit_4)
+
+stargazer::stargazer(fit_3, fit_4, type = "text")
+
+avg_app <- mean(ns_df_2$pres_approval[ns_df_2$is_hispanic == 1])
+
+plot_2 <- ns_df_2 %>%
+  filter(is_hispanic == 1) %>%
+  group_by(hispanic) %>%
+  summarise(mean_app = mean(pres_approval)) %>%
+  ggplot(aes(x = hispanic, y = mean_app, fill = hispanic)) +
+  geom_col() +
+  geom_hline(yintercept = avg_app,
+             size = 1.5, linetype = "dashed") +
+  scale_y_continuous(limits = c(0,4.5),
+                     breaks = c(1,2,3,4),
+                     labels = c("Strongly approve", "Somewhat approve",
+  "Somewhat disapprove", "Strongly disapprove")) +
+  coord_flip()  +
+  theme_classic() +
+  labs(title = "Avg Approval amongst Nationalities",
+       subtitle = "Attitudes vary greatly",
+       x = "Nationality",
+       y = "Average Approval")  +
+  theme(legend.position = "none")
 
 
-ns_df_1 %>%
-  drop_na() %>%
-  ggplot(aes(x = is_hispanic, y = vote_2020)) +
-  geom_point(position = "jitter")
-
-is_h_fit <- lm(vote_2020 ~ is_hispanic, data = ns_df_1)
-summary(is_h_fit)
-
-ns_df_2 <- lm(vote_2020 ~ factor(hispanic),  data = ns_df_1)
-summary(ns_df_2)
-
-ns_df_1 %>%
-  ggplot(aes(x = is_hispanic, y = vote_2020, col = factor(hispanic))) +
-  geom_point(position = "jitter")
