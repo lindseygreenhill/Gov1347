@@ -11,4 +11,6 @@ Per the [Pew Research Center](https://www.pewresearch.org/fact-tank/2020/01/31/w
 
 After the election, many media outlets claimed that the Latino vote had a major impact on the election. [Some say](https://www.washingtonpost.com/politics/2020/11/04/what-election-results-so-far-tell-us-about-latino-vote/) that the Latino vote is why Biden performed so well in Texas, Arizona, and Virginia. On the other hand, many also claim that the Latino vote is why Biden lost Florida. But how can that be that the Latino vote had such differing effects across states? The answer seems to be that there is no unified Latino vote, and maybe there never was. 
 
+There is good reason to believe that this is, in fact, the case. 
+
 
