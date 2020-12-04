@@ -10,8 +10,14 @@ As 2020 comes to a close, it’s hard not to be excited about what the next year
 
 Per the [Pew Research Center](https://www.pewresearch.org/fact-tank/2020/01/31/where-latinos-have-the-most-eligible-voters-in-the-2020-election/), Latinos made up just over 13% of the US eligible voter population in 2020. In 2016, the group accounted for just under 12%. In 2016, Trump won 28% of the Latino vote, and in 2020 he won 32%. In 2016, Clinton won about 66% of the Latino vote, and in 2020 Biden won the same. 
 
-After the election, many media outlets claimed that the Latino vote had a major impact on the election. [Some say](https://www.washingtonpost.com/politics/2020/11/04/what-election-results-so-far-tell-us-about-latino-vote/) that the Latino vote is why Biden performed so well in Texas, Arizona, and Virginia. On the other hand, many also claim that the Latino vote is why Biden lost Florida. But how can that be that the Latino vote had such differing effects across states? The answer seems to be that there is no unified Latino vote, and maybe there never was. 
+After the election, many media outlets claimed that the Latino vote had a major impact on the election. [Some say](https://www.washingtonpost.com/politics/2020/11/04/what-election-results-so-far-tell-us-about-latino-vote/) that the Latino vote is why Biden performed so well in Texas, Arizona, and Virginia. On the other hand, many also claim that the Latino vote is why Biden lost Florida. But how can that be that the Latino vote had such differing effects across states? 
 
-There is good reason to believe that this is, in fact, the case. 
+Flashy headlines about this question appeared in publications across the political spectrum with an answer – **there is no unified Latino vote, and maybe there never was.**
+
+> - See *Time Magazine's* November 10 article "Why It's a Mistake to Simplify the 'Latino Vote'"
+> - See *The Washington Post's* November 4 article "What the election results so far tell us about the Latino vote"
+> - See *CNN's* November 9 article "'There's no such thing as the Latino vote.' 2020 results reveal a complex electorate"
+
+
 
 
