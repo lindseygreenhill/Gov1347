@@ -18,6 +18,10 @@ Flashy headlines about this question appeared in publications across the politic
 > - See *The Washington Post's* November 4 [article](https://www.washingtonpost.com/politics/2020/11/04/what-election-results-so-far-tell-us-about-latino-vote/) "What the election results so far tell us about the Latino vote"
 > - See *CNN's* November 9 [article](https://www.cnn.com/2020/11/09/politics/latino-voters-florida-texas-arizona/index.html) "'There's no such thing as the Latino vote.' 2020 results reveal a complex electorate"
 
+## Testing the narrative
+
+Is this media narrative true? Is it a mistake to consider the Latino vote as a unified entity? My intial thought it that there are many reasons why the narrative could be true. Considering that voters classified as Latino may come from many different nationalities, it would make sense that different subgroups have different political leanings and values. 
+
 
 
 
