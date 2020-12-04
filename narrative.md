@@ -14,9 +14,9 @@ After the election, many media outlets claimed that the Latino vote had a major 
 
 Flashy headlines about this question appeared in publications across the political spectrum with an answer – **there is no unified Latino vote, and maybe there never was.**
 
-> - See *Time Magazine's* November 10 article "Why It's a Mistake to Simplify the 'Latino Vote'"
-> - See *The Washington Post's* November 4 article "What the election results so far tell us about the Latino vote"
-> - See *CNN's* November 9 article "'There's no such thing as the Latino vote.' 2020 results reveal a complex electorate"
+> - See *Time Magazine's* November 10 [article](https://time.com/5907525/latino-vote-2020-election/) "Why It's a Mistake to Simplify the 'Latino Vote'"
+> - See *The Washington Post's* November 4 [article](https://www.washingtonpost.com/politics/2020/11/04/what-election-results-so-far-tell-us-about-latino-vote/) "What the election results so far tell us about the Latino vote"
+> - See *CNN's* November 9 [article](https://www.cnn.com/2020/11/09/politics/latino-voters-florida-texas-arizona/index.html) "'There's no such thing as the Latino vote.' 2020 results reveal a complex electorate"
 
 
 
