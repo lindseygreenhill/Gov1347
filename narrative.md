@@ -1,5 +1,6 @@
 # The 2020 Election and the Latino Vote
 December 6, 2020
+
 Lindsey Greenhill
 
 ## Introduction
