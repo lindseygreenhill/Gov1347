@@ -20,7 +20,9 @@ Flashy headlines about this question appeared in publications across the politic
 
 ## Testing the narrative
 
-Is this media narrative true? Is it a mistake to consider the Latino vote as a unified entity? My intial thought it that there are many reasons why the narrative could be true. Considering that voters classified as Latino may come from many different nationalities, it would make sense that different subgroups have different political leanings and values. For example, Cuban Americans and Venezualan Americans might be more wary of left leaning governments influenced by socialism compared to Mexican Americans or Puerto Rican Americans.
+Is this media narrative true? Is it a mistake to consider the Latino vote as a unified entity? My intial thought it that there are many reasons why the narrative could be true. Considering that voters classified as Latino may come from many different nationalities, it would make sense that different subgroups have different political leanings and values. For example, Cuban Americans and Venezualan Americans might be more wary of left leaning governments influenced by socialism compared to Mexican Americans or Puerto Rican Americans. In line with this logic, I expect that simply being Latino would be a poor predictor of an individual's vote.
+
+To test this theory empirically, I gathered data from 
 
 
 
