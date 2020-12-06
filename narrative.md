@@ -24,7 +24,20 @@ Is this media narrative true? Is it a mistake to consider the Latino vote as a u
 
 To test this theory empirically, I gathered data from the UCLA Democracy Fund Voter Study Group Nationscape survey. The survey, directed by Lynn Vavreck and Chris Tausanovitch, was conducted in June of 2020 and asked individuals a series of questions related to the election. I looked at a question that asked individuals about their intended vote: "if the election for president were going to be held now and the Democratic nominee was Joe Biden and the Republican nominee was Donald Trump, would you vote for..." as a proxy for each respondent's predicted vote (I excluded "I don't know" answers). I regressed the predicted vote on an is_hispanic indicator variable. I also regressed the predicted vote on a nationality factor variable to see if nationality is a better predictor than the first broader variable. See the regression results below:
 
-![reg]()
+![reg](Gov1347-master/figures/narr_star_1.png)
+
+#### Discussion
+
+> - The first regression model accounts for nearly no variation in the model, showing that hispanic-ness is not a good predictor of predicted vote 
+> - This finding supports the media narrative that there is no unified Latino vote
+> - Incuding a nationality factor definitely variable improves the model, although the second regression does not account for a substantial amount of variability either
+> - I wanted to further investigate how different nationalities' predicted votes compare to each other
+
+### Comparing different nationalities
+
+The regression results above suggest that different nationalities within the broad Latino category could have interesting differences. I wanted to look more closely at these differences. The graphic below shows the average predicted votes of each group where a group's predicted vote is 0 if 100% of the group wanted to vote for Trump and 1 if 100% of the group wanted to vote for Biden. 
+
+![img](Gov1347-master/figures/narrative_nation_vote.png)
 
 
 
