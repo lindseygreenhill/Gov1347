@@ -35,7 +35,7 @@ To test this theory empirically, I gathered data from the UCLA Democracy Fund Vo
 
 ### Comparing different nationalities
 
-The regression results above suggest that different nationalities within the broad Latino category could have interesting differences. I wanted to look more closely at these differences. The graphic below shows the average predicted votes of each group where a group's predicted vote is 0 if 100% of the group wanted to vote for Trump and 1 if 100% of the group wanted to vote for Biden. 
+The regression results above suggest that different nationalities within the broad Latino category could have interesting differences. I wanted to look more closely at these differences. The graphic below shows the average predicted votes of each group where a group's predicted vote is 0 if 100% of the group wanted to vote for Trump and 1 if 100% of the group wanted to vote for Biden.  
 
 ![img](Gov1347-master/figures/narrative_nation_vote.png)
 
