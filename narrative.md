@@ -24,7 +24,7 @@ Is this media narrative true? Is it a mistake to consider the Latino vote as a u
 
 To test this theory empirically, I gathered data from the UCLA Democracy Fund Voter Study Group Nationscape survey. The survey, directed by Lynn Vavreck and Chris Tausanovitch, was conducted in June of 2020 and asked individuals a series of questions related to the election. I looked at a question that asked individuals about their intended vote: "if the election for president were going to be held now and the Democratic nominee was Joe Biden and the Republican nominee was Donald Trump, would you vote for..." as a proxy for each respondent's predicted vote (I excluded "I don't know" answers). I regressed the predicted vote on an is_hispanic indicator variable. I also regressed the predicted vote on a nationality factor variable to see if nationality is a better predictor than the first broader variable. See the regression results below:
 
-![reg]()
+![reg](Gov1347-master/figures/narr_star_1.png)
 
 
 
