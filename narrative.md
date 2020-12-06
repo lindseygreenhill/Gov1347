@@ -20,7 +20,7 @@ Flashy headlines about this question appeared in publications across the politic
 
 ## Testing the narrative
 
-Is this media narrative true? Is it a mistake to consider the Latino vote as a unified entity? My intial thought is that there are many reasons why the narrative could be true. Considering that voters classified as Latino may come from many different nationalities, it would make sense that different subgroups have different political leanings and values. For example, Cuban Americans and Venezuelan Americans might be more wary of left leaning governments influenced by socialism compared to Mexican Americans or Puerto Rican Americans. In line with this logic, I expect that simply being Latino would be a poor predictor of an individual's vote.
+Is this media narrative true? Is it a mistake to consider the Latino vote as a unified entity? My initial thought is that there are many reasons why the narrative could be true. Considering that voters classified as Latino may come from many different nationalities, it would make sense that different subgroups have different political leanings and values. For example, Cuban Americans and Venezuelan Americans might be more wary of left leaning governments influenced by socialism compared to Mexican Americans or Puerto Rican Americans. In line with this logic, I expect that simply being Latino would be a poor predictor of an individual's vote.
 
 To test this theory empirically, I gathered data from the UCLA Democracy Fund Voter Study Group Nationscape [survey](https://www.voterstudygroup.org/nationscape). The survey, directed by Lynn Vavreck and Chris Tausanovitch, was conducted in June of 2020 and asked individuals a series of questions related to the election. I looked at a question that asked individuals about their intended vote: "if the election for president were going to be held now and the Democratic nominee was Joe Biden and the Republican nominee was Donald Trump, would you vote for..." as a proxy for each respondent's predicted vote (I excluded "I don't know" answers). I regressed the predicted vote on an is_hispanic indicator variable which reflects if a respondent classified themselves as Hispanic or Latino. I also regressed the predicted vote on a nationality factor variable to see if nationality is a better predictor than the first broader variable. See the regression results below:
 
@@ -30,7 +30,7 @@ To test this theory empirically, I gathered data from the UCLA Democracy Fund Vo
 
 > - The first regression model accounts for nearly no variation in the model, showing that hispanic-ness is not a good predictor of vote 
 > - This finding supports the media narrative that there is no unified Latino vote
-> - Incuding a nationality factor definitely variable improves the model, although the second regression does not account for a substantial amount of variability either
+> - Including a nationality factor definitely variable improves the model, although the second regression does not account for a substantial amount of variability either
 > - I wanted to further investigate how different nationalities' predicted votes compare to each other
 
 ### Comparing different nationalities
@@ -51,7 +51,7 @@ The regression results above suggest that different nationalities within the bro
 
 My analyses provide some preliminary evidence that there is no unified Latino vote. My regression analysis shows that being Latino is a poor predictor of an individual's vote and that nationality may be a better predictor. I also showed that the nationality subgroups that make up the Latino category have apparent differing political leans with some groups supporting Trump more on average and some groups supporting Biden more on average. 
 
-If I were to continue this analysis, I would like a larger data set that include more members of each nationality subgroup. It would also be interesting to see similarities or disimilarities between groups on more qualitative opinion questions related to topics such as immigration or religion. I would also like to gather similar data from previous years and see if there is any tightening or broadening of the unification of the "Latino vote" across time. 
+If I were to continue this analysis, I would like a larger data set that include more members of each nationality subgroup. It would also be interesting to see similarities or dissimilarities between groups on more qualitative opinion questions related to topics such as immigration or religion. I would also like to gather similar data from previous years and see if there is any tightening or broadening of the unification of the "Latino vote" across time. 
 
 
 
