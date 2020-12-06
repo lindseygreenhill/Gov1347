@@ -18,3 +18,5 @@
 ### [Final Election Prediction - November 1, 2020](final_prediction.md)
 
 ### [Post Election Reflection - November 23, 2020](reflection.md)
+
+### [Post Election Narrative - December 6, 2020](narrative.md)
