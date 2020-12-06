@@ -39,6 +39,13 @@ The regression results above suggest that different nationalities within the bro
 
 ![img](Gov1347-master/figures/narrative_nation_vote.png)
 
+#### Discussion
+> - First it is of note of the differing number of observations in the data set where certain subgroups have relatively low numbers
+> - The dotted line is the average "Latino Vote" and leans more towards Biden, however, the average predicted vote amongst the groups vary drastically
+> - The Cuban vote in particular leans towards Trump, as does the Argentinian and Colombian votes
+> - The Venezuelan, Spanish, Panamanian, Salvadoorean, and Ecuadorian votes are also below the average vote line
+> - The Puerto Rican, Peruvian, Nicaraguan, Guatemalan, and Mexican votes are above the average vote line
+
 
 
 
