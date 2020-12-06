@@ -26,6 +26,17 @@ To test this theory empirically, I gathered data from the UCLA Democracy Fund Vo
 
 ![reg](Gov1347-master/figures/narr_star_1.png)
 
+#### Discussion
+
+> - The first regression model accounts for nearly no variation in the model, showing that hispanic-ness is not a good predictor of predicted vote 
+> - This finding supports the media narrative that there is no unified Latino vote
+> - Incuding a nationality factor definitely variable improves the model, although the second regression does not account for a substantial amount of variability either
+> - I wanted to further investigate how different nationalities' predicted votes compare to each other
+
+### Comparing different nationalities
+
+The regression results above suggest that different nationalities within the broad Latino category could have interesting differences. I wanted to look more closely at these differences. The graphic below shows the average 
+
 
 
 
