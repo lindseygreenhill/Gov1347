@@ -47,6 +47,11 @@ The regression results above suggest that different nationalities within the bro
 > - The Puerto Rican, Peruvian, Nicaraguan, Guatemalan, and Mexican votes are above the average vote line
 > - This distribution of predicted votes suggests it is difficult to capture the political preferences of these subgroups with a broad label of "Latino"
 
+## Conclusion
+
+My analyses provides some preliminary evidence that there is no unified Latino vote. My regression analysis shows that being Latino is a poor predictor of an individual's vote and that nationality may be a better predictor. I also showed that the nationality subgroups that make up the Latino category have apparent differing leans politically with some groups supporting Trump more on average and some groups supporting Biden more on average. 
+
+If I were to continue this analysis, I would like a larger data set that include more members of each nationality subgroup. It would also be interesting to see similarities or disimilarities between groups on more qualitative opinion questions related to topics such as immigration or religion. I would also like to gather similar data for previous years and see if there is any tightening or broadening of the unification of the "Latino vote" across time. 
 
 
 
