@@ -45,6 +45,7 @@ The regression results above suggest that different nationalities within the bro
 > - The Cuban vote in particular leans towards Trump, as does the Argentinian and Colombian votes
 > - The Venezuelan, Spanish, Panamanian, Salvadoorean, and Ecuadorian votes are also below the average vote line
 > - The Puerto Rican, Peruvian, Nicaraguan, Guatemalan, and Mexican votes are above the average vote line
+> - This distribution of predicted votes suggests it is difficult to capture the political preferences of these subgroups with a broad label of "Latino"
 
 
 
